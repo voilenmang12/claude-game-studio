@@ -66,7 +66,7 @@ if ls "$SRC"/Build/*.loader.js >/dev/null 2>&1; then
   fi
 fi
 
-# Vercel refuses source files over 100 MB on the Hobby plan; a CrazyGames build is far below that.
+# Vercel refuses source files over 100 MB on the Hobby plan; a web game build is far below that.
 BIG="$(find "$SRC" -type f -size +100M 2>/dev/null | head -3)"
 [ -z "$BIG" ] || die "files over 100 MB: $BIG"
 

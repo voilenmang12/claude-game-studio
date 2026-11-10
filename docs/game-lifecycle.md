@@ -25,7 +25,7 @@ and the main production risk. A parked idea keeps its entry; it can come back.
 ## 1. Brief
 
 ```bash
-bash new-concept.sh market-rumble          # concepts/market-rumble/, local git repo, first commit
+bash new-concept.sh star-farm          # concepts/star-farm/, local git repo, first commit
 ```
 
 The slug is a working title in kebab-case. Start Claude Code in `concepts/<slug>/` and say "make me a game" with the
@@ -74,11 +74,11 @@ Only now does the game get a folder name, a repo or a product name. Until then, 
 ## 6. Game project
 
 1. In Unity Hub, create a "Universal 2D" project with Unity 6000.6.7f1, **in the workspace root**, named exactly the
-   locked folder name (`CG03-MarketRumble`). Skip this when `local/project/` holds your base Unity project:
+   locked folder name (`CG03-StarFarm`). Skip this when `local/project/` holds your base Unity project:
    `new-game.sh` copies it (`docs/local-layer.md`).
 2. From the workspace root:
    ```bash
-   bash new-game.sh CG03-MarketRumble --concept market-rumble
+   bash new-game.sh CG03-StarFarm --concept star-farm
    ```
    It refuses a concept whose name is not locked. It applies `template/`, copies the concept's design files,
    `prototypes/` and `references/`, creates the git repo and commits `chore: start <Game> from template vX.YY`,
@@ -90,7 +90,7 @@ Only now does the game get a folder name, a repo or a product name. Until then, 
 ## 7. GitHub repo
 
 ```bash
-bash publish-game.sh CG03-MarketRumble     # repo name from name-lock.md, private
+bash publish-game.sh CG03-StarFarm     # repo name from name-lock.md, private
 ```
 
 It creates the repo with `gh repo create --private`, adds it as `origin` and pushes `main`. A game repo is

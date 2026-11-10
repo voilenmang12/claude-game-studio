@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Start a concept: a local folder for the brief, GDD, HTML playtest and name lock (docs/game-lifecycle.md, 1 to 5).
-#   bash new-concept.sh <slug>          e.g. bash new-concept.sh market-rumble
+#   bash new-concept.sh <slug>          e.g. bash new-concept.sh star-farm
 # Makes concepts/<slug>/ with the CCGS layer of template/ (no engine set, so /prototype builds a browser game first)
 # and the files in concept-kit/, then a local git repo with no remote. The concept's CLAUDE.md imports your
 # local/RULES.md (docs/local-layer.md).

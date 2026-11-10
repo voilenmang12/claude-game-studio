@@ -29,10 +29,10 @@ How to check:
 
 Filled when the user picks a candidate. Then set `Status: locked` at the top.
 
-- Product name: (shown to players, for example `Market Rumble`)
+- Product name: (shown to players, for example `Star Farm`)
 - Game code: (portfolio prefix + number, for example `CG03`)
-- Folder: `<Code>-<PascalName>`, for example `CG03-MarketRumble`
-- Repo: `<owner>/<kebab-name>`, for example `my-account/market-rumble`, private
+- Folder: `<Code>-<PascalName>`, for example `CG03-StarFarm`
+- Repo: `<owner>/<kebab-name>`, for example `my-account/star-farm`, private
 - Application identifier: `com.<company>.<lowercasename>`
 - Save key: `<lowercasename>` (or the game's own save prefix)
 - Approved by: the user, YYYY-MM-DD
