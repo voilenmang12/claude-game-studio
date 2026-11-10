@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Workspace repo pre-commit hook (docs/local-layer.md). Refuses a commit that would publish something private:
+# a file under local/, a Unity package or a secrets file, or an added line or file name matching a pattern in
+# local/public-denylist.txt. Turn it on once: git config core.hooksPath tools/hooks (studio-doctor.sh --init does).
+set -uo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+DENY="$ROOT/local/public-denylist.txt"
+bad=0
+say() { echo "pre-commit: $*" >&2; bad=1; }
+
+names="$(git diff --cached --name-only --diff-filter=ACMR)"
+[ -n "$names" ] || exit 0
+
+while IFS= read -r f; do
+  case "$f" in
+    local/*) say "$f is in local/, which never goes into the workspace repo" ;;
+    *.unitypackage) say "$f is a Unity package" ;;
+    .env|*/.env|*.pem|*.p12|*.keystore) say "$f looks like a secret" ;;
+  esac
+done <<< "$names"
+
+if [ -f "$DENY" ]; then
+  patterns="$(grep -vE '^[[:space:]]*(#|$)' "$DENY" || true)"
+  if [ -n "$patterns" ]; then
+    added="$(git diff --cached -U0 --no-color --diff-filter=ACMR | grep -E '^\+' | grep -vE '^\+\+\+ ' || true)"
+    while IFS= read -r p; do
+      hit="$( { printf '%s\n' "$names"; printf '%s\n' "$added"; } | grep -iE -m 3 -- "$p" || true)"
+      [ -z "$hit" ] || say "matches \"$p\" from local/public-denylist.txt:
+$hit"
+    done <<< "$patterns"
+  fi
+fi
+
+if [ $bad -ne 0 ]; then
+  echo "pre-commit: nothing committed. Move private content to local/ (docs/local-layer.md)." >&2
+  exit 1
+fi
+exit 0

@@ -27,6 +27,13 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 - When the user describes a mechanic or text in another language, translate it into short, natural game English and
   show the wording in your reply so they can approve it.
 
+## Studio rules
+
+The studio's own rules for every game (platform, build, SDKs, plugins). They come from the workspace's
+`local/overlay/` and win over this file; change them there, never in a game:
+
+@.claude/studio-rules.md
+
 ## Studio template (read before writing game code)
 
 - `TEMPLATE_VERSION` — template version this project is synced to; `TEMPLATE_CHANGELOG.md` — what

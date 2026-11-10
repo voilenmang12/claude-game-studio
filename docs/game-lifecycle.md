@@ -74,7 +74,8 @@ Only now does the game get a folder name, a repo or a product name. Until then, 
 ## 6. Game project
 
 1. In Unity Hub, create a "Universal 2D" project with Unity 6000.6.7f1, **in the workspace root**, named exactly the
-   locked folder name (`CG03-MarketRumble`).
+   locked folder name (`CG03-MarketRumble`). Skip this when `local/project/` holds your base Unity project:
+   `new-game.sh` copies it (`docs/local-layer.md`).
 2. From the workspace root:
    ```bash
    bash new-game.sh CG03-MarketRumble --concept market-rumble

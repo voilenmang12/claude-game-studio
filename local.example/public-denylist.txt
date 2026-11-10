@@ -1,0 +1,5 @@
+# One extended regex per line (grep -E, case-insensitive). tools/hooks/pre-commit refuses a workspace commit whose
+# added lines or file names match one. Put here what must never be public: paid plugin names, your portal, your
+# email, machine paths. Examples:
+# \.unitypackage$
+# C:/Users/

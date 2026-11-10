@@ -1,0 +1,58 @@
+# Your layer: `local/`
+
+The workspace has two owners. **Workspace files** (everything this repo tracks: `CLAUDE.md`, `docs/`, the scripts,
+`template/`, `concept-kit/`, `tools/`) come from the public repo and are updated by pulling a new version.
+**`local/`** is yours: your rules, your platform, your accounts, your paid plugins, your Unity starting project. The
+workspace repo ignores it, so a pull never touches it and a commit never publishes it.
+
+Keep that split and updates stay a plain `git merge` with no conflicts. Change a workspace file for your own needs
+and every update conflicts on it.
+
+## Set it up
+
+```bash
+git clone https://github.com/voilenmang12/claude-game-studio my-studio
+cd my-studio
+bash studio-doctor.sh --init        # local/ from local.example/, commit hook on
+cd local && git init -b main         # your own repo; private if it holds plugins or personal data
+```
+
+If you forked the repo on GitHub instead, add the public repo as `upstream`:
+`git remote add upstream https://github.com/voilenmang12/claude-game-studio`.
+
+## What goes where
+
+| Need | Put it in | Used by |
+|---|---|---|
+| Rules for workspace and concept sessions (your language, your portal, portfolio decisions) | `local/RULES.md` | imported by the workspace `CLAUDE.md` and each concept's `CLAUDE.md` |
+| Rules for every game (platform, build, SDKs, plugins) | `local/overlay/.claude/studio-rules.md` | imported by each game's `CLAUDE.md` |
+| Your own skills, rules, build scripts for every game | `local/overlay/<same path as in the game>` (for example `.claude/skills/my-build/SKILL.md`) | copied into every game by `new-game.sh` and **every** `sync-template.sh` |
+| A different version of a template file in your games | `local/overlay/<its path>` | wins over the template's copy at every sync |
+| Files a new game starts with and then owns (`project.yaml` with your build command, `design/art/...`) | `local/seed/<path>` | copied by `new-game.sh`; `sync-template.sh` only creates missing ones |
+| A Unity project every game starts from (base code, paid plugins, settings) | `local/project/` (a whole project: `Assets/`, `Packages/`, `ProjectSettings/`) | `new-game.sh` copies it to the new game folder (new product GUID) |
+| Machine and account values | `local/studio.config.json`: `vercelScope`, `pixelAssetApi`, `pixelAssetConnectorDir` | `deploy-test.sh`, `template/Tools/pixel-asset.mjs` (environment variables still win) |
+| Words that must never be public | `local/public-denylist.txt` | `tools/hooks/pre-commit` |
+| Your notes and decisions | `local/docs/` | you |
+
+A new game is built in this order, later wins: `local/project/` (or your Unity Hub project) → `template/` →
+`local/seed/` → `local/overlay/`. Each game is still a complete repo of its own: it holds copies, not links.
+
+## Update to a new version
+
+```bash
+bash studio-doctor.sh --fetch        # what changed in your workspace files, and the newer versions
+git merge vX.YY                      # or: git pull
+```
+
+Then follow the **Port** steps of each new version in `template/TEMPLATE_CHANGELOG.md` for every game
+(`bash sync-template.sh <Game>`). If `studio-doctor.sh` lists workspace files you changed, move those changes into
+`local/` first and restore the files (`git checkout -- <file>`). A change that every user would want belongs in the
+public repo: open an issue or a pull request there.
+
+## Keep private things private
+
+- `tools/hooks/pre-commit` (turned on by `--init`, or `git config core.hooksPath tools/hooks`) refuses a workspace
+  commit that adds a file under `local/`, a `.unitypackage`, a secrets file, or a line or file name that matches a
+  pattern in `local/public-denylist.txt`.
+- `studio-doctor.sh` warns when `local/` is tracked by the workspace repo or when its own remote is public (with `gh`).
+- Game repos hold paid plugins once `local/project/` or `local/overlay/` adds them: keep those repos private.

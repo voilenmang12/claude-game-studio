@@ -16,7 +16,7 @@ rows=0
 printf '%-13s %-20s %-16s %-24s %s\n' ID GAME "GAME STATUS" "TEMPLATE STATUS" TITLE
 for f in "$ROOT"/*/design/template-requests/TR-*.md; do
   game="$(basename "$(dirname "$(dirname "$(dirname "$f")")")")"
-  [ "$game" = "template" ] && continue
+  case "$game" in template|local|local.example) continue ;; esac
   id="$(basename "$f" | grep -Eo '^TR-[A-Za-z0-9]+-[0-9]{3}' || true)"
   [ -n "$id" ] || { echo "bad file name (want TR-<code>-<NNN>-<slug>.md): $f" >&2; continue; }
   title="$(sed -n '1s/^# *TR-[^:]*: *//p' "$f")"

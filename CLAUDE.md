@@ -14,8 +14,12 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ```
 <workspace>/
 ├─ CLAUDE.md, README.md, FORK.md
+├─ local/                     YOUR layer, ignored by this repo (local.example/README.md): rules, config, overlay, Unity base
+├─ local.example/             what studio-doctor.sh --init copies to local/
+├─ studio-doctor.sh           bash studio-doctor.sh [--init] [--fetch]   checks the workspace before an update
 ├─ template/                  studio template; every game gets a copy
 ├─ tools/pixelorama-mcp/      Pixelorama MCP extension + server (games point to it with ../tools/...)
+├─ tools/hooks/pre-commit     refuses workspace commits that match local/public-denylist.txt
 ├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
 ├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)
 ├─ new-concept.sh             bash new-concept.sh <slug>       concepts/<slug>/: brief, GDD, HTML playtest, name lock
@@ -31,6 +35,14 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 - Start Claude Code **inside a concept or game folder** for that work: CCGS hooks, rules and `.mcp.json` load only from the
   folder where `claude` starts.
 - Game codes are the folder prefix (`CG01-Name` → `CG01`); template request IDs use them.
+
+## Your layer: `local/` (`docs/local-layer.md`)
+- Workspace files belong to the public repo; `local/` belongs to the user. Never change a workspace file for one
+  user's needs (a platform, a language, a plugin, a path): put it in `local/` (`RULES.md`, `studio.config.json`,
+  `overlay/`, `seed/`, `project/`). A change every user would want goes into the workspace files.
+- Nothing from `local/`, no paid plugin and no personal data is ever committed to the workspace repo.
+
+@local/RULES.md
 
 ## From idea to game (`docs/game-lifecycle.md`)
 Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 2 GDD draft → 3 HTML playtest

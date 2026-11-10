@@ -14,13 +14,18 @@
 #                     project too: its first deployment does not get the public domain).
 #   --dry-run         stage and print the files and headers, deploy nothing.
 #
-# Sign-in, once per machine: `vercel login` (the user does it), or a token in VERCEL_TOKEN; VERCEL_SCOPE picks a team.
+# Sign-in, once per machine: `vercel login` (the user does it), or a token in VERCEL_TOKEN; VERCEL_SCOPE picks a team
+# (default: vercelScope in local/studio.config.json).
 # The last line is "TEST_URL=<url>", for whoever runs this from a chat (Remote Control) to pass on.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 die() { echo "deploy-test: $*" >&2; exit 1; }
 USAGE="usage: bash deploy-test.sh <folder> [--project <name>] [--prod] [--dry-run]"
+if [ -z "${VERCEL_SCOPE:-}" ] && [ -f "$ROOT/local/studio.config.json" ]; then
+  VERCEL_SCOPE="$(node -e 'const c = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); console.log(c.vercelScope || "")' \
+    "$ROOT/local/studio.config.json")" || die "local/studio.config.json is not valid JSON"
+fi
 
 SRC="" PROJECT="" PROD=0 DRY=0
 while [ $# -gt 0 ]; do

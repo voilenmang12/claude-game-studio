@@ -13,6 +13,8 @@ that move improvements both ways: from the template to the games, and from the g
 ```
 claude-game-studio/            the workspace; game folders are created next to template/
 ├─ CLAUDE.md                   workspace rules (template upkeep, versions, requests)
+├─ local.example/              your own layer, copied to local/ (ignored): rules, config, overlay, Unity base
+├─ studio-doctor.sh            set up local/, check the workspace before an update
 ├─ FORK.md                     what was taken from CCGS and what changed
 ├─ template/                   the studio template applied to every game
 │  ├─ .claude/                 CCGS agents, skills, hooks, rules, docs (+ art-assets rule, game-ui-design skill)
@@ -23,7 +25,8 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  ├─ design/template-requests/README.md   how a game asks for a template change
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       Pixelorama MCP extension + dependency-free server
-├─ docs/                       game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
+├─ tools/hooks/pre-commit      keeps private content out of commits to this repo
+├─ docs/                       game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
 ├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
@@ -35,7 +38,20 @@ claude-game-studio/            the workspace; game folders are created next to t
 ```
 
 The template is the **studio layer only**: no Unity `Assets/` content besides the Editor import scripts, no
-`Packages/` or `ProjectSettings/`, and no paid Asset Store plugins. You bring the Unity project.
+`Packages/` or `ProjectSettings/`, and no paid Asset Store plugins. You bring the Unity project: one per game from
+Unity Hub, or one base project in `local/project/` that every new game is copied from.
+
+## Make it yours, keep it updatable
+
+Never edit the workspace files for your own needs. Put your rules, platform, accounts, plugins and base project
+in `local/` (ignored by this repo, its own private repo if you like), and a new version is a plain `git merge`.
+
+```bash
+bash studio-doctor.sh --init     # once: local/ from local.example/, commit hook on
+bash studio-doctor.sh --fetch    # before an update: your changed files, newer versions
+```
+
+What goes where, and how games get it: [`docs/local-layer.md`](docs/local-layer.md).
 
 ## Requirements
 
@@ -55,7 +71,7 @@ The template is the **studio layer only**: no Unity `Assets/` content besides th
 | Brief, GDD draft | `bash new-concept.sh <slug>`, then `/prototype` in `concepts/<slug>/` | core loop approved |
 | HTML playtest | `/prototype` builds `prototypes/<slug>/`; play (on a phone: `bash deploy-test.sh <folder>`), change, log sessions | PROCEED, PIVOT or KILL |
 | GDD v1.0, name lock | `design/production-gdd.md`, `design/name-lock.md` | name locked |
-| Game project | Unity Hub project, then `bash new-game.sh <Code>-<Name> --concept <slug>` | opens in Unity |
+| Game project | Unity Hub project (or `local/project/`), then `bash new-game.sh <Code>-<Name> --concept <slug>` | opens in Unity |
 | GitHub repo | `bash publish-game.sh <Code>-<Name>` (private) | repo created |
 | Production | `/start` in the game folder, then CCGS epics and stories | per milestone |
 

@@ -24,6 +24,12 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 - When the user describes a mechanic or text in another language, translate it into short, natural game English and
   show the wording in your reply so they can approve it.
 
+## Local rules
+
+The workspace user's own rules (`local/RULES.md`, `../../docs/local-layer.md`); they win over this file:
+
+@../../local/RULES.md
+
 ## Concept stage (read before anything else)
 
 Guide: `../../docs/game-lifecycle.md` (stages 1 to 5). Git rules: `../../docs/git-rules.md`.
