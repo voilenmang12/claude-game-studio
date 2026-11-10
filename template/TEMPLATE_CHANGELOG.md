@@ -66,7 +66,21 @@ ticket to `released vX.YY`.
   `Tools/pixel-asset.mjs` finds `local/studio.config.json` the same way.
 - `PixelArt.md` section 5 and `UIPrompting.md` section 3 use the new tools and setup.
 
+**Added**
+- Pixel art is optional. The `pixel-art` skill (`.claude/skills/pixel-art/`) turns on Pixelorama and its MCP server
+  for a game whose art style is pixel art, through `node Tools/pixel-art.mjs enable | disable | status` (writes or
+  removes the `pixelorama` server in `.mcp.json`, then lists what is missing: server packages, Pixelorama with
+  PixMcpBridge). `CLAUDE.md` ("Art style"), `.claude/rules/art-assets.md`, `PixelArt.md` and the UI profile's "Art
+  style" row point to it.
+
+**Changed**
+- `.mcp.json` is a game file. The template's declares no server; `sync-template.sh` creates it only when a game has
+  none and never overwrites it, so a pixel game keeps its `pixelorama` entry.
+
 **Port**
+- Each game: nothing to do for `.mcp.json` (a game that already declares `pixelorama` keeps it). A game whose style
+  is not pixel art runs `node Tools/pixel-art.mjs disable`. Merge the "Art style" bullet of `template/CLAUDE.md`
+  into the game's `CLAUDE.md` in place of the old "Art is pixel art from Pixelorama" bullet.
 - Once per machine: in Pixelorama → Edit → Preferences → Extensions, remove `PixeloramaMCP`, add
   `tools/pixelorama-mcp/PixMcpBridge.pck`, enable it, restart Pixelorama; then
   `npm ci --omit=dev --prefix tools/pixelorama-mcp/server` and `node tools/pixelorama-mcp/test-connection.mjs`.

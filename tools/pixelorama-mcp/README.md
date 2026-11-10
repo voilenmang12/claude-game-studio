@@ -1,6 +1,7 @@
 # pixelorama-mcp
 
-The Pixelorama MCP server every game uses, vendored from [Pixelorama-MCP](https://github.com/abidoo22/Pixelorama-MCP)
+The Pixelorama MCP server for pixel-art games (optional: a game turns it on with its `pixel-art` skill,
+`node Tools/pixel-art.mjs enable`), vendored from [Pixelorama-MCP](https://github.com/abidoo22/Pixelorama-MCP)
 v0.2.1 (commit `56fd8aa`, MIT, see `LICENSE`): 106 tools for drawing, layers, frames, palettes, selections,
 tilesets and export, live in the open Pixelorama.
 
@@ -8,10 +9,10 @@ tilesets and export, live in the open Pixelorama.
 |---|---|
 | `PixMcpBridge.pck` | The Pixelorama extension (built upstream, unchanged). It serves `http://127.0.0.1:7373` inside Pixelorama |
 | `server/` | The upstream MCP server, built JavaScript (`dist/`) with its `package.json` and lock; packages not included |
-| `pixelorama-mcp.mjs` | What games start (`.mcp.json`: `../tools/pixelorama-mcp/pixelorama-mcp.mjs`); it runs `server/` |
+| `pixelorama-mcp.mjs` | What a pixel-art game starts (`.mcp.json`: `../tools/pixelorama-mcp/pixelorama-mcp.mjs`); it runs `server/` |
 | `test-connection.mjs` | Checks the bridge and the server (`--draw` draws a test coin) |
 
-## Set up, once per machine
+## Set up, once per machine (only for pixel-art games)
 
 1. Pixelorama 1.2.x → Edit → Preferences → Extensions → **Add Extension** → pick `PixMcpBridge.pck` from this
    folder → enable it → restart Pixelorama. Remove any older Pixelorama MCP extension (`PixeloramaMCP`): one bridge

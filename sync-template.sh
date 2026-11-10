@@ -34,13 +34,13 @@ SHARED=(
   Tools
   ArtSource/README.md
   design/template-requests/README.md
-  .gitignore .mcp.json .worktreeinclude
+  .gitignore .worktreeinclude
 )
 # Inside the shared folders, files a game writes itself.
 EXCEPT=(.claude/docs/technical-preferences.md)
 # Game-owned files: created once if missing, then left alone.
 GAME_FILES=(design/art/pixel-asset-project.json design/art/ui-prompt-profile.md design/art/ui-kit-palette.json design/asset-ledger.csv
-  .claude/studio-rules.md)
+  .claude/studio-rules.md .mcp.json)
 
 # Your layer: overlay files replace the template's at the same path; seed files are game files.
 layer_files() {   # relative paths under $1, without the _layer.md notes

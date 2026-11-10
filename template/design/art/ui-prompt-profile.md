@@ -7,7 +7,7 @@ Per-game values for `Assets/Integration/UIPrompting.md`. Fill every TODO from th
 
 | Setting | Value |
 |---|---|
-| Art style | TODO: pixel or raster (raster: UIPrompting.md section 10; S and multiplier rows below do not apply) |
+| Art style | TODO: pixel or raster (pixel: run the `pixel-art` skill to turn on Pixelorama; raster: UIPrompting.md section 10, the S and multiplier rows below do not apply) |
 | Orientation | TODO: landscape or portrait |
 | Canvas reference resolution | TODO: the template is 900×1600. Landscape games use 1600×900 |
 | Scenes updated to that resolution | TODO: Splash, Loading Scene, Main UI, Gameplay |

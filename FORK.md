@@ -28,7 +28,7 @@ upstream.
 | File | Change |
 |---|---|
 | `CLAUDE.md` | Fork note; Technology Stack set to Unity 6.6 URP 2D; Language section (reply in the user's language, repo in English); "Studio rules" section importing
-`.claude/studio-rules.md`; "Studio template" section (deleting files through `_to_delete/`, versioning, template requests, git, Unity CLI, art pipeline); the engine import line set to Unity |
+`.claude/studio-rules.md`; "Studio template" section (deleting files through `_to_delete/`, versioning, template requests, git, Unity CLI, art style: optional pixel art through the `pixel-art` skill); the engine import line set to Unity |
 | `project.yaml` | `modes.rigor: minimal`; engine, specialists, naming and commands written by `/setup-engine unity`; build and run left `[TO BE CONFIGURED]` |
 | `.claude/docs/technical-preferences.md` | Engine, input, budgets, naming and specialists from `/setup-engine unity`; platforms left `[TO BE CONFIGURED]` |
 | `docs/engine-reference/unity/VERSION.md`, `breaking-changes.md`, `current-best-practices.md`, `deprecated-apis.md` | Pin moved from 6.3 LTS to 6.6 (6000.6.7f1); 6.4, 6.5 and 6.6 changes added under their own headings with sources |
@@ -59,6 +59,7 @@ upstream.
 | `Assets/Integration/PixelArt.md`, `UIPrompting.md`, `UIPopupStandard.md` | Art pipeline, UI prompting and popup standard |
 | `AgentScripts/ValidatePixelArtImport.cs` | Editor check of the Pixelorama import |
 | `Tools/export-pixelorama.sh`, `pixel-asset.mjs`, `ui-kit-template.mjs`, `ui-kit-check.py` | Export, asset connector client, UI kit drawing, contrast check |
+| `.claude/skills/pixel-art/`, `Tools/pixel-art.mjs` | Optional pixel-art pipeline: turns Pixelorama and its MCP server on or off per game |
 | `ArtSource/README.md`, `design/art/*`, `design/asset-ledger.csv` | Art source folder, per-game art config and profile, license ledger |
 | `.mcp.json`, `.editorconfig` | Pixelorama MCP server, editor settings |
 | `docs/CCGS-README.md`, `docs/CCGS-UPGRADING.md`, `docs/CCGS-CHANGELOG.md`, `docs/CCGS-VERSION.txt` | Upstream docs kept for reference, and the base commit |

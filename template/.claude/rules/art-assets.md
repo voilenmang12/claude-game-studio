@@ -10,9 +10,11 @@ paths:
 
 # Art and Asset Rules
 
-Guide: `Assets/Integration/PixelArt.md`.
+Guide: `Assets/Integration/PixelArt.md` (connector, import) and, for a pixel-art game, the `pixel-art` skill.
+The art style comes from the art bible and the "Art style" row of `design/art/ui-prompt-profile.md`; Pixelorama
+is only for a game whose style is pixel art, after the `pixel-art` skill turned it on.
 
-- Source art goes in `ArtSource/` (`.pxo`); game-ready exports go in `Assets/Art/` through `bash Tools/export-pixelorama.sh`. Never hand-edit an exported PNG or JSON in `Assets/Art/`: change the `.pxo` and export again.
+- Source art goes in `ArtSource/`; in a pixel game the `.pxo` sources export to `Assets/Art/` through `bash Tools/export-pixelorama.sh`. Never hand-edit an exported PNG or JSON in `Assets/Art/`: change the `.pxo` and export again.
 - Never generate F1 images yourself. Detailed assets go through the connector worker: submit a job, wait for `done`, and use the PNG at `export_path`. Every brief states the camera angle in `view` and the facing or orientation in `asset`, using the game's art bible convention so assets of one kind match. Each submitted job uses image-generation quota. `node Tools/pixel-asset.mjs pull` copies the PNG to `Assets/Art/` and writes the ledger row. To change a connector PNG, submit a new job or redraw it as a `.pxo`. Guide: section 6 of `Assets/Integration/PixelArt.md`.
 - UI elements (frames, buttons, icons, emblems) follow `Assets/Integration/UIPrompting.md` with the values in `design/art/ui-prompt-profile.md`. Fill the profile first, pilot three pieces, and get approval before sending the rest of the kit. No text in UI art.
 - Popups and buttons follow `Assets/Integration/UIPopupStandard.md`: the fixed layer stack (Black Panel, bg1, bg2, bg3, card, title, close), one shared kit for every popup, one button shape with a baked sprite per color role, and the contrast minimums checked by `python Tools/ui-kit-check.py`.
@@ -22,6 +24,6 @@ Guide: `Assets/Integration/PixelArt.md`.
 - Allowed licenses: CC0, CC-BY (credit added to the credits screen), purchased royalty-free, paid AI plans that grant commercial use. Refuse NC, ND, "personal use", unknown licenses, and free AI tiers without commercial rights; tell the user why.
 - External assets must be recolored to the game's palette and fitted to its sizes before use. An unmodified pack is an asset flip.
 - Use the palette and frame sizes from the game's art bible. If there is no art bible yet, ask the user to run `/art-bible` before producing art.
-- Do not change `PixelArtImporter.PixelsPerUnit` after the first asset is placed in a scene.
-- Keep Pixelorama's default spritesheet layout; one tag per animation.
+- Pixel games: do not change `PixelArtImporter.PixelsPerUnit` after the first asset is placed in a scene; keep
+  Pixelorama's default spritesheet layout, one tag per animation.
 - Content stays within the game's age rating and original: no characters, logos or styles copied from existing games or brands.

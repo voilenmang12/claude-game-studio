@@ -66,8 +66,10 @@ Upstream: https://github.com/abidoo22/Pixelorama-MCP v0.2.1 (MIT). Claude draws 
 tilesets, export); you watch the canvas and can undo with Ctrl+Z. Good for icons, items, tiles, UI pieces, recolors
 and short animations. Detailed characters still come from the connector (section 6).
 
-The workspace ships the `PixMcpBridge` extension and the server in `tools/pixelorama-mcp/`, and every game's
-`.mcp.json` points to it. One-time setup per machine (`tools/pixelorama-mcp/README.md`):
+Pixelorama is optional: only a game whose art style is pixel art uses it. The `pixel-art` skill turns it on
+(`node Tools/pixel-art.mjs enable` writes the `pixelorama` server into the game's `.mcp.json`). The workspace ships
+the `PixMcpBridge` extension and the server in `tools/pixelorama-mcp/`. One-time setup per machine
+(`tools/pixelorama-mcp/README.md`):
 
 1. Pixelorama → Edit → Preferences → Extensions → **Add Extension** → pick `tools/pixelorama-mcp/PixMcpBridge.pck`
    → enable **PixMcpBridge** → restart Pixelorama. One MCP extension per Pixelorama: remove older ones.

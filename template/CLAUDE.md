@@ -56,16 +56,18 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 - The Unity CLI drives the open Editor. Pass `--project-path` when more than one Editor is open. Editor-side helper
   scripts live in `AgentScripts/` and run with `unity command run_script`.
 - **Play Mode is run by the user.** For CCGS "run and observe", ask the user to play and supply the screenshot.
-- Art is pixel art from Pixelorama: sources in `ArtSource/*.pxo`, export with
-  `bash Tools/export-pixelorama.sh`, Unity import rules in `Assets/Editor/Art/PixelArtImporter.cs`.
-  Read `Assets/Integration/PixelArt.md` before producing or importing art. When the `pixelorama`
-  MCP server is connected, draw small assets (icons, items, tiles, recolors) in the open Pixelorama
-  project and save them under `ArtSource/`. Log every asset in `design/asset-ledger.csv`.
-  Detailed assets use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally). Submit a job, wait for `done`, and use the
+- **Art style** is the game's choice, made in the art bible (`/art-bible`) and recorded in the "Art style" row of
+  `design/art/ui-prompt-profile.md` (`pixel` or `raster`). Ask before producing art when it is not set.
+  - **Pixel art** is optional: the `pixel-art` skill turns on Pixelorama and its MCP server for the game
+    (`node Tools/pixel-art.mjs enable`) and holds the workflow (`.pxo` sources in `ArtSource/`,
+    `bash Tools/export-pixelorama.sh`, `Assets/Integration/PixelArt.md`). Without it the game has no `pixelorama`
+    MCP server and needs no Pixelorama.
+  - **Raster** (any non-pixel style): connector jobs with the raster pipeline, files in `Assets/ArtRaster/`
+    (`UIPrompting.md` section 10).
+  Detailed assets in either style use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally). Submit a job, wait for `done`, and use the
   PNG at `export_path`. The connector worker generates the image and exports the sprite; never generate it yourself.
-  Non-pixel art uses its raster pipeline and goes to `Assets/ArtRaster/`. Simple pixel UI pieces are
-  drawn with Pixelorama MCP instead of a job (`Assets/Integration/UIPrompting.md`, section 3).
-  Every popup and button follows `Assets/Integration/UIPopupStandard.md` (layer stack, shared kit, contrast).
+  Log every asset in `design/asset-ledger.csv`. Every popup and button follows
+  `Assets/Integration/UIPopupStandard.md` (layer stack, shared kit, contrast).
 
 ## Project Structure
 
