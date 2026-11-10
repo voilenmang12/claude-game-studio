@@ -55,12 +55,29 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+(nothing yet)
+
+## v1.04 (2026-11-10)
+
+Minor. Playtests and WebGL builds can be put on Vercel for testing, on a phone too.
+
 **Added**
-- `.gitignore` ignores `.vercel/`. Test builds go to Vercel through the workspace's `deploy-test.sh`
-  (`docs/test-deploys.md`), which deploys a temporary copy and never writes into the game.
+- Workspace `deploy-test.sh <folder> [--prod] [--dry-run]`: puts a concept's HTML playtest
+  (`concepts/<slug>/prototypes/<name>/`) or a Unity WebGL build (`<Game>/Builds/WebGL/`) on Vercel and prints
+  `TEST_URL=<url>`, so the user can play it on a phone, also when Claude Code runs under Remote Control. It deploys a
+  temporary copy with the `Content-Encoding` and `Content-Type` headers a Brotli or gzip Unity build needs, and
+  writes nothing into the folder. Deploys are previews only the signed-in Vercel account can open (a new project's
+  first deploy too); `--prod` gives the public stable URL, only when the user asks. It never starts a Vercel sign-in
+  itself. Setup and rules: `docs/test-deploys.md`; the lifecycle (stages 3 and 8), the git rules, the concept kit,
+  `CLAUDE.md` and `README.md` point to it.
+- `.gitignore` ignores `.vercel/`.
 
 **Port**
-- Copy `.gitignore` (`sync-template.sh` does it).
+- Copy `.gitignore` (`sync-template.sh` does it). `deploy-test.sh` is a workspace script: nothing to copy into games.
+- Once per machine: `npm i -g vercel`, then the user runs `vercel login` (or sets `VERCEL_TOKEN`).
+
+**Requests**
+- None.
 
 ## v1.03 (2026-11-10)
 
