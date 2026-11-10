@@ -55,29 +55,58 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+(nothing yet)
+
+## v2.00 (2026-11-11)
+
+Major. The workspace gets a second owner: `local/`, the user's own layer. Workspace files stay exactly as published,
+so a new version is a plain `git merge`; everything one user needs (rules, platform, accounts, paid plugins, a base
+Unity project) lives in `local/`, which the workspace repo ignores. Games get the user's layer on every sync.
+
 **Added**
-- Your own layer, `local/` (`docs/local-layer.md`): the workspace repo ignores it, so users keep their rules,
-  platform, accounts, paid plugins and base Unity project out of the workspace files and update with a plain
-  `git merge`. `local.example/` is its starting point. `local/RULES.md` is imported by the workspace and concept
-  `CLAUDE.md`; `local/overlay/` is laid over `template/` in every game by `new-game.sh` and every
-  `sync-template.sh` (it wins over the template's file at the same path); `local/seed/` gives a new game files it
-  then owns; `local/project/` is an optional Unity project `new-game.sh` copies as the new game (new product
-  GUID); `local/studio.config.json` holds `vercelScope` (`deploy-test.sh`) and `pixelAssetApi` /
-  `pixelAssetConnectorDir` (`Tools/pixel-asset.mjs`).
+- `local/` (`docs/local-layer.md`), made from `local.example/` by `bash studio-doctor.sh --init`:
+  - `local/RULES.md`, imported by the workspace `CLAUDE.md` and by each concept's `CLAUDE.md`.
+  - `local/overlay/`: files laid over `template/` in every game by `new-game.sh` and **every** `sync-template.sh`;
+    an overlay file wins over the template's file at the same path.
+  - `local/seed/`: files a new game starts with and then owns; `sync-template.sh` only creates missing ones.
+  - `local/project/`: an optional Unity project every game starts from. `new-game.sh` copies it to the new game
+    folder (generated and per-user folders left out, new product GUID), then the template replaces its template files.
+    It can be a repo and a working Unity project of its own: `bash sync-template.sh local/project`.
+  - `local/studio.config.json`: `vercelScope` (`deploy-test.sh`), `pixelAssetApi` and `pixelAssetConnectorDir`
+    (`Tools/pixel-asset.mjs`); environment variables still win.
+  - `local/public-denylist.txt`, `local/CHANGELOG.md`, `local/.gitignore` (ignores `project/`). Files named
+    `_layer.md` are folder notes and are never copied.
 - `.claude/studio-rules.md`, imported by `CLAUDE.md` (new "Studio rules" section): the studio's rules for every
-  game, a placeholder until `local/overlay/.claude/studio-rules.md` replaces it.
-- `studio-doctor.sh` (`--init` makes `local/` and turns on the commit hook; `--fetch` lists newer versions) and
-  `tools/hooks/pre-commit` (refuses `local/`, `.unitypackage`, secrets files and `local/public-denylist.txt`
-  matches in workspace commits).
+  game; a placeholder until `local/overlay/.claude/studio-rules.md` replaces it.
+- `studio-doctor.sh`: `--init` makes `local/` and turns on the commit hook; plain run checks `local/`, the workspace
+  files you changed (they would conflict on the next pull), the hook and the upstream remote; `--fetch` lists newer
+  versions.
+- `studio-commit.sh "<message>" [--push]`: one change, committed in every studio repo it touched (workspace,
+  `local/`, `local/project/`).
+- `tools/hooks/pre-commit`: refuses workspace commits that add a file under `local/`, a `.unitypackage`, a secrets
+  file, or a line or file name matching `local/public-denylist.txt`.
 
 **Changed**
-- `new-game.sh` sets the product name from the name lock, and makes the game folder itself from `local/project/`
-  when there is one.
+- `new-game.sh`: makes the game folder itself from `local/project/` when there is one, applies `local/seed/` and
+  `local/overlay/` after the template, and sets the product name from the name lock.
+- `sync-template.sh`: copies `local/overlay/` after the template's shared files (no false "update" for a path the
+  overlay owns) and creates missing `local/seed/` files; `.claude/studio-rules.md` is a game file.
+- `deploy-test.sh` and `Tools/pixel-asset.mjs` read `local/studio.config.json`.
+
+**Breaking**
+- Rules and values you had written into workspace files must move into `local/` before you merge, or the merge
+  conflicts. `bash studio-doctor.sh` lists the files you changed.
+- Each game's `CLAUDE.md` (game-owned) needs the "Studio rules" section with the `@.claude/studio-rules.md` import.
 
 **Port**
-- Workspace: `bash studio-doctor.sh --init`; move your own changes to workspace files into `local/`.
-- Each game: merge the "Studio rules" section into `CLAUDE.md` (game-owned) by hand; `sync-template.sh`
-  creates `.claude/studio-rules.md` and copies `Tools/pixel-asset.mjs` and your `local/overlay/`.
+- Workspace, once: `bash studio-doctor.sh --init`, move your own changes to workspace files into `local/` and restore
+  the files (`git checkout -- <file>`), then `git merge v2.00`. Fill `local/RULES.md`, `local/studio.config.json`,
+  `local/public-denylist.txt`; make `local/` a private repo of its own.
+- Each game: `bash sync-template.sh <Game>`; copy the "Studio rules" section from `template/CLAUDE.md` into the
+  game's `CLAUDE.md` (above "Studio template"); then the Port steps of `local/CHANGELOG.md` for your layer.
+
+**Requests**
+- None.
 
 ## v1.04 (2026-11-10)
 
