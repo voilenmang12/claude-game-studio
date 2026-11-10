@@ -12,6 +12,8 @@
 
 ## Knowledge Gap Warning
 
+May 2025 is a floor for every model the studio runs on: a newer model may know more, but check this folder first.
+
 The LLM's training data likely covers Unity up to ~2022 LTS (2022.3). The entire
 Unity 6 release series (formerly Unity 2023 Tech Stream) introduced significant
 changes that the model does NOT know about. Always cross-reference this directory
@@ -38,7 +40,7 @@ version-qualified claim** — `NOT DETERMINED` means the gap is unknown, not abs
 **This template pins 6.6 (2026-11-05).** The 6.4 → 6.6 changes are now recorded in `breaking-changes.md`, `deprecated-apis.md` and `current-best-practices.md` under their own headings; the rest of each file is the 6.3 LTS baseline. The paragraph below is the original 6.3-pin note, kept for history: These are
 Supported Update releases that shipped after it. Nothing else in this directory
 covers their APIs, so treat any 6.4+ API as unconfirmed until checked against
-Unity's docs for that release. 6.0 LTS support ends in October 2026.
+Unity's docs for that release. 6.0 LTS support ended in October 2026.
 
 | Version | Release | Status (2026-10-17) | Key Theme |
 |---------|---------|---------------------|-----------|

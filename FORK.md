@@ -5,29 +5,36 @@
 | | |
 |---|---|
 | Upstream | https://github.com/donchitos/claude-code-game-studios |
-| Fork point | tag `v1.2.0`, commit `05ad7c8a5b8aa2aa86bbd3439ae7cf7295cac418` (2026-10-19) |
+| Current base | tag `v1.3.0`, commit `abc0de79d6ceb0b5d7aa693945849b3937afbe6a` (2026-11-09) |
+| First fork point | tag `v1.2.0`, commit `05ad7c8a5b8aa2aa86bbd3439ae7cf7295cac418` (2026-10-19) |
 | Upstream license | MIT, copy in `licenses/claude-code-game-studios.txt` |
-| Recorded in | `template/project.yaml` (`framework.version: 1.2.0`), `template/docs/CCGS-VERSION.txt` |
-| Upstream releases after the fork point | `v1.3.0` exists upstream and is **not** merged |
+| Recorded in | `template/project.yaml` (`framework.version: 1.3.0`), `template/docs/CCGS-VERSION.txt` |
 
-Everything else in this repo (the workspace scripts, template versioning, template requests, the pixel art and UI
-pipeline) is new work under this repo's `LICENSE`.
+Everything else in this repo (the workspace scripts, the game lifecycle and git rules, template versioning, template
+requests, the concept kit's own documents, the pixel art and UI pipeline) is new work under this repo's `LICENSE`.
+
+## Merge history
+
+| Date | Upstream | Template | What happened |
+|---|---|---|---|
+| 2026-11-10 | `v1.2.0` | v1.00 | First fork |
+| 2026-11-10 | `v1.2.0` → `v1.3.0` | v1.01 | 401 files taken as they are; 3 test specs renamed with their skills (`help` → `next-step`, `settings` → `project-settings`, `changelog` → `write-changelog`; the old skills stay as shims); `project.yaml` and Unity `VERSION.md` merged with no conflict; `CLAUDE.md` conflict resolved by hand: the fork's Unity stack kept, upstream's new engine-import comment taken with the Unity import line under it |
 
 ## Upstream files changed in `template/`
 
-Compared with upstream `v1.2.0`, ignoring line endings. Every other upstream file in `template/` is byte-for-byte
+Compared with upstream `v1.3.0`, ignoring line endings. Every other upstream file in `template/` is byte-for-byte
 upstream.
 
 | File | Change |
 |---|---|
-| `CLAUDE.md` | Technology Stack set to Unity 6.6 URP 2D; Language section (reply in the user's language, repo in English); new "Studio template" section (versioning, template requests, Unity CLI, art pipeline); engine reference import points to Unity |
+| `CLAUDE.md` | Fork note; Technology Stack set to Unity 6.6 URP 2D; Language section (reply in the user's language, repo in English); "Studio template" section (versioning, template requests, git, Unity CLI, art pipeline); the engine import line set to Unity |
 | `project.yaml` | `modes.rigor: minimal`; engine, specialists, naming and commands written by `/setup-engine unity`; build and run left `[TO BE CONFIGURED]` |
 | `.claude/docs/technical-preferences.md` | Engine, input, budgets, naming and specialists from `/setup-engine unity`; platforms left `[TO BE CONFIGURED]` |
 | `docs/engine-reference/unity/VERSION.md`, `breaking-changes.md`, `current-best-practices.md`, `deprecated-apis.md` | Pin moved from 6.3 LTS to 6.6 (6000.6.7f1); 6.4, 6.5 and 6.6 changes added under their own headings with sources |
 | `.gitignore` | Replaced by the standard game-repo file: Unity + CCGS local state + build output + secrets |
 | `README.md` | Upstream README moved, unchanged, to `docs/CCGS-README.md`; `template/README.md` describes the template |
-| `UPGRADING.md` | Moved to `docs/CCGS-UPGRADING.md` (unchanged) |
-| `LICENSE` | Moved to `licenses/claude-code-game-studios.txt` in the workspace root (unchanged) |
+| `UPGRADING.md`, `CHANGELOG.md` | Moved, unchanged, to `docs/CCGS-UPGRADING.md` and `docs/CCGS-CHANGELOG.md` |
+| `LICENSE` | Moved, unchanged, to `licenses/claude-code-game-studios.txt` in the workspace root |
 
 ## Upstream files removed from `template/`
 
@@ -35,7 +42,7 @@ upstream.
 |---|---|
 | `src/` (`CLAUDE.md`, `.gitkeep`) | Unity compiles only `Assets/`; the code root is `Assets/` |
 | `.github/` (issue and PR templates, CODEOWNERS, FUNDING) | Upstream project's own repo files |
-| `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` | Upstream project's own files; the template keeps `TEMPLATE_CHANGELOG.md` |
+| `CONTRIBUTING.md`, `SECURITY.md` | Upstream project's own files |
 | `production/session-state/.gitkeep` | `production/session-state/` is gitignored local state |
 
 ## Files added to `template/`
@@ -51,16 +58,35 @@ upstream.
 | `AgentScripts/ValidatePixelArtImport.cs` | Editor check of the Pixelorama import |
 | `Tools/export-pixelorama.sh`, `pixel-asset.mjs`, `ui-kit-template.mjs`, `ui-kit-check.py` | Export, asset connector client, UI kit drawing, contrast check |
 | `ArtSource/README.md`, `design/art/*`, `design/asset-ledger.csv` | Art source folder, per-game art config and profile, license ledger |
-| `.mcp.json`, `.editorconfig`, `.gitattributes` | Pixelorama MCP server, editor and line-ending settings |
-| `docs/CCGS-README.md`, `docs/CCGS-UPGRADING.md`, `docs/CCGS-VERSION.txt` | Upstream docs kept for reference, and the fork point |
+| `.mcp.json`, `.editorconfig` | Pixelorama MCP server, editor settings |
+| `docs/CCGS-README.md`, `docs/CCGS-UPGRADING.md`, `docs/CCGS-CHANGELOG.md`, `docs/CCGS-VERSION.txt` | Upstream docs kept for reference, and the base commit |
+
+## Upstream-derived files outside `template/`
+
+`concept-kit/` is laid over the CCGS layer in each concept folder, so a concept runs CCGS with **no engine set**.
+
+| File | Relation to upstream `v1.3.0` |
+|---|---|
+| `concept-kit/project.yaml` | Upstream file plus `modes.rigor: minimal` at the end |
+| `concept-kit/CLAUDE.md` | Upstream file plus a concept note, a Language section and a "Concept stage" section after the stack note |
+| `concept-kit/.claude/docs/technical-preferences.md` | Upstream file, unchanged (the unconfigured one) |
+| `concept-kit/.gitignore` | Upstream file, unchanged (covers web prototypes) |
+
+The other files in `concept-kit/` (`README.md`, `design/production-gdd.md`, `design/playtest-record.md`,
+`design/name-lock.md`) are new.
 
 ## Taking a newer upstream release
 
-1. Clone upstream and check out the new tag next to this repo.
-2. Diff upstream `v1.2.0` against the new tag. For each changed file:
-   - not in the tables above: copy it into `template/`;
-   - in "Upstream files changed": merge by hand, keeping the change described above;
-   - removed upstream: remove it from `template/` unless a table above says it is ours.
-3. Follow upstream `UPGRADING.md` for config migrations (`project.yaml`).
-4. Update this file (fork point, tables), `template/docs/CCGS-VERSION.txt` and `framework.version` in
-   `template/project.yaml`, and release a template version whose **Port** says what games must merge.
+1. Clone upstream next to this repo and fetch the new tag.
+2. For each path in `git diff --name-status <current base> <new tag>`:
+   - not in the tables above: copy it into `template/` (a rename: remove the old path);
+   - in "Upstream files changed": three-way merge (`git merge-file`) with the current base as the base, and keep the
+     change described above;
+   - moved files: copy the new version to the moved path;
+   - `CLAUDE.md`, `project.yaml`, `technical-preferences.md`, `.gitignore`: also update the `concept-kit/` copies
+     as the table above says.
+3. Check that every upstream file outside the "changed" table is byte-for-byte the new tag (ignoring line endings),
+   and that `template/` has no file that is neither upstream nor in "Files added".
+4. Follow upstream `UPGRADING.md` for config migrations, update this file (base, merge history, tables),
+   `template/docs/CCGS-VERSION.txt` and `framework.version`, and release a template version whose **Port** says what
+   games must merge.

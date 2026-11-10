@@ -4,7 +4,7 @@ Indie game development managed through 49 coordinated Claude Code subagents.
 Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 > This project was made from the `claude-game-studio` template, a fork of
-> Claude Code Game Studios v1.2.0 (see `FORK.md` in the workspace root).
+> Claude Code Game Studios v1.3.0 (see `FORK.md` in the workspace root).
 
 ## Technology Stack
 
@@ -35,6 +35,12 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
   template-owned file, a reusable tool, a rule learned the hard way, a standard that is wrong), file a ticket in
   `design/template-requests/` by its `README.md` and give the user its ID. A game never edits `template/`. A fix
   to a template-owned file always gets a ticket, or the next port overwrites it.
+- **Git.** This repo is the game's own, private GitHub repo (`origin`). Follow the workspace's
+  `docs/git-rules.md`: trunk `main`, Conventional Commits with the story ID, the fixed messages (`chore: sync
+  template vX.YY`, `docs: template request TR-...`), no force-push, no `--no-verify`, nothing generated or
+  secret, commit and push only when the user asks. The concept's design (`design/game-brief.md`,
+  `design/production-gdd.md`, `design/playtest-record.md`, `design/name-lock.md`) and its HTML playtest
+  (`prototypes/`, the feel reference) came in at the first commit.
 - Code root is `Assets/`; there is no `src/`. Tests go in `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/`.
 - The Unity CLI drives the open Editor. Pass `--project-path` when more than one Editor is open. Editor-side helper
   scripts live in `AgentScripts/` and run with `unity command run_script`.
@@ -56,12 +62,11 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Engine Version Reference
 
-<!-- ENGINE-REFERENCE-IMPORT: the line below is engine-specific. /setup-engine
-     rewrites it to @docs/engine-reference/<engine>/VERSION.md for the chosen
-     engine, so a Unity or Unreal project stops loading the Godot reference every
-     session. It defaults to Godot (the template's example engine); skills that
-     need the pinned version read docs/engine-reference/<engine>/VERSION.md on
-     demand regardless of this import. -->
+<!-- ENGINE-REFERENCE-IMPORT: the line under this comment is engine-specific,
+     and there is none until an engine is set. /setup-engine, the grow's record
+     step and /project-settings (engine.name) write
+     @docs/engine-reference/<engine>/VERSION.md here for the chosen engine. Skills
+     that need the pinned version read that file on demand either way. -->
 @docs/engine-reference/unity/VERSION.md
 
 
@@ -98,8 +103,8 @@ Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
 
 See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
 
-> **First session?** If the project has no engine configured and no game concept,
-> run `/start` to begin the guided onboarding flow.
+> **First session?** Say "make me a game" (`/prototype`), or run `/start` to begin
+> the guided onboarding flow.
 
 ## Coding Standards
 

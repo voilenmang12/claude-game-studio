@@ -16,15 +16,35 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ├─ CLAUDE.md, README.md, FORK.md
 ├─ template/                  studio template; every game gets a copy
 ├─ tools/pixelorama-mcp/      Pixelorama MCP extension + server (games point to it with ../tools/...)
-├─ new-game.sh                bash new-game.sh <Game>          apply the template to a Unity project in <Game>/
+├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md
+├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)
+├─ new-concept.sh             bash new-concept.sh <slug>       concepts/<slug>/: brief, GDD, HTML playtest, name lock
+├─ new-game.sh                bash new-game.sh <Game> --concept <slug>   template + concept into a Unity project
+├─ publish-game.sh            bash publish-game.sh <Game>      the game's own private GitHub repo
 ├─ sync-template.sh           bash sync-template.sh <Game> [--dry-run]   port shared template files
 ├─ list-template-requests.sh  bash list-template-requests.sh [--open]    tickets of every game
 ├─ licenses/                  upstream licenses
+├─ concepts/                  local: BACKLOG.md and one folder per concept, each a local git repo (ignored)
 └─ <Game>/                    one folder = one Unity project = one git repo (ignored by this repo)
 ```
-- Start Claude Code **inside a game folder** for game work: CCGS hooks, rules and `.mcp.json` load only from the
+- Start Claude Code **inside a concept or game folder** for that work: CCGS hooks, rules and `.mcp.json` load only from the
   folder where `claude` starts.
 - Game codes are the folder prefix (`CG01-Name` → `CG01`); template request IDs use them.
+
+## From idea to game (`docs/game-lifecycle.md`)
+Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 2 GDD draft → 3 HTML playtest
+(PROCEED, PIVOT or KILL) → 4 GDD v1.0 → 5 name lock → 6 game project → 7 GitHub repo → 8 production.
+- Stages 1 to 5 happen in `concepts/<slug>/` (`new-concept.sh`): CCGS with **no engine set**, so `/prototype`
+  builds the browser playtest. Never `/setup-engine` there, never grow the playtest into a web project.
+- **No Unity project, folder name, repo or product name before the name is locked** (`design/name-lock.md`,
+  `Status: locked`). `new-game.sh --concept` refuses an unlocked concept or a folder that differs from the lock.
+- The Unity project is created by the user in Unity Hub, in the workspace root, with the locked folder name.
+- The GitHub repo comes after the first commit: `publish-game.sh`, private, only when the user asks.
+
+## Git (`docs/git-rules.md`)
+- Workspace repo public (workspace files only); concept repos local with no remote; one private GitHub repo per game.
+- Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. Commit and push only when the user asks.
+- Conventional Commits, plus the fixed messages in `git-rules.md` (start, sync, request, release, GDD, name lock).
 
 ## The template
 - Change shared behaviour in `template/` first, then port it to existing games deliberately.

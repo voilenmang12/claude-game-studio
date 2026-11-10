@@ -57,6 +57,47 @@ ticket to `released vX.YY`.
 
 (nothing yet)
 
+## v1.01 (2026-11-10)
+
+Minor. Claude Code Game Studios v1.3.0 merged, and the road from an idea to a game repo written down.
+
+**Changed**
+- CCGS `v1.2.0` → `v1.3.0` ("make me a game"): `/prototype` asks one round of questions from a genre sheet, writes
+  `design/game-brief.md`, builds a browser game in `prototypes/<name>/`, checks it, and changes it after play; new
+  `/cut`; `/help`, `/settings` and `/changelog` renamed `/next-step`, `/project-settings` and `/write-changelog`
+  (the old names still work); new `.claude/genres/` and `.claude/engines/`; hooks that exit cleanly on Windows
+  without Git Bash; 28 more read-only permissions in `.claude/settings.json`. Upstream notes:
+  `docs/CCGS-CHANGELOG.md`, `docs/CCGS-UPGRADING.md`. `FORK.md` (workspace) records the merge.
+- `CLAUDE.md`: fork note says v1.3.0; upstream's new engine-import comment; a **Git** bullet pointing to the
+  workspace's `docs/git-rules.md`.
+- `project.yaml`: `framework.version: 1.3.0`; comments name `/project-settings`.
+
+**Added (workspace, outside `template/`)**
+- `docs/game-lifecycle.md`: stages 0 to 8 from idea to production, each with its gate: brief, GDD draft, HTML
+  playtest (PROCEED, PIVOT, KILL), GDD v1.0, name lock, game project, private GitHub repo.
+- `docs/git-rules.md`: repos and visibility, trunk `main`, commit messages and fixed messages, tags, what never goes
+  into a repo, the stage 7 checklist.
+- `new-concept.sh` and `concept-kit/`: a concept folder with the CCGS layer and no engine set, the GDD, playtest
+  record and name lock forms, and a local git repo with no remote.
+- `new-game.sh --concept <slug>`: refuses an unlocked name or a folder that differs from it, and copies the concept's
+  design, `prototypes/` and `references/` into the first commit. `--no-concept` for an existing game.
+- `publish-game.sh`: creates the game's GitHub repo, private by default, and pushes `main`.
+- `sync-template.sh` also carries `.claude/genres`, `.claude/engines` and the CCGS docs.
+
+**Port**
+- `bash sync-template.sh <Game>`: takes the CCGS 1.3.0 files. Delete what it lists as `only in game` under
+  `studio-tests/` (`sprint/changelog.md`, `utility/help.md`, `utility/settings.md`: renamed upstream).
+- `.claude/settings.json`: copy the template's file if the game never edited it; otherwise replace every hook
+  `"command"` line and add the new allow rules by hand (`docs/CCGS-UPGRADING.md`, "Merge Carefully").
+- `CLAUDE.md`: replace the engine-import comment with the template's, keep the import line, and add the **Git**
+  bullet and the fork note version.
+- `project.yaml`: `framework.version: 1.3.0`, `last_upgraded`, and the `/project-settings` comment.
+- A game already past stage 6 keeps its history; it does not need the concept files. Add `design/name-lock.md`
+  with its current names if `publish-game.sh` will be used.
+
+**Requests**
+- None.
+
 ## v1.00 (2026-11-10)
 
 First public release. Fork of Claude Code Game Studios v1.2.0 (`05ad7c8`); `FORK.md` in the workspace root lists

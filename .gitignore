@@ -1,4 +1,5 @@
-# Workspace repo: track only the workspace files. Every game folder is its own git repo and is ignored here.
+# Workspace repo: track only the workspace files. Every game folder is its own git repo, and concepts/ is local;
+# both are ignored here.
 /*
 !/.gitignore
 !/.gitattributes
@@ -9,6 +10,10 @@
 !/new-game.sh
 !/sync-template.sh
 !/list-template-requests.sh
+!/new-concept.sh
+!/publish-game.sh
+!/docs/
+!/concept-kit/
 !/template/
 !/tools/
 !/licenses/

@@ -18,8 +18,11 @@ DST="$ROOT/$NAME"
 # Template-owned paths (folders are compared file by file).
 SHARED=(
   .claude/agents .claude/skills .claude/hooks .claude/rules .claude/scripts .claude/statusline.sh
-  .claude/docs
+  .claude/docs .claude/genres .claude/engines
   studio-tests
+  docs/engine-reference docs/WORKFLOW-GUIDE.md docs/CLAUDE.md docs/skill-flow-diagrams.md docs/migration-guide-v1.1.md
+  docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/CCGS-README.md docs/CCGS-UPGRADING.md docs/CCGS-CHANGELOG.md
+  docs/CCGS-VERSION.txt
   Assets/Editor/Art
   Assets/Integration/PixelArt.md Assets/Integration/PixelArt.md.meta
   Assets/Integration/UIPrompting.md Assets/Integration/UIPrompting.md.meta

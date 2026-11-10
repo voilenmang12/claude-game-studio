@@ -5,9 +5,8 @@ that move improvements both ways: from the template to the games, and from the g
 
 > **Fork notice.** `template/` is a fork of
 > [Claude Code Game Studios](https://github.com/donchitos/claude-code-game-studios) by Donchitos (MIT), taken at
-> `v1.2.0` (commit `05ad7c8`). The 49 agents, 74 skills, hooks, rules and docs in `template/.claude/` come from
-> there. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added. Upstream `v1.3.0` is
-> not merged.
+> `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`). The 49 agents, 78 skills, hooks, rules, genre sheets and
+> docs in `template/.claude/` come from there. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
 
 ## What is here
 
@@ -24,7 +23,11 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  ├─ design/template-requests/README.md   how a game asks for a template change
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       Pixelorama MCP extension + dependency-free server
-├─ new-game.sh                 apply the template to a new Unity project and start its git repo
+├─ docs/                       game-lifecycle.md (idea → GitHub repo) and git-rules.md
+├─ concept-kit/                what a concept folder gets on top of the CCGS layer
+├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
+├─ new-game.sh                 apply the template and a locked concept to a new Unity project
+├─ publish-game.sh             create the game's own private GitHub repo and push
 ├─ sync-template.sh            port the template's shared files to an existing game
 ├─ list-template-requests.sh   list the template requests of every game
 └─ licenses/                   upstream licenses (CCGS, pixelorama-mcp, game-ui-design)
@@ -40,17 +43,23 @@ The template is the **studio layer only**: no Unity `Assets/` content besides th
 - Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art; an asset connector
   service for generated art (not part of this repo; `Tools/pixel-asset.mjs` is its client).
 
-## Start a game
+## From idea to game
 
-1. Clone this repo. In Unity Hub, create a "Universal 2D" project **inside the clone**, for example `CG01-MyGame`.
-2. Apply the template and start the game's git repo:
-   ```bash
-   bash new-game.sh CG01-MyGame
-   ```
-3. Start Claude Code **in the game folder** (hooks, rules and `.mcp.json` load only from where `claude` starts), then
-   run `/start`.
+[`docs/game-lifecycle.md`](docs/game-lifecycle.md) has the stages; each one ends at a gate the user passes.
 
-Game folders are ignored by this repo's `.gitignore`: each game is its own repository.
+| Stage | Command or skill | Gate |
+|---|---|---|
+| Idea | `concepts/BACKLOG.md` | pick one |
+| Brief, GDD draft | `bash new-concept.sh <slug>`, then `/prototype` in `concepts/<slug>/` | core loop approved |
+| HTML playtest | `/prototype` builds `prototypes/<slug>/`; play, change, log sessions | PROCEED, PIVOT or KILL |
+| GDD v1.0, name lock | `design/production-gdd.md`, `design/name-lock.md` | name locked |
+| Game project | Unity Hub project, then `bash new-game.sh <Code>-<Name> --concept <slug>` | opens in Unity |
+| GitHub repo | `bash publish-game.sh <Code>-<Name>` (private) | repo created |
+| Production | `/start` in the game folder, then CCGS epics and stories | per milestone |
+
+Start Claude Code **in the concept or game folder** (hooks, rules and `.mcp.json` load only from where `claude`
+starts). Concepts are local git repos with no remote; each game is its own repository. Both are ignored by this
+repo. Git rules: [`docs/git-rules.md`](docs/git-rules.md).
 
 ## The two-way rules
 
