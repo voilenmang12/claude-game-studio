@@ -88,6 +88,22 @@ ahead="$(git rev-list --count '@{u}..HEAD' 2>/dev/null || echo 0)"
 [ "$(git config core.hooksPath || true)" = "tools/hooks" ] && ok "commit hook on (tools/hooks/pre-commit)" \
   || bad "commit hook off: git config core.hooksPath tools/hooks"
 
+# ---- games behind the template or the local layer (observations only; each game ports when the user asks)
+tv="$(tr -d '[:space:]' < template/TEMPLATE_VERSION)"
+lv="$(tr -d '[:space:]' < local/overlay/LOCAL_VERSION 2>/dev/null || true)"
+for d in */ local/project/; do
+  d="${d%/}"
+  [ -f "$d/TEMPLATE_VERSION" ] && [ -d "$d/ProjectSettings" ] || continue
+  gv="$(tr -d '[:space:]' < "$d/TEMPLATE_VERSION")"
+  gl="$(tr -d '[:space:]' < "$d/LOCAL_VERSION" 2>/dev/null || true)"
+  line="template $gv"; [ -z "$lv" ] || line="$line, local ${gl:-none}"
+  if [ "$gv" = "$tv" ] && { [ -z "$lv" ] || [ "$gl" = "$lv" ]; }; then
+    ok "$d: $line"
+  else
+    info "$d: $line (current: template $tv${lv:+, local $lv}); port it: bash sync-template.sh $d + the Port steps"
+  fi
+done
+
 # ---- upstream
 src=""
 for r in upstream origin; do

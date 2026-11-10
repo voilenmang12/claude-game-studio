@@ -151,6 +151,9 @@ docs/consistency-failures.md
 # === Vercel (deploy-test.sh never writes it; a manual `vercel` run does) ===
 .vercel/
 
+# === Files waiting to be deleted (CCGS denies rm -rf: move them here, the user deletes by hand) ===
+_to_delete/
+
 # === Secrets ===
 .env
 .env.*

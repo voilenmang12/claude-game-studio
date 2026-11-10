@@ -18,7 +18,8 @@ commit. Git rules for every stage: [`git-rules.md`](git-rules.md).
 
 ## 0. Idea
 
-`concepts/BACKLOG.md` (local, not in any repo) holds ideas with a status: `new`, `exploring`, `parked` (with the
+`concepts/BACKLOG.md` (local, not in any repo; `backlog` in `local/studio.config.json` moves it, for example into
+`local/docs/`) holds ideas with a status: `new`, `exploring`, `parked` (with the
 date and why), `killed`. An entry has a one-line pitch, the core decision the player makes, why it is worth trying,
 and the main production risk. A parked idea keeps its entry; it can come back.
 

@@ -36,6 +36,10 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 
 ## Studio template (read before writing game code)
 
+- **Deleting files.** The CCGS settings deny `rm -rf`. To get rid of a file or folder you made (scratch output,
+  screenshots, a replaced asset), move it to `_to_delete/` at the project root, which git ignores, and tell the
+  user; the user empties it by hand. Never move tracked files there to dodge a review: delete those with `git rm`
+  in a commit the user asked for.
 - `TEMPLATE_VERSION` — template version this project is synced to; `TEMPLATE_CHANGELOG.md` — what
   each version changed and how to port it. In a game, change both only when porting a template version.
 - **Template requests.** When work in a game makes or finds something every game should have (a fix in a

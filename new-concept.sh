@@ -25,7 +25,15 @@ tar -C "$SRC" -cf - .claude docs design/CLAUDE.md design/registry production .gi
 # concept-kit/ wins: CLAUDE.md, project.yaml and technical-preferences.md with no engine, .gitignore, the documents.
 tar -C "$KIT" -cf - . | tar -C "$DST" -xf -
 
-[ -f "$ROOT/concepts/BACKLOG.md" ] || printf '# Idea backlog\n\nOne entry per idea: pitch, core decision, why try it, main risk, status (new, exploring, parked, killed) and date.\n' > "$ROOT/concepts/BACKLOG.md"
+# The idea backlog: concepts/BACKLOG.md, or "backlog" (a path from the workspace root) in local/studio.config.json.
+BACKLOG="concepts/BACKLOG.md"
+if [ -f "$ROOT/local/studio.config.json" ]; then
+  B="$(node -e 'const c = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); console.log(c.backlog || "")' \
+    "$ROOT/local/studio.config.json")" || { echo "local/studio.config.json is not valid JSON" >&2; exit 1; }
+  [ -z "$B" ] || BACKLOG="$B"
+fi
+mkdir -p "$(dirname "$ROOT/$BACKLOG")"
+[ -f "$ROOT/$BACKLOG" ] || printf '# Idea backlog\n\nOne entry per idea: pitch, core decision, why try it, main risk, status (new, exploring, parked, killed) and date.\n' > "$ROOT/$BACKLOG"
 
 cd "$DST"
 git init -q -b main
@@ -39,6 +47,8 @@ fi
 
 cat <<EOF
 Made $DST: $COMMITTED.
+
+Idea backlog: $BACKLOG (set the idea's status to exploring there).
 
 Next (docs/game-lifecycle.md):
   1. cd concepts/$SLUG && claude      then: make me a game <your idea>   (or /prototype)

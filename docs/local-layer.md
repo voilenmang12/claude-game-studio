@@ -30,7 +30,7 @@ If you forked the repo on GitHub instead, add the public repo as `upstream`:
 | A different version of a template file in your games | `local/overlay/<its path>` | wins over the template's copy at every sync |
 | Files a new game starts with and then owns (`project.yaml` with your build command, `design/art/...`) | `local/seed/<path>` | copied by `new-game.sh`; `sync-template.sh` only creates missing ones |
 | A Unity project every game starts from (base code, paid plugins, settings) | `local/project/` (a whole project: `Assets/`, `Packages/`, `ProjectSettings/`) | `new-game.sh` copies it to the new game folder (new product GUID) |
-| Machine and account values | `local/studio.config.json`: `vercelScope`, `pixelAssetApi`, `pixelAssetConnectorDir` | `deploy-test.sh`, `template/Tools/pixel-asset.mjs` (environment variables still win) |
+| Machine and account values | `local/studio.config.json`: `vercelScope`, `pixelAssetApi`, `pixelAssetConnectorDir`, `backlog` | `deploy-test.sh`, `template/Tools/pixel-asset.mjs` (environment variables still win), `new-concept.sh` (`backlog`: the idea backlog's path from the workspace root, for example `local/docs/backlog.md`, so it is kept in your repo; default `concepts/BACKLOG.md`, in no repo) |
 | Words that must never be public | `local/public-denylist.txt` | `tools/hooks/pre-commit` |
 | Your notes and decisions | `local/docs/` | you |
 
