@@ -67,7 +67,7 @@ else
   else
     info "local/ is not a git repo: cd local && git init -b main"
   fi
-  [ -d local/project ] && [ ! -d local/project/ProjectSettings ] && [ -n "$(ls -A local/project | grep -v '^README.md$' || true)" ] \
+  [ -d local/project ] && [ ! -d local/project/ProjectSettings ] && [ -n "$(ls -A local/project | grep -v -E '^(README|_layer).md$' || true)" ] \
     && bad "local/project/ has files but no ProjectSettings/: new-game.sh only uses it as a whole Unity project"
 fi
 [ -z "$(git ls-files local)" ] && ok "nothing from local/ is tracked by the workspace repo" \
