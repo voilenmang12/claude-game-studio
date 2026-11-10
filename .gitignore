@@ -12,6 +12,7 @@
 !/list-template-requests.sh
 !/new-concept.sh
 !/publish-game.sh
+!/deploy-test.sh
 !/docs/
 !/concept-kit/
 !/template/

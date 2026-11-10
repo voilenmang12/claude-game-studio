@@ -47,7 +47,8 @@ the playtest tests a design, not a guess.
 `/prototype` builds `prototypes/<slug>/` from the brief: a browser game that opens with a double-click, every tuning
 value in `config.js`, checked by a short scripted run before handover. Then:
 
-- The user plays it. Each change they ask for is one commit, `iteration N: <what>`; the tweak panel (`tune.js`)
+- The user plays it, on the computer or on a phone: `bash deploy-test.sh concepts/<slug>/prototypes/<slug>` puts it
+  on Vercel and prints the URL (`docs/test-deploys.md`). Each change they ask for is one commit, `iteration N: <what>`; the tweak panel (`tune.js`)
   is added when they want to tune numbers themselves.
 - Every play session goes in `design/playtest-record.md`: build, who played, device, what was observed, numbers,
   changes asked for. A scripted check is not a session.
@@ -98,5 +99,6 @@ user asks; the user changes visibility themselves.
 ## 8. Production
 
 In the game folder: `/art-bible`, `/create-epics`, `/create-stories`, `/dev-story`, `/story-done` (CCGS). The
-template's rules apply: versions and ports from the workspace, template requests back to it (`CLAUDE.md`). The
+template's rules apply: versions and ports from the workspace, template requests back to it (`CLAUDE.md`). Test
+builds go to Vercel with `bash deploy-test.sh <Code>-<Name>/Builds/WebGL` (`docs/test-deploys.md`), never to players. The
 concept folder stays in `concepts/` as the history of the idea; delete it when the user no longer needs it.

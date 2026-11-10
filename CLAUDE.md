@@ -16,11 +16,12 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ├─ CLAUDE.md, README.md, FORK.md
 ├─ template/                  studio template; every game gets a copy
 ├─ tools/pixelorama-mcp/      Pixelorama MCP extension + server (games point to it with ../tools/...)
-├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md
+├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
 ├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)
 ├─ new-concept.sh             bash new-concept.sh <slug>       concepts/<slug>/: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                bash new-game.sh <Game> --concept <slug>   template + concept into a Unity project
 ├─ publish-game.sh            bash publish-game.sh <Game>      the game's own private GitHub repo
+├─ deploy-test.sh             bash deploy-test.sh <folder> [--prod]      playtest or WebGL build → Vercel test URL
 ├─ sync-template.sh           bash sync-template.sh <Game> [--dry-run]   port shared template files
 ├─ list-template-requests.sh  bash list-template-requests.sh [--open]    tickets of every game
 ├─ licenses/                  upstream licenses

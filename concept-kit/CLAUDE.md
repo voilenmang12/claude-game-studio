@@ -32,7 +32,8 @@ Guide: `../../docs/game-lifecycle.md` (stages 1 to 5). Git rules: `../../docs/gi
 2. **GDD draft.** `design/production-gdd.md`, sections 1 to 5 at least, as v0.x. The user approves the core loop
    before the playtest is built.
 3. **HTML playtest.** `/prototype` builds `prototypes/<slug>/` from the brief. The user plays it; changes follow
-   their play. Log every play session in `design/playtest-record.md`. The verdict is PROCEED, PIVOT or KILL, and
+   their play; to play it on a phone, run `bash deploy-test.sh concepts/<slug>/prototypes/<slug>` from the workspace
+   root and give the user the URL (`../../docs/test-deploys.md`). Log every play session in `design/playtest-record.md`. The verdict is PROCEED, PIVOT or KILL, and
    only the user gives it.
 4. **GDD v1.0.** After PROCEED, finish every section of `design/production-gdd.md` from the brief and the playtest
    record, and set it to v1.0 with the user's approval.

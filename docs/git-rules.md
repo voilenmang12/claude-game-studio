@@ -61,6 +61,8 @@ Tags are annotated (`git tag -a`), and pushed on purpose (`git push origin <tag>
   template's `.gitignore` covers them. It is the standard file for every game; change it in `template/` first.
 - Secrets: API keys, tokens, `.env`, keystores, signing certificates, `project.local.yaml` values.
 - Paid plugins in a public repo; personal data or machine paths in the workspace repo.
+- Vercel state: `.vercel/` (ignored). `deploy-test.sh` deploys from a temporary copy, so it never writes one;
+  a test deploy is not a git step (`docs/test-deploys.md`).
 - Files over 50 MB. If a game needs them, decide on Git LFS first **(user)**.
 
 Before each commit, read `git status` and `git diff --cached`: only the files of this change, nothing generated,

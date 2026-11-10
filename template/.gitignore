@@ -148,6 +148,9 @@ docs/consistency-failures.md
 /reports/
 /test-results/
 
+# === Vercel (deploy-test.sh never writes it; a manual `vercel` run does) ===
+.vercel/
+
 # === Secrets ===
 .env
 .env.*

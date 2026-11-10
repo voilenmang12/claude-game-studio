@@ -55,7 +55,12 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
-(nothing yet)
+**Added**
+- `.gitignore` ignores `.vercel/`. Test builds go to Vercel through the workspace's `deploy-test.sh`
+  (`docs/test-deploys.md`), which deploys a temporary copy and never writes into the game.
+
+**Port**
+- Copy `.gitignore` (`sync-template.sh` does it).
 
 ## v1.03 (2026-11-10)
 

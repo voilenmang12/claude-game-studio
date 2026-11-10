@@ -23,11 +23,12 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  ├─ design/template-requests/README.md   how a game asks for a template change
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       Pixelorama MCP extension + dependency-free server
-├─ docs/                       game-lifecycle.md (idea → GitHub repo) and git-rules.md
+├─ docs/                       game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
 ├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
 ├─ publish-game.sh             create the game's own private GitHub repo and push
+├─ deploy-test.sh              put a playtest or WebGL build on Vercel and print the test URL
 ├─ sync-template.sh            port the template's shared files to an existing game
 ├─ list-template-requests.sh   list the template requests of every game
 └─ licenses/                   upstream licenses (CCGS, pixelorama-mcp, game-ui-design)
@@ -41,7 +42,8 @@ The template is the **studio layer only**: no Unity `Assets/` content besides th
 - Claude Code; Git and bash (Git Bash on Windows); Node 20 or later; Python 3 with Pillow for `ui-kit-check.py`.
 - Unity 6000.6.7f1 (Unity 6.6), a 2D URP project, with the `com.unity.nuget.newtonsoft-json` package.
 - Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art;
-  [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) for generated art (see below).
+  [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) for generated art (see below);
+  [Vercel CLI](https://vercel.com/docs/cli) for test deploys.
 
 ## From idea to game
 
@@ -51,7 +53,7 @@ The template is the **studio layer only**: no Unity `Assets/` content besides th
 |---|---|---|
 | Idea | `concepts/BACKLOG.md` | pick one |
 | Brief, GDD draft | `bash new-concept.sh <slug>`, then `/prototype` in `concepts/<slug>/` | core loop approved |
-| HTML playtest | `/prototype` builds `prototypes/<slug>/`; play, change, log sessions | PROCEED, PIVOT or KILL |
+| HTML playtest | `/prototype` builds `prototypes/<slug>/`; play (on a phone: `bash deploy-test.sh <folder>`), change, log sessions | PROCEED, PIVOT or KILL |
 | GDD v1.0, name lock | `design/production-gdd.md`, `design/name-lock.md` | name locked |
 | Game project | Unity Hub project, then `bash new-game.sh <Code>-<Name> --concept <slug>` | opens in Unity |
 | GitHub repo | `bash publish-game.sh <Code>-<Name>` (private) | repo created |
@@ -76,6 +78,14 @@ that comes from a ticket ends with its ID, and each release lists the tickets it
 
 Details: [`CLAUDE.md`](CLAUDE.md), [`template/TEMPLATE_CHANGELOG.md`](template/TEMPLATE_CHANGELOG.md),
 [`template/design/template-requests/README.md`](template/design/template-requests/README.md).
+
+## Test deploys: Vercel
+
+`bash deploy-test.sh <folder>` puts an HTML playtest or a Unity WebGL build on Vercel and prints `TEST_URL=<url>`,
+so a build can be played on a phone, or from a phone when Claude Code runs under Remote Control. It deploys a
+temporary copy with the headers a Brotli or gzip Unity build needs, and writes nothing into the folder. Deploys are
+previews that only the signed-in Vercel account can open; `--prod` gives a public stable URL. Sign in once with
+`vercel login` (or `VERCEL_TOKEN`). Details: [`docs/test-deploys.md`](docs/test-deploys.md).
 
 ## Generated art: Codex Asset Studio
 
