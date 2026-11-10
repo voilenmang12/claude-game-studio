@@ -51,11 +51,32 @@ ticket to `released vX.YY`.
 
 | ID | Game | Title | Status | Version or reason |
 |---|---|---|---|---|
-| (none yet) | | | | |
+| TR-CG01-001 | CG01 | Ignore `_to_delete/` in the standard .gitignore | released v2.01 | v2.01 |
 
 ## Unreleased
 
 (nothing yet)
+
+## v2.01 (2026-11-11)
+
+Minor. A place for files waiting to be deleted, the idea backlog in your own layer, and game versions in the doctor.
+
+**Added**
+- `_to_delete/`: the folder for files waiting to be deleted, since the CCGS settings deny `rm -rf`. `.gitignore`
+  ignores it and `CLAUDE.md` ("Studio template", "Deleting files") says how to use it. (TR-CG01-001)
+- `studio-doctor.sh` lists every game (and `local/project/`) with its template and local versions, and how to port
+  the ones behind.
+- `backlog` in `local/studio.config.json`: where `new-concept.sh` keeps the idea backlog (a path from the workspace
+  root, for example `local/docs/backlog.md`, so it lives in your own repo). Default `concepts/BACKLOG.md`.
+
+**Port**
+- `bash sync-template.sh <Game>` copies `.gitignore`. Copy the "Deleting files" bullet of `template/CLAUDE.md` into
+  the game's `CLAUDE.md` (game-owned). A game that added `_to_delete/` to its own `.gitignore` drops that copy; set
+  the game's ticket TR-CG01-001 to `released v2.01`. (TR-CG01-001)
+- Workspace: add `"backlog": ""` (or your path) to `local/studio.config.json` if you want it; nothing else.
+
+**Requests**
+- TR-CG01-001: Ignore `_to_delete/` in the standard .gitignore.
 
 ## v2.00 (2026-11-11)
 
