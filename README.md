@@ -25,7 +25,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  ├─ Tools/                   Pixelorama export, asset connector client, UI kit drawing and contrast check
 │  ├─ design/template-requests/README.md   how a game asks for a template change
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
-├─ tools/pixelorama-mcp/       Pixelorama MCP extension + dependency-free server
+├─ tools/pixelorama-mcp/       Pixelorama MCP: PixMcpBridge extension + server (Pixelorama-MCP 0.2.1, 106 tools)
 ├─ tools/hooks/pre-commit      keeps private content out of commits to this repo
 ├─ docs/                       game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
@@ -126,4 +126,4 @@ connector sets `ASSET_API_TOKEN`, give each game a project token through the sam
 ## Licenses
 
 This repo: MIT ([`LICENSE`](LICENSE)). Upstream parts keep their licenses: Claude Code Game Studios (MIT),
-pixelorama-mcp (MIT), the `game-ui-design` skill (Apache-2.0); copies in [`licenses/`](licenses/).
+Pixelorama-MCP by abidoo22 (MIT), the `game-ui-design` skill (Apache-2.0); copies in [`licenses/`](licenses/).

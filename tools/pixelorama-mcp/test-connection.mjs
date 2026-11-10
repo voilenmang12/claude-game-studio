@@ -1,32 +1,69 @@
-// Quick check that Pixelorama + the Pixelorama MCP extension are reachable.
-//   node tools/pixelorama-mcp/test-connection.mjs -> prints the open project
-//   node tools/pixelorama-mcp/test-connection.mjs --draw -> also draws a 8x8 coin at (0,0)
-import { createConnection } from "node:net";
+// Checks that Pixelorama is running with the PixMcpBridge extension, and that the MCP server starts.
+//   node tools/pixelorama-mcp/test-connection.mjs          bridge health + the server's tool list
+//   node tools/pixelorama-mcp/test-connection.mjs --draw   also draws an 8x8 coin on a new 8x8 canvas
+import { spawn } from "node:child_process";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const port = Number(process.env.PIXELORAMA_MCP_PORT ?? 7651);
+const BRIDGE = process.env.PIX_MCP_BRIDGE_URL || "http://127.0.0.1:7373";
 const draw = process.argv.includes("--draw");
-const calls = [{ id: 1, method: "get_project", params: {} }];
-if (draw) calls.push({ id: 2, method: "draw_pixels", params: {
-  palette: { o: "#5a3a12", y: "#f2c230", h: "#fff2a8" },
-  rows: ["..oooo..", ".oyhyyo.", "oyhyyyyo", "oyyyyyyo", "oyyyyyyo", "oyyyyyyo", ".oyyyyo.", "..oooo.."],
-  x: 0, y: 0 } });
 
-const socket = createConnection({ host: "127.0.0.1", port });
-socket.setEncoding("utf8");
-socket.setTimeout(5000, () => { console.error("Timed out: Pixelorama answered nothing."); process.exit(1); });
-socket.on("error", (e) => {
-  console.error(`Cannot reach Pixelorama on 127.0.0.1:${port} (${e.message}).`);
-  console.error("Open Pixelorama and enable Edit > Preferences > Extensions > Pixelorama MCP, then restart Pixelorama.");
+let health;
+try {
+  health = await (await fetch(`${BRIDGE}/health`, { signal: AbortSignal.timeout(3000) })).json();
+} catch (e) {
+  console.error(`Cannot reach the Pixelorama bridge at ${BRIDGE} (${e.message}).`);
+  console.error("Open Pixelorama; in Edit > Preferences > Extensions, PixMcpBridge must be installed and enabled.");
   process.exit(1);
+}
+console.log(`bridge: ${JSON.stringify(health)}`);
+
+const child = spawn(process.execPath, [join(dirname(fileURLToPath(import.meta.url)), "pixelorama-mcp.mjs")], {
+  stdio: ["pipe", "pipe", "inherit"],
 });
-let buffer = "", left = calls.length;
-socket.on("connect", () => { for (const c of calls) socket.write(JSON.stringify(c) + "\n"); });
-socket.on("data", (chunk) => {
+let buffer = "", nextId = 1;
+const waiting = new Map();
+child.stdout.setEncoding("utf8");
+child.stdout.on("data", (chunk) => {
   buffer += chunk;
-  let nl;
-  while ((nl = buffer.indexOf("\n")) !== -1) {
-    const msg = JSON.parse(buffer.slice(0, nl)); buffer = buffer.slice(nl + 1);
-    console.log(msg.error ? `ERROR (${msg.id}): ${msg.error}` : `OK (${msg.id}): ${JSON.stringify(msg.result)}`);
-    if (--left === 0) { console.log(`Node ${process.version}: connection works.`); socket.end(); process.exit(0); }
+  let i;
+  while ((i = buffer.indexOf("\n")) !== -1) {
+    const line = buffer.slice(0, i); buffer = buffer.slice(i + 1);
+    if (!line.trim()) continue;
+    const msg = JSON.parse(line);
+    waiting.get(msg.id)?.(msg); waiting.delete(msg.id);
   }
 });
+child.on("exit", (code) => { if (code) { console.error(`MCP server exited with code ${code}`); process.exit(1); } });
+const rpc = (method, params) => new Promise((ok, fail) => {
+  const id = nextId++;
+  const timer = setTimeout(() => fail(new Error(`${method}: no answer`)), 15000);
+  waiting.set(id, (m) => { clearTimeout(timer); m.error ? fail(new Error(m.error.message)) : ok(m.result); });
+  child.stdin.write(JSON.stringify({ jsonrpc: "2.0", id, method, params }) + "\n");
+});
+
+try {
+  await rpc("initialize", { protocolVersion: "2024-11-05", capabilities: {}, clientInfo: { name: "test-connection", version: "1" } });
+  const { tools } = await rpc("tools/list", {});
+  console.log(`server: ${tools.length} tools`);
+  if (draw) {
+    const rows = ["..oooo..", ".oyhyyo.", "oyhyyyyo", "oyyyyyyo", "oyyyyyyo", "oyyyyyyo", ".oyyyyo.", "..oooo.."];
+    const palette = { o: "#5a3a12", y: "#f2c230", h: "#fff2a8" };
+    const data = rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === "." ? [] : [x, y, palette[ch]])));
+    for (const [name, args] of [
+      ["create_canvas", { width: 8, height: 8, name: "coin", fill_color: "transparent" }],
+      ["draw_pixels_fast", { data }],
+    ]) {
+      const r = await rpc("tools/call", { name, arguments: args });
+      const text = r.content?.[0]?.text ?? "";
+      if (r.isError || text.startsWith("❌")) throw new Error(`${name}: ${text}`);
+      console.log(`${name}: ${text.split("\n")[0]}`);
+    }
+  }
+  console.log(`Node ${process.version}: connection works.`);
+} catch (e) {
+  console.error(e.message);
+  process.exitCode = 1;
+} finally {
+  child.kill();
+}

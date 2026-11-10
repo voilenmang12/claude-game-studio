@@ -61,16 +61,19 @@ Camera: add a **Pixel Perfect Camera** (URP 2D) with Assets PPU = PixelsPerUnit 
 
 ## 5. Claude draws in Pixelorama (pixelorama-mcp)
 
-Upstream: https://github.com/CyberIce2077/pixelorama-mcp (MIT). Claude draws with a character grid and a palette in
-the open file; you watch the canvas and can undo with Ctrl+Z. Good for icons, items, tiles, recolors and short
-animations. Not for detailed characters (pixels and rectangles only, no brush or selection).
+Upstream: https://github.com/abidoo22/Pixelorama-MCP v0.2.1 (MIT). Claude draws live in the open Pixelorama
+(106 tools: pixels, lines, shapes, fills, layers, frames, animation tags, palettes, selections, dithering, outlines,
+tilesets, export); you watch the canvas and can undo with Ctrl+Z. Good for icons, items, tiles, UI pieces, recolors
+and short animations. Detailed characters still come from the connector (section 6).
 
-The workspace ships the extension and a dependency-free server in `tools/pixelorama-mcp/`, and every game's
-`.mcp.json` points to it. One-time setup per machine:
+The workspace ships the `PixMcpBridge` extension and the server in `tools/pixelorama-mcp/`, and every game's
+`.mcp.json` points to it. One-time setup per machine (`tools/pixelorama-mcp/README.md`):
 
-1. Pixelorama → Edit → Preferences → Extensions → **Add Extension** → pick `tools/pixelorama-mcp/PixeloramaMCP.zip`
-   → enable **Pixelorama MCP** → restart Pixelorama.
-2. Start Claude Code in the game folder and accept the `pixelorama` server when asked (`/mcp` to check).
+1. Pixelorama → Edit → Preferences → Extensions → **Add Extension** → pick `tools/pixelorama-mcp/PixMcpBridge.pck`
+   → enable **PixMcpBridge** → restart Pixelorama. One MCP extension per Pixelorama: remove older ones.
+2. `npm ci --omit=dev --prefix tools/pixelorama-mcp/server` (workspace root), then
+   `node tools/pixelorama-mcp/test-connection.mjs` with Pixelorama open.
+3. Start Claude Code in the game folder and accept the `pixelorama` server when asked (`/mcp` to check).
 
 Each time: open Pixelorama first, then ask Claude.
 

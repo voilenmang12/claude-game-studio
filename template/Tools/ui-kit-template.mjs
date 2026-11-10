@@ -3,17 +3,25 @@
 // server, saves ArtSource/UI/**.pxo, then exports with Tools/export-pixelorama.sh.
 // This script belongs to the template; the colors and button roles belong to the game, in
 // design/art/ui-kit-palette.json (set it from design/art/ui-prompt-profile.md).
-// Pixelorama must be open with the MCP extension enabled (not needed for --check).
+// Pixelorama must be open with the PixMcpBridge extension enabled (tools/pixelorama-mcp/README.md; not needed for --check).
 //   node Tools/ui-kit-template.mjs [--only popup_frame,button_primary]
 //   node Tools/ui-kit-template.mjs --check      validate the palette file and list the pieces, draw nothing
 import { spawn, execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-// The workspace keeps the server in tools/pixelorama-mcp/ next to the game folders; override with PIXELORAMA_MCP_SERVER.
-const SERVER = process.env.PIXELORAMA_MCP_SERVER || resolve(ROOT, "..", "tools/pixelorama-mcp/pixelorama-mcp.mjs");
+// The workspace keeps the server in tools/pixelorama-mcp/; the nearest parent folder that has it wins, so this works
+// in a game next to tools/ and in a deeper project such as local/project/. PIXELORAMA_MCP_SERVER overrides it.
+function findServer() {
+  for (let dir = resolve(ROOT, ".."); ; dir = dirname(dir)) {
+    const candidate = join(dir, "tools/pixelorama-mcp/pixelorama-mcp.mjs");
+    if (existsSync(candidate)) return candidate;
+    if (dirname(dir) === dir) return resolve(ROOT, "..", "tools/pixelorama-mcp/pixelorama-mcp.mjs");
+  }
+}
+const SERVER = process.env.PIXELORAMA_MCP_SERVER || findServer();
 
 // ---- palette: design/art/ui-kit-palette.json. Fails loudly: a missing layer or a bad color stops the run.
 const PALETTE_FILE = join(ROOT, "design/art/ui-kit-palette.json");
@@ -130,7 +138,9 @@ const rpc = (method, params) => new Promise((ok, fail) => {
 });
 const call = async (name, args) => {
   const result = await rpc("tools/call", { name, arguments: args });
-  if (result.isError) throw new Error(`${name}: ${result.content?.[0]?.text}`);
+  // The server reports a failed command as text starting with an X mark, not always with isError.
+  const text = result.content?.[0]?.text ?? "";
+  if (result.isError || text.startsWith("❌")) throw new Error(`${name}: ${text}`);
   return result;
 };
 
@@ -145,8 +155,10 @@ try {
     if (piece.rows.length !== h || piece.rows.some((row) => row.length !== w)) throw new Error(`${name}: grid is not ${w}x${h}`);
     const used = new Set(piece.rows.join("").replaceAll(".", ""));
     const palette = Object.fromEntries([...used].map((ch) => [ch, piece.palette[ch]]));
-    await call("new_project", { width: w, height: h, name: name.split("/").pop() });
-    await call("draw_pixels", { rows: piece.rows, palette });
+    await call("create_canvas", { width: w, height: h, name: name.split("/").pop(), fill_color: "transparent" });
+    // One batch per piece: [x, y, "#hex", ...] for every pixel that is not "." (transparent).
+    const data = piece.rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === "." ? [] : [x, y, palette[ch]])));
+    await call("draw_pixels_fast", { data });
     const source = `ArtSource/UI/${name}.pxo`;
     mkdirSync(dirname(join(ROOT, source)), { recursive: true }); // Pixelorama does not create folders
     await call("save_project", { path: join(ROOT, source) });

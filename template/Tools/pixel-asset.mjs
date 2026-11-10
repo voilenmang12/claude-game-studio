@@ -21,10 +21,15 @@ import { parseArgs } from "node:util";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG_PATH = join(ROOT, "design/art/pixel-asset-project.json");
 const LEDGER_PATH = join(ROOT, "design/asset-ledger.csv");
-// The game folder sits in the workspace root, so the studio config is ../local/studio.config.json.
+// The studio config is local/studio.config.json in the nearest parent folder that has one (the workspace root for a
+// game, two levels up for local/project/).
 function studioConfig() {
-  const path = join(ROOT, "..", "local", "studio.config.json");
-  if (!existsSync(path)) return {};
+  let path = null;
+  for (let dir = resolve(ROOT, ".."); ; dir = dirname(dir)) {
+    if (existsSync(join(dir, "local", "studio.config.json"))) { path = join(dir, "local", "studio.config.json"); break; }
+    if (dirname(dir) === dir) break;
+  }
+  if (!path) return {};
   try {
     return JSON.parse(readFileSync(path, "utf8"));
   } catch (error) {

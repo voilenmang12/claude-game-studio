@@ -59,13 +59,14 @@ If a "simple" piece needs more than 4 colors or shading that follows a form, it 
 **Drawing with Pixelorama MCP** (Pixelorama must be open; guide `PixelArt.md`, section 5):
 
 1. Take size, border and palette from section 5 and the profile. The colors are the profile's hex values.
-2. Compute the whole grid in code first and send it as one `draw_pixels` call: one character per palette color, `.` for
-   clear. A frame fills the full grid; only its corner notches are clear. Draw one corner and mirror it to the other three
+2. Compute the whole grid in code first (one character per palette color, `.` for clear) and send it as one
+   `draw_pixels_fast` call: a flat list `[x, y, "#hex", ...]` of every pixel that is not clear. A frame fills the full grid; only its corner notches are clear. Draw one corner and mirror it to the other three
    in the code, so all four match exactly. A glyph icon keeps 1 to 2 clear pixels on each side.
-3. `new_project` at the native size, `draw_pixels`, then check it with `get_image` (scaled) and `read_pixels`.
+3. `create_canvas` at the native size with `fill_color: "transparent"`, `draw_pixels_fast`, then check it with
+   `capture_canvas_image` (scaled) and `get_pixels`. `Tools/ui-kit-template.mjs` does steps 2 to 4 for the popup kit.
 4. `save_project` to `ArtSource/UI/<Kind>/<name>.pxo`, then `bash Tools/export-pixelorama.sh` writes
    `Assets/Art/UI/<Kind>/<name>.png`. Change the `.pxo` and export again; never edit the PNG.
-5. Ledger row: source type `claude-mcp`, tool `Pixelorama 1.2.3 + pixelorama-mcp`, license "own work".
+5. Ledger row: source type `claude-mcp`, tool `Pixelorama 1.2.3 + Pixelorama-MCP 0.2.1`, license "own work".
 6. Review with section 8, then import with section 9 (step 2 onward).
 
 Lessons from the pilot, 2026-11-09 (a 32 px button with an 8 px border, and a 16 px close glyph):

@@ -19,7 +19,7 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ├─ studio-doctor.sh           bash studio-doctor.sh [--init] [--fetch]   checks the workspace before an update
 ├─ studio-commit.sh           bash studio-commit.sh "<msg>" [--push]      commits workspace, local/, local/project/
 ├─ template/                  studio template; every game gets a copy
-├─ tools/pixelorama-mcp/      Pixelorama MCP extension + server (games point to it with ../tools/...)
+├─ tools/pixelorama-mcp/      Pixelorama MCP (PixMcpBridge + server; games point to it with ../tools/...; README)
 ├─ tools/hooks/pre-commit     refuses workspace commits that match local/public-denylist.txt
 ├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
 ├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)

@@ -55,7 +55,23 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
-(nothing yet)
+**Changed**
+- The Pixelorama MCP is now [Pixelorama-MCP](https://github.com/abidoo22/Pixelorama-MCP) v0.2.1 (MIT, commit
+  `56fd8aa`): the `PixMcpBridge` extension (port 7373) and the upstream server, 106 tools instead of 13. Workspace
+  `tools/pixelorama-mcp/`: `PixMcpBridge.pck`, `server/` (built JavaScript, packages installed per machine),
+  `pixelorama-mcp.mjs` (same path in `.mcp.json`, now starts the server), `test-connection.mjs` (bridge health, tool
+  list, `--draw`). The old `PixeloramaMCP.zip` (0.1.0, port 7651) is gone.
+- `Tools/ui-kit-template.mjs` draws with `create_canvas`, `draw_pixels_fast` and `save_project` (the popup kit comes
+  out the same, pixel for pixel), and finds `tools/pixelorama-mcp/` in the nearest parent folder.
+  `Tools/pixel-asset.mjs` finds `local/studio.config.json` the same way.
+- `PixelArt.md` section 5 and `UIPrompting.md` section 3 use the new tools and setup.
+
+**Port**
+- Once per machine: in Pixelorama → Edit → Preferences → Extensions, remove `PixeloramaMCP`, add
+  `tools/pixelorama-mcp/PixMcpBridge.pck`, enable it, restart Pixelorama; then
+  `npm ci --omit=dev --prefix tools/pixelorama-mcp/server` and `node tools/pixelorama-mcp/test-connection.mjs`.
+- Each game: `bash sync-template.sh <Game>` (copies `Tools/` and the `Assets/Integration` docs). A game script that
+  calls the old tools (`new_project`, `draw_pixels` with `rows`, `get_image`, `read_pixels`) moves to the new names.
 
 ## v2.01 (2026-11-11)
 

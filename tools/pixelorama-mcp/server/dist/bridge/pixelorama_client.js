@@ -1,0 +1,83 @@
+/**
+ * Pixelorama Bridge Client
+ *
+ * HTTP client that sends commands to the Pixelorama plugin's local HTTP server.
+ * All drawing operations are sent as POST /command with a JSON body.
+ */
+const BRIDGE_URL = process.env.PIX_MCP_BRIDGE_URL || "http://127.0.0.1:7373";
+const DEFAULT_TIMEOUT_MS = parseInt(process.env.PIX_MCP_TIMEOUT_MS || "120000", 10) || 120_000;
+// FIFO queue to serialize commands and prevent race conditions when LLMs fire parallel tool calls
+let commandQueue = Promise.resolve();
+/**
+ * Send a command to the Pixelorama bridge plugin.
+ * Serialized in strict order to avoid concurrent mutation races.
+ */
+export async function sendCommand(tool, params = {}, timeoutMs) {
+    return new Promise((resolve) => {
+        commandQueue = commandQueue
+            .then(async () => {
+            const res = await _executeHttpCommand(tool, params, timeoutMs);
+            resolve(res);
+        })
+            .catch((err) => {
+            resolve({
+                success: false,
+                error: err instanceof Error ? err.message : String(err),
+            });
+        });
+    });
+}
+async function _executeHttpCommand(tool, params, timeoutMs) {
+    const body = JSON.stringify({ tool, params });
+    const effectiveTimeout = timeoutMs ?? DEFAULT_TIMEOUT_MS;
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), effectiveTimeout);
+        const response = await fetch(`${BRIDGE_URL}/command`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+            signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        const result = (await response.json());
+        return result;
+    }
+    catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+            return {
+                success: false,
+                error: `Request timed out after ${effectiveTimeout}ms while executing '${tool}'. NOTE: The operation may have completed or still be processing in Pixelorama (changes may already have been committed). Do not blind-retry without inspecting state with get_pixels or get_canvas_image. Increase PIX_MCP_TIMEOUT_MS if running heavy scripts.`,
+            };
+        }
+        const message = error instanceof Error ? error.message : "Unknown error";
+        // Provide helpful error message if connection refused
+        if (message.includes("ECONNREFUSED") || message.includes("fetch failed")) {
+            return {
+                success: false,
+                error: `Cannot connect to Pixelorama bridge at ${BRIDGE_URL}. Make sure Pixelorama is running with the PixMcpBridge.pck plugin enabled.`,
+            };
+        }
+        return { success: false, error: message };
+    }
+}
+/**
+ * Check if the Pixelorama bridge is reachable.
+ */
+export async function checkHealth() {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        const response = await fetch(`${BRIDGE_URL}/health`, {
+            signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        return (await response.json());
+    }
+    catch {
+        return {
+            success: false,
+            error: `Pixelorama bridge not reachable at ${BRIDGE_URL}`,
+        };
+    }
+}

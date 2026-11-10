@@ -32,3 +32,4 @@
 /template/.claude/worktrees/
 **/__pycache__/
 .DS_Store
+/tools/pixelorama-mcp/server/node_modules/
