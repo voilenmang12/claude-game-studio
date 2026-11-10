@@ -34,6 +34,11 @@ If you forked the repo on GitHub instead, add the public repo as `upstream`:
 | Words that must never be public | `local/public-denylist.txt` | `tools/hooks/pre-commit` |
 | Your notes and decisions | `local/docs/` | you |
 
+Imports resolve relative to the file that holds them. A concept's `@../../local/RULES.md` points outside the
+concept folder, so the first Claude Code session in each concept asks once to approve that external import:
+approve it, or the local rules do not load there. The workspace and game imports are inside their folders and load
+without a prompt.
+
 A new game is built in this order, later wins: `local/project/` (or your Unity Hub project) → `template/` →
 `local/seed/` → `local/overlay/`. Each game is still a complete repo of its own: it holds copies, not links.
 Files named `_layer.md` are notes about a folder and are never copied.

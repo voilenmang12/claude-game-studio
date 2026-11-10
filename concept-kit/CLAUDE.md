@@ -26,7 +26,8 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Local rules
 
-The workspace user's own rules (`local/RULES.md`, `../../docs/local-layer.md`); they win over this file:
+The workspace user's own rules (`local/RULES.md`, `../../docs/local-layer.md`); they win over this file. Claude Code
+asks once per concept to approve this import because it is outside the folder; approve it:
 
 @../../local/RULES.md
 
