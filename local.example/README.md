@@ -13,9 +13,11 @@ if it holds paid plugins or personal data.
 | `overlay/` | `new-game.sh`, `sync-template.sh` | files laid over `template/` in every game, **every sync**: your rules (`.claude/studio-rules.md`, imported by each game's `CLAUDE.md`), your skills, your build scripts. Same path as in the game. |
 | `seed/` | `new-game.sh`, `sync-template.sh` | files a new game starts with that the game then owns (`project.yaml`, `design/art/…`): copied by `new-game.sh`, and by `sync-template.sh` only when the game has none |
 | `project/` | `new-game.sh` | optional Unity project every game starts from (your base code, plugins, settings). With it, `new-game.sh` makes the game folder itself; without it, make the project in Unity Hub first |
+| `CHANGELOG.md` | you | your layer's versions: what changed in `local/`, the workspace version it was tested with, and Port steps for games |
 | `docs/`, anything else | you | your own notes; no script reads them |
 
-Order in a new game: `project/` → `template/` → `seed/` → `overlay/` (later wins). `sync-template.sh` copies the
+Order in a new game: `project/` → `template/` → `seed/` → `overlay/` (later wins). Files named `_layer.md` are
+notes about a folder and are never copied. `sync-template.sh` copies the
 template's shared files, then `overlay/`, then creates missing `seed/` files.
 
 Rules:

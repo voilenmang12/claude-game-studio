@@ -5,8 +5,9 @@
 # The Unity project: with local/project/ (a Unity project every game starts from) the script copies it to
 # <GameFolder>; without it, create <GameFolder> in the workspace root first with Unity Hub (Unity 6000.6.7f1,
 # "Universal 2D"), named exactly as the Folder line of the concept's design/name-lock.md.
-# Then, later wins: template/ (files the project already has are kept and listed as "keep"), local/seed/,
-# local/overlay/ (docs/local-layer.md). Run in Git Bash (Windows) or any bash.
+# Then, later wins: template/, local/seed/, local/overlay/ (docs/local-layer.md). Over a Unity Hub project the
+# template keeps files the project already has (listed as "keep"); over local/project/ it replaces them, so the
+# new game gets the current template. Run in Git Bash (Windows) or any bash.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -64,7 +65,9 @@ if [ $BASE -eq 1 ]; then
   tar -C "$LOCAL/project" \
     --exclude='./Library' --exclude='./Temp' --exclude='./Logs' --exclude='./obj' --exclude='./UserSettings' \
     --exclude='./Builds' --exclude='./.git' --exclude='./.idea' --exclude='./.vs' --exclude='*.csproj' \
-    --exclude='*.sln' \
+    --exclude='*.sln' --exclude='_layer.md' --exclude='./production/session-state' \
+    --exclude='./production/session-logs' --exclude='./.claude/settings.local.json' --exclude='./CLAUDE.local.md' \
+    --exclude='./.claude/agent-memory' --exclude='./.claude/worktrees' \
     -cf - . | tar -C "$DST" -xf -
   # A new game gets its own product GUID, so it never shares saves or analytics with the base project.
   PS="$DST/ProjectSettings/ProjectSettings.asset"
@@ -75,11 +78,11 @@ if [ $BASE -eq 1 ]; then
   fi
 fi
 
-# ---- 2. template/: copy what the project does not have
+# ---- 2. template/: over local/project/ it wins; over a Unity Hub project it fills in what is missing
 copied=0; kept=0
 while IFS= read -r -d '' file; do
   rel="${file#"$SRC"/}"
-  if [ -e "$DST/$rel" ]; then
+  if [ $BASE -eq 0 ] && [ -e "$DST/$rel" ]; then
     echo "keep    $rel"
     kept=$((kept + 1))
   else
@@ -95,7 +98,7 @@ for layer in seed overlay; do
   [ -d "$LOCAL/$layer" ] || continue
   while IFS= read -r -d '' file; do
     rel="${file#"$LOCAL/$layer"/}"
-    [ "$rel" = "README.md" ] && continue
+    [ "${rel##*/}" = "_layer.md" ] && continue
     mkdir -p "$(dirname "$DST/$rel")"
     cp "$file" "$DST/$rel"
     echo "$layer $rel"

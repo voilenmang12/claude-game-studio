@@ -17,6 +17,7 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ├─ local/                     YOUR layer, ignored by this repo (local.example/README.md): rules, config, overlay, Unity base
 ├─ local.example/             what studio-doctor.sh --init copies to local/
 ├─ studio-doctor.sh           bash studio-doctor.sh [--init] [--fetch]   checks the workspace before an update
+├─ studio-commit.sh           bash studio-commit.sh "<msg>" [--push]      commits workspace, local/, local/project/
 ├─ template/                  studio template; every game gets a copy
 ├─ tools/pixelorama-mcp/      Pixelorama MCP extension + server (games point to it with ../tools/...)
 ├─ tools/hooks/pre-commit     refuses workspace commits that match local/public-denylist.txt
@@ -41,6 +42,7 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
   user's needs (a platform, a language, a plugin, a path): put it in `local/` (`RULES.md`, `studio.config.json`,
   `overlay/`, `seed/`, `project/`). A change every user would want goes into the workspace files.
 - Nothing from `local/`, no paid plugin and no personal data is ever committed to the workspace repo.
+- A change that touches both sides is one message in each repo: `bash studio-commit.sh "<msg>"`.
 
 @local/RULES.md
 
@@ -74,7 +76,7 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
   closes under **Requests**.
 - `template/.gitignore` is the **standard gitignore** for every game repo. Change it there and copy it to existing
   games (`sync-template.sh` does); never edit one game's copy alone without a reason written in that commit.
-- **Upstream.** `template/` is a fork of Claude Code Game Studios `v1.2.0`. `FORK.md` lists every upstream file we
+- **Upstream.** `template/` is a fork of Claude Code Game Studios `v1.3.0`. `FORK.md` lists every upstream file we
   changed, removed or added, and how to take a newer upstream release. Keep it current with every change to an
   upstream file.
 - **Public repo.** This workspace repo is public. Never add paid Asset Store plugins, game content, credentials or

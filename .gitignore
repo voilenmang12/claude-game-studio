@@ -14,6 +14,7 @@
 !/publish-game.sh
 !/deploy-test.sh
 !/studio-doctor.sh
+!/studio-commit.sh
 !/local.example/
 !/docs/
 !/concept-kit/

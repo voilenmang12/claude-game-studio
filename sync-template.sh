@@ -43,9 +43,9 @@ GAME_FILES=(design/art/pixel-asset-project.json design/art/ui-prompt-profile.md 
   .claude/studio-rules.md)
 
 # Your layer: overlay files replace the template's at the same path; seed files are game files.
-layer_files() {   # relative paths under $1, without its README.md
+layer_files() {   # relative paths under $1, without the _layer.md notes
   [ -d "$1" ] || return 0
-  find "$1" -type f ! -path "$1/README.md" -print0 | while IFS= read -r -d '' f; do printf '%s\n' "${f#"$1"/}"; done
+  find "$1" -type f ! -name _layer.md -print0 | while IFS= read -r -d '' f; do printf '%s\n' "${f#"$1"/}"; done
 }
 OVL_FILES=(); while IFS= read -r f; do OVL_FILES+=("$f"); done < <(layer_files "$OVL")
 SEED_FILES=(); while IFS= read -r f; do SEED_FILES+=("$f"); done < <(layer_files "$SEED")

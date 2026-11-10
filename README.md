@@ -15,6 +15,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 ├─ CLAUDE.md                   workspace rules (template upkeep, versions, requests)
 ├─ local.example/              your own layer, copied to local/ (ignored): rules, config, overlay, Unity base
 ├─ studio-doctor.sh            set up local/, check the workspace before an update
+├─ studio-commit.sh            commit one change in the workspace, local/ and local/project/ together
 ├─ FORK.md                     what was taken from CCGS and what changed
 ├─ template/                   the studio template applied to every game
 │  ├─ .claude/                 CCGS agents, skills, hooks, rules, docs (+ art-assets rule, game-ui-design skill)

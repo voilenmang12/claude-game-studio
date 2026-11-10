@@ -36,6 +36,21 @@ If you forked the repo on GitHub instead, add the public repo as `upstream`:
 
 A new game is built in this order, later wins: `local/project/` (or your Unity Hub project) → `template/` →
 `local/seed/` → `local/overlay/`. Each game is still a complete repo of its own: it holds copies, not links.
+Files named `_layer.md` are notes about a folder and are never copied.
+
+`local/project/` can be a git repo of its own (for example the base project's existing repo) and a working
+Unity project: open it in Unity Hub to work on the base, and keep its template files current with
+`bash sync-template.sh local/project`. Version your layer in `local/CHANGELOG.md` (what changed, which workspace
+version it was tested with, Port steps); a `LOCAL_VERSION` file in `local/overlay/` tells each game which one it has.
+
+## Commit both sides
+
+```bash
+bash studio-commit.sh "feat: <what>"          # commits every repo that changed: workspace, local/, local/project/
+bash studio-commit.sh "feat: <what>" --push   # and pushes them
+```
+
+It shows each repo's changes first, runs the workspace hook as usual, and stops at the first failure.
 
 ## Update to a new version
 
