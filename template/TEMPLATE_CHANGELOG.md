@@ -57,6 +57,27 @@ ticket to `released vX.YY`.
 
 (nothing yet)
 
+## v1.03 (2026-11-10)
+
+Minor. The popup kit's colors are a game file; the kit script is the template's again.
+
+**Changed**
+- The popup kit's colors moved out of `Tools/ui-kit-template.mjs` into `design/art/ui-kit-palette.json`, a game file.
+  The script is template-owned again: it reads the file, fails on a missing layer, a bad color or an unknown key,
+  draws one `button_<role>` per entry under `buttons`, and `--check` validates the file without Pixelorama. With the
+  template's palette it draws the same 11 pieces as before, pixel for pixel. `UIPopupStandard.md` section 6,
+  `ui-prompt-profile.md` and `game-ui-design/SOURCE.md` say where the colors live. `sync-template.sh` copies the
+  script again and creates the palette file only when the game has none.
+
+**Port**
+- **Before** `sync-template.sh`: if the game changed `PALETTE` in its `Tools/ui-kit-template.mjs`, write those colors
+  into `design/art/ui-kit-palette.json` first (template file as the start; `cardSel` is now `cardSelected`; every
+  key that is not a layer goes under `buttons`, for example `danger`). Then sync, and run
+  `node Tools/ui-kit-template.mjs --check`: the piece list must match the sprites in `Assets/Art/UI/`.
+
+**Requests**
+- None.
+
 ## v1.02 (2026-11-10)
 
 Minor. The asset connector is named and linked.

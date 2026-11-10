@@ -1,0 +1,16 @@
+{
+  "_about": "Colors of the popup kit drawn by Tools/ui-kit-template.mjs (Assets/Integration/UIPopupStandard.md, sections 4 and 5). This file belongs to the game: set it from design/art/ui-prompt-profile.md. fill, outline, lip (bottom shade) and rim (top light) are #rrggbb. Each entry under buttons becomes Buttons/button_<role>. Template placeholder values.",
+  "frame":        { "fill": "#2e8f85", "outline": "#10302c", "lip": "#1f6b63", "rim": "#62c1b5" },
+  "panel":        { "fill": "#f5f4eb", "outline": "#1c4440", "lip": "#d6d2bd" },
+  "well":         { "fill": "#c8d2c4" },
+  "card":         { "fill": "#fbfaf4", "outline": "#1c4440", "lip": "#d9d5c2" },
+  "cardSelected": { "fill": "#ffb85c", "outline": "#6b3a0c", "lip": "#e0943a", "rim": "#ffd9a6" },
+  "title":        { "fill": "#e8702e", "outline": "#5a2208", "lip": "#b84f17", "rim": "#ffae7a" },
+  "close":        { "fill": "#e5533d", "outline": "#4f140b", "lip": "#b23a27", "rim": "#f48b78", "glyph": "#ffffff" },
+  "buttons": {
+    "primary":    { "fill": "#ff9c55", "outline": "#5e2a08", "lip": "#d9712b", "rim": "#ffc89e" },
+    "secondary":  { "fill": "#6cc3b8", "outline": "#10302c", "lip": "#3f9a8f", "rim": "#a9e2da" },
+    "buy":        { "fill": "#ffd04a", "outline": "#5e4306", "lip": "#d9a520", "rim": "#ffe79a" },
+    "disabled":   { "fill": "#b9bcb6", "outline": "#45483f", "lip": "#8f928a", "rim": "#d8dad5" }
+  }
+}

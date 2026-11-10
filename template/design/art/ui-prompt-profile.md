@@ -28,7 +28,8 @@ Per-game values for `Assets/Integration/UIPrompting.md`. Fill every TODO from th
 ## Palette
 
 Layer roles follow `Assets/Integration/UIPopupStandard.md`. Fill, outline and lip per raised element; check them with
-`python Tools/ui-kit-check.py` (section 4 of the standard).
+`python Tools/ui-kit-check.py` (section 4 of the standard). The pixel kit reads these colors from
+`design/art/ui-kit-palette.json` (`node Tools/ui-kit-template.mjs`): keep the two in step.
 
 | Role | Fill | Outline | Lip | Used for |
 |---|---|---|---|---|

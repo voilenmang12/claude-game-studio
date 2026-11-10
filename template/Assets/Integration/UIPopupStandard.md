@@ -112,14 +112,15 @@ Order: frame, panel and one button first; run `Tools/ui-kit-check.py` on them; g
 
 | Piece | Where |
 |---|---|
-| Kit drawing script (palette, shapes, Pixelorama MCP, export) | `Tools/ui-kit-template.mjs`. A game sets the palette from its profile and runs it |
+| Kit drawing script (shapes, Pixelorama MCP, export) | `Tools/ui-kit-template.mjs`, owned by the template. A game never edits it: it sets its colors and button roles in `design/art/ui-kit-palette.json` and runs it (`--check` validates the file without drawing) |
 | Kit sources and sprites | The script writes `ArtSource/UI/{Popup,Buttons}/*.pxo` and exports `Assets/Art/UI/{Popup,Buttons}/*.png` |
 | Contrast check | `python Tools/ui-kit-check.py` (section 4) |
 | Title text | A TMP material with a white face and an outline in the title's outline color |
 | Popup prefabs | Project-specific. Build each popup with the section 1 names, and add an Editor check (an AgentScript) that fails when a popup breaks section 1: order, Black Panel color, kit sprites, Close last, Color Tint buttons |
 
 Template kit colors are placeholders: teal frame, cream panel, gray-green well, orange title, orange primary, teal
-secondary, yellow buy, gray disabled, red close. A game replaces them in its profile and in its copy of the script.
+secondary, yellow buy, gray disabled, red close. A game replaces them in its profile and in `design/art/ui-kit-palette.json`, which is the only file the kit
+script reads colors from. A role added there (for example `danger`) becomes one more `button_<role>` sprite.
 
 ## 7. Checklist for a new popup
 

@@ -36,7 +36,7 @@ SHARED=(
 # Inside the shared folders, files a game writes itself.
 EXCEPT=(.claude/docs/technical-preferences.md)
 # Game-owned files: created once if missing, then left alone.
-GAME_FILES=(design/art/pixel-asset-project.json design/art/ui-prompt-profile.md design/asset-ledger.csv)
+GAME_FILES=(design/art/pixel-asset-project.json design/art/ui-prompt-profile.md design/art/ui-kit-palette.json design/asset-ledger.csv)
 
 # Never overwrite local edits: stop if a file about to be replaced has uncommitted changes.
 dirty="$(git -C "$DST" status --porcelain --untracked-files=no -- "${SHARED[@]}")"

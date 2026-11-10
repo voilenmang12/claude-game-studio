@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-// Draws the template's neutral popup kit (Assets/Integration/UIPopupStandard.md, section 5) in Pixelorama through
-// the pixelorama-mcp server, saves ArtSource/UI/**.pxo, then exports with Tools/export-pixelorama.sh.
-// A game copies this file, changes PALETTE (from its ui-prompt-profile.md) and runs it again.
-// Pixelorama must be open with the MCP extension enabled.
+// Draws the popup kit (Assets/Integration/UIPopupStandard.md, section 5) in Pixelorama through the pixelorama-mcp
+// server, saves ArtSource/UI/**.pxo, then exports with Tools/export-pixelorama.sh.
+// This script belongs to the template; the colors and button roles belong to the game, in
+// design/art/ui-kit-palette.json (set it from design/art/ui-prompt-profile.md).
+// Pixelorama must be open with the MCP extension enabled (not needed for --check).
 //   node Tools/ui-kit-template.mjs [--only popup_frame,button_primary]
+//   node Tools/ui-kit-template.mjs --check      validate the palette file and list the pieces, draw nothing
 import { spawn, execFileSync } from "node:child_process";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -13,20 +15,40 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // The workspace keeps the server in tools/pixelorama-mcp/ next to the game folders; override with PIXELORAMA_MCP_SERVER.
 const SERVER = process.env.PIXELORAMA_MCP_SERVER || resolve(ROOT, "..", "tools/pixelorama-mcp/pixelorama-mcp.mjs");
 
-// ---- palette: fill, outline, lip (bottom shade), rim (top light). Placeholder values for the template only.
-const PALETTE = {
-  frame:    { fill: "#2e8f85", outline: "#10302c", lip: "#1f6b63", rim: "#62c1b5" },
-  panel:    { fill: "#f5f4eb", outline: "#1c4440", lip: "#d6d2bd" },
-  well:     { fill: "#c8d2c4" },
-  card:     { fill: "#fbfaf4", outline: "#1c4440", lip: "#d9d5c2" },
-  cardSel:  { fill: "#ffb85c", outline: "#6b3a0c", lip: "#e0943a", rim: "#ffd9a6" },
-  title:    { fill: "#e8702e", outline: "#5a2208", lip: "#b84f17", rim: "#ffae7a" },
-  primary:  { fill: "#ff9c55", outline: "#5e2a08", lip: "#d9712b", rim: "#ffc89e" },
-  secondary:{ fill: "#6cc3b8", outline: "#10302c", lip: "#3f9a8f", rim: "#a9e2da" },
-  buy:      { fill: "#ffd04a", outline: "#5e4306", lip: "#d9a520", rim: "#ffe79a" },
-  disabled: { fill: "#b9bcb6", outline: "#45483f", lip: "#8f928a", rim: "#d8dad5" },
-  close:    { fill: "#e5533d", outline: "#4f140b", lip: "#b23a27", rim: "#f48b78", glyph: "#ffffff" },
+// ---- palette: design/art/ui-kit-palette.json. Fails loudly: a missing layer or a bad color stops the run.
+const PALETTE_FILE = join(ROOT, "design/art/ui-kit-palette.json");
+const HEX = /^#[0-9a-fA-F]{6}$/;
+const LAYERS = {   // layer: color keys it must have (UIPopupStandard.md section 1)
+  frame: ["fill", "outline"], panel: ["fill", "outline"], well: ["fill"], card: ["fill", "outline"],
+  cardSelected: ["fill", "outline"], title: ["fill", "outline"], close: ["fill", "outline", "glyph"],
 };
+const OPTIONAL = ["lip", "rim"];
+function loadPalette() {
+  let data;
+  try { data = JSON.parse(readFileSync(PALETTE_FILE, "utf8")); }
+  catch (error) { throw new Error(`${PALETTE_FILE}: ${error.message}. Copy the template's file and set the game's colors.`); }
+  const color = (where, entry, keys) => {
+    if (!entry || typeof entry !== "object") throw new Error(`palette: ${where} is missing`);
+    for (const key of keys) if (!HEX.test(entry[key] ?? "")) throw new Error(`palette: ${where}.${key} must be #rrggbb`);
+    for (const key of Object.keys(entry)) {
+      if (!keys.includes(key) && !OPTIONAL.includes(key)) throw new Error(`palette: ${where}.${key} is not a color key`);
+      if (!HEX.test(entry[key])) throw new Error(`palette: ${where}.${key} must be #rrggbb`);
+    }
+    return entry;
+  };
+  const layers = Object.fromEntries(Object.entries(LAYERS).map(([name, keys]) => [name, color(name, data[name], keys)]));
+  const buttons = data.buttons;
+  if (!buttons || typeof buttons !== "object" || !Object.keys(buttons).length) throw new Error("palette: buttons needs at least one role");
+  for (const [role, entry] of Object.entries(buttons)) {
+    if (!/^[a-z][a-z0-9_]*$/.test(role)) throw new Error(`palette: button role "${role}" must be lowercase letters, digits and _`);
+    color(`buttons.${role}`, entry, ["fill", "outline"]);
+  }
+  for (const key of Object.keys(data)) {
+    if (!key.startsWith("_") && key !== "buttons" && !(key in LAYERS)) throw new Error(`palette: unknown key "${key}"`);
+  }
+  return { ...layers, buttons };
+}
+const PALETTE = loadPalette();
 
 // ---- shapes. Characters: O outline, R rim, L lip, F fill, X glyph, . clear
 // Rounded plate: corner radius r (stepped), 1 px outline, `rim` light rows under the top outline, `lip` rows above the bottom.
@@ -76,14 +98,17 @@ const PIECES = {
   "Popup/popup_panel":         { size: [64, 64], rows: plate(64, 64, { r: 6, lip: 2 }), palette: map(PALETTE.panel) },
   "Popup/popup_well":          { size: [32, 32], rows: plate(32, 32, { r: 4, outline: false }), palette: map(PALETTE.well) },
   "Popup/popup_card":          { size: [32, 32], rows: plate(32, 32, { r: 4, lip: 2 }), palette: map(PALETTE.card) },
-  "Popup/popup_card_selected": { size: [32, 32], rows: plate(32, 32, { r: 4, rim: 1, lip: 2 }), palette: map(PALETTE.cardSel) },
+  "Popup/popup_card_selected": { size: [32, 32], rows: plate(32, 32, { r: 4, rim: 1, lip: 2 }), palette: map(PALETTE.cardSelected) },
   "Popup/popup_title":         { size: [64, 24], rows: plate(64, 24, { r: 5, rim: 1, lip: 3 }), palette: map(PALETTE.title) },
-  "Buttons/button_primary":    button(PALETTE.primary),
-  "Buttons/button_secondary":  button(PALETTE.secondary),
-  "Buttons/button_buy":        button(PALETTE.buy),
-  "Buttons/button_disabled":   button(PALETTE.disabled),
+  ...Object.fromEntries(Object.entries(PALETTE.buttons).map(([role, p]) => [`Buttons/button_${role}`, button(p)])),
   "Buttons/button_close":      { size: [28, 28], rows: closeButton(28), palette: map(PALETTE.close) },
 };
+
+if (process.argv.includes("--check")) {
+  console.log(`${PALETTE_FILE}: OK`);
+  for (const name of Object.keys(PIECES)) console.log(`  ArtSource/UI/${name}.pxo`);
+  process.exit(0);
+}
 
 // ---- MCP client (newline-delimited JSON-RPC over stdio)
 const child = spawn("node", [SERVER], { stdio: ["pipe", "pipe", "inherit"] });
