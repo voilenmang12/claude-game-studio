@@ -55,37 +55,58 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+(nothing yet)
+
+## v2.03 (2026-11-11)
+
+Minor. Pixel art is optional: Pixelorama and its MCP server are turned on per game by the `pixel-art` skill, only
+when the game's art style is pixel art. Released together with v2.02.
+
+**Added**
+- The `pixel-art` skill (`.claude/skills/pixel-art/`): confirms the art style, turns on Pixelorama and its MCP
+  server for a pixel-art game through `node Tools/pixel-art.mjs enable | disable | status` (writes or removes the
+  `pixelorama` server in `.mcp.json`, then lists what is missing: server packages, Pixelorama with PixMcpBridge), and
+  holds the pixel workflow. `CLAUDE.md` ("Art style"), `.claude/rules/art-assets.md`, `PixelArt.md` and the UI
+  profile's "Art style" row point to it.
+
+**Changed**
+- `.mcp.json` is a game file. The template's declares no server; `sync-template.sh` creates it only when a game has
+  none and never overwrites it, so a pixel game keeps its `pixelorama` entry. A studio whose games are all pixel art
+  puts a `.mcp.json` with the server in `local/seed/`.
+
+**Port**
+- Each game: `bash sync-template.sh <Game>` (adds the skill and `Tools/pixel-art.mjs`; `.mcp.json` stays as it is).
+  Replace the old "Art is pixel art from Pixelorama" bullet of the game's `CLAUDE.md` with the "Art style" bullet of
+  `template/CLAUDE.md`. A game whose style is not pixel art runs `node Tools/pixel-art.mjs disable`.
+
+**Requests**
+- None.
+
+## v2.02 (2026-11-11)
+
+Minor. The Pixelorama MCP becomes Pixelorama-MCP 0.2.1: 106 tools instead of 13. Released together with v2.03 (no
+tag of its own).
+
 **Changed**
 - The Pixelorama MCP is now [Pixelorama-MCP](https://github.com/abidoo22/Pixelorama-MCP) v0.2.1 (MIT, commit
-  `56fd8aa`): the `PixMcpBridge` extension (port 7373) and the upstream server, 106 tools instead of 13. Workspace
-  `tools/pixelorama-mcp/`: `PixMcpBridge.pck`, `server/` (built JavaScript, packages installed per machine),
-  `pixelorama-mcp.mjs` (same path in `.mcp.json`, now starts the server), `test-connection.mjs` (bridge health, tool
-  list, `--draw`). The old `PixeloramaMCP.zip` (0.1.0, port 7651) is gone.
+  `56fd8aa`): the `PixMcpBridge` extension (port 7373) and the upstream server. Workspace `tools/pixelorama-mcp/`:
+  `PixMcpBridge.pck`, `server/` (built JavaScript, packages installed per machine), `pixelorama-mcp.mjs` (same path
+  in `.mcp.json`, now starts the server), `test-connection.mjs` (bridge health, tool list, `--draw`). The old
+  `PixeloramaMCP.zip` (0.1.0, port 7651) is gone.
 - `Tools/ui-kit-template.mjs` draws with `create_canvas`, `draw_pixels_fast` and `save_project` (the popup kit comes
   out the same, pixel for pixel), and finds `tools/pixelorama-mcp/` in the nearest parent folder.
   `Tools/pixel-asset.mjs` finds `local/studio.config.json` the same way.
 - `PixelArt.md` section 5 and `UIPrompting.md` section 3 use the new tools and setup.
 
-**Added**
-- Pixel art is optional. The `pixel-art` skill (`.claude/skills/pixel-art/`) turns on Pixelorama and its MCP server
-  for a game whose art style is pixel art, through `node Tools/pixel-art.mjs enable | disable | status` (writes or
-  removes the `pixelorama` server in `.mcp.json`, then lists what is missing: server packages, Pixelorama with
-  PixMcpBridge). `CLAUDE.md` ("Art style"), `.claude/rules/art-assets.md`, `PixelArt.md` and the UI profile's "Art
-  style" row point to it.
-
-**Changed**
-- `.mcp.json` is a game file. The template's declares no server; `sync-template.sh` creates it only when a game has
-  none and never overwrites it, so a pixel game keeps its `pixelorama` entry.
-
 **Port**
-- Each game: nothing to do for `.mcp.json` (a game that already declares `pixelorama` keeps it). A game whose style
-  is not pixel art runs `node Tools/pixel-art.mjs disable`. Merge the "Art style" bullet of `template/CLAUDE.md`
-  into the game's `CLAUDE.md` in place of the old "Art is pixel art from Pixelorama" bullet.
-- Once per machine: in Pixelorama → Edit → Preferences → Extensions, remove `PixeloramaMCP`, add
+- Once per machine, for pixel-art games: in Pixelorama → Edit → Preferences → Extensions, remove `PixeloramaMCP`, add
   `tools/pixelorama-mcp/PixMcpBridge.pck`, enable it, restart Pixelorama; then
   `npm ci --omit=dev --prefix tools/pixelorama-mcp/server` and `node tools/pixelorama-mcp/test-connection.mjs`.
 - Each game: `bash sync-template.sh <Game>` (copies `Tools/` and the `Assets/Integration` docs). A game script that
   calls the old tools (`new_project`, `draw_pixels` with `rows`, `get_image`, `read_pixels`) moves to the new names.
+
+**Requests**
+- None.
 
 ## v2.01 (2026-11-11)
 
