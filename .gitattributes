@@ -1,0 +1,3 @@
+# Shell scripts must stay LF: a CRLF checkout breaks bash on Windows Git Bash.
+*.sh text eol=lf
+# template/ has its own .gitattributes for the files inside it.

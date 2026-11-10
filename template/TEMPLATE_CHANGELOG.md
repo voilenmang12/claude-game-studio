@@ -1,0 +1,90 @@
+# Template changelog
+
+Every game made from `template/` keeps two files at its root:
+
+- `TEMPLATE_VERSION`: the template version the game is synced to (one line, for example `1.00`).
+- `TEMPLATE_CHANGELOG.md`: a copy of this file as it was at that version.
+
+To see what a game is missing, compare its `TEMPLATE_VERSION` with the template's and read the
+entries in between. Each entry lists what changed and how to port it.
+
+## Version numbers
+
+`MAJOR.MINOR`, minor always two digits: `1.00`, `1.01` … `1.99`, `2.00`.
+
+- **Minor** (`1.00` → `1.01`): additive or compatible. A game can take it by copying the listed files.
+- **Major** (`1.xx` → `2.00`): breaking. A game must run the entry's migration steps (scene, data,
+  save format, folder layout or API changes), and some steps may need the user.
+
+Git tags are `v1.00`, `v1.01`, …, one per release commit.
+
+## How to release a version (in `template/`)
+
+1. Commit the work as usual. Add each change under `## Unreleased` below as you go.
+2. Test it in a Unity project that has the template applied (compile, plus what the change needs).
+3. Rename `## Unreleased` to `## vX.YY (YYYY-MM-DD)`, fill **Port** and **Requests**, add a new empty
+   `## Unreleased`, and write the new number into `TEMPLATE_VERSION`.
+4. Commit `release: template vX.YY` and tag it: `git tag -a vX.YY -m "Template vX.YY"`.
+
+## How to port a version to a game
+
+1. The game's working tree is clean (commit or stash the game's own work first).
+2. Apply each entry after the game's `TEMPLATE_VERSION`, oldest first, by its **Port** steps.
+   `bash sync-template.sh <Game> --dry-run` (workspace root) shows which shared files differ.
+   Before overwriting a file, diff it: if the game changed it on purpose, merge by hand.
+3. Copy `TEMPLATE_CHANGELOG.md`, write the new number into the game's `TEMPLATE_VERSION`, set the game's
+   tickets that this version released to `released vX.YY`, and commit `chore: sync template vX.YY` in the game repo.
+
+Entry format: **Added / Changed / Fixed / Removed**, then **Port** (files to copy and steps to run),
+then **Breaking** for major versions, then **Requests** (the game tickets the version closes). A line that comes
+from a game ticket ends with its ID, for example `(TR-CG01-001)`.
+
+## How a game requests a change
+
+A game never edits `template/`. It files a ticket `TR-<game code>-<NNN>` in its own
+`design/template-requests/`, with the form and rules in `design/template-requests/README.md`. The template lists
+them with `bash list-template-requests.sh --open` (workspace root), the user approves each accept or reject, and the
+table below records the decision. A release names every ticket it closes; porting that version sets the game's
+ticket to `released vX.YY`.
+
+## Template requests
+
+| ID | Game | Title | Status | Version or reason |
+|---|---|---|---|---|
+| (none yet) | | | | |
+
+## Unreleased
+
+(nothing yet)
+
+## v1.00 (2026-11-10)
+
+First public release. Fork of Claude Code Game Studios v1.2.0 (`05ad7c8`); `FORK.md` in the workspace root lists
+every upstream file that changed. Taken from a private Unity 2D template at its v1.02 plus later rules, without the
+platform-specific layer (portal SDK, web build skills) and without paid Unity plugins.
+
+**Contents**
+- CCGS v1.2.0: 49 agents, 74 skills, 18 hooks, 14 rules, docs, `project.yaml` (`modes.rigor: minimal`),
+  `studio-tests/`. Upstream README and upgrade guide in `docs/CCGS-README.md` and `docs/CCGS-UPGRADING.md`.
+- `/setup-engine unity` already run: Unity 6000.6.7f1 pinned, 6.4 to 6.6 changes in
+  `docs/engine-reference/unity/*`, Unity specialists, naming, test command, smoke command through the Unity CLI.
+  Target platforms and the build command are left `[TO BE CONFIGURED]`.
+- Skill `game-ui-design`, vendored from omer-metin/skills-for-antigravity (Apache-2.0), as a UI review checklist.
+- Pixel art pipeline: `ArtSource/` sources, `Tools/export-pixelorama.sh`, `Assets/Editor/Art/PixelArtImporter.cs`
+  (PPU 16, Point, uncompressed; sheets with 2+ frames or tags → slices and one clip per tag; one frame → Single sprite),
+  `AgentScripts/ValidatePixelArtImport.cs`, Pixelorama MCP through `.mcp.json`, guide `Assets/Integration/PixelArt.md`.
+- Asset connector client `Tools/pixel-asset.mjs` (API 1.x: pixel and raster pipelines, `ui_9_slice`, references),
+  `Assets/Editor/Art/RasterArtImporter.cs` for `Assets/ArtRaster/`, config `design/art/pixel-asset-project.json`,
+  license ledger `design/asset-ledger.csv`, rule `.claude/rules/art-assets.md`.
+- UI: `Assets/Integration/UIPrompting.md` (sizes, pixel scale, tool choice, raster UI), per-game
+  `design/art/ui-prompt-profile.md`, `Assets/Integration/UIPopupStandard.md` (popup layer stack, shared kit, one
+  button shape with baked role colors, contrast minimums), `Tools/ui-kit-template.mjs` (draws the kit through
+  Pixelorama MCP), `Tools/ui-kit-check.py` (contrast check).
+- Template versioning (this file, `TEMPLATE_VERSION`) and template requests (`design/template-requests/`).
+- `.gitignore`: the standard file for every game repo.
+
+**Port**
+- New games: `bash new-game.sh <Game>` (workspace root) applies v1.00 to a Unity project.
+
+**Requests**
+- None.

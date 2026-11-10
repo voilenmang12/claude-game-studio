@@ -1,0 +1,2 @@
+05ad7c8a5b8aa2aa86bbd3439ae7cf7295cac418
+CCGS v1.2.0 from https://github.com/donchitos/claude-code-game-studios

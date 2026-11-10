@@ -1,0 +1,65 @@
+# CCGS project configuration — single source of truth for project settings.
+# See .claude/docs/effects-map.md for full schema.
+
+schema_version: 1
+
+framework:
+  version: 1.2.0
+  last_upgraded: 2026-10-19
+
+# NOTE: this template ships with no `modes:` block, and the six knobs below must
+# never be added to one.
+#
+# `/start` DOES add `modes.rigor` and `modes.automation` here — that is its job,
+# and a `modes:` block containing those two is the expected state of a configured
+# project, not a mistake.
+#
+# What must stay absent is the six knobs `modes.rigor` FRONTS:
+# `modes.review_mode`, `modes.workflow`, `docs.density`, `qa.level`,
+# `modes.story_granularity` and `team.size`. Seeding any of them in this file
+# pins that value and shadows the rigor expansion, so the rigor `/start` infers
+# and saves would stop changing anything. `/start` states the same rule for the
+# settings it writes.
+#
+# Per-developer preferences belong in `project.local.yaml` (gitignored), not
+# here. `/settings --local <key>=<value>` writes there; `/settings <key>=<value>`
+# edits this file. See `.claude/docs/config-resolution.md` for the full
+# precedence order.
+
+modes:
+  rigor: minimal
+
+engine:
+  name: "Unity"
+  version: "6000.6.7f1"
+  language: "C#"
+  rendering: "URP"   # URP 2D Renderer
+  # The /setup-engine table says PhysX for Unity, but PhysX is Unity's 3D engine; this project is 2D.
+  physics: "Unity Physics 2D"
+  path: "C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Unity.exe"
+
+specialists:
+  code: "unity-specialist"
+  shader: "unity-shader-specialist"
+  ui: "unity-ui-specialist"
+  additional: ["unity-dots-specialist", "unity-addressables-specialist"]
+
+naming:
+  classes: PascalCase
+  variables: camelCase
+  constants: SCREAMING_SNAKE   # UNVERIFIED — not sourceable from
+                               # docs/engine-reference/unity/; confirm before relying on it
+  signals: PascalCase On<Event>
+  files: PascalCase
+  scenes: PascalCase
+
+# Commands drive the Editor that is already open through the Unity CLI: a -batchmode editor
+# cannot open the project while that Editor holds it. With the Editor closed, the batchmode form is
+#   "C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Unity.exe" -batchmode -quit -projectPath . -logFile -
+commands:
+  # A project sets its own build entry, for example an AgentScript that calls BuildPipeline.BuildPlayer.
+  build: "[TO BE CONFIGURED]"
+  test: "unity test . --mode EditMode --output test-results/editmode.xml"
+  # Play Mode is run by the user. Set this when the project has a player to launch.
+  run: "[TO BE CONFIGURED]"
+  smoke: "unity recompile --project-path . --timeout 240"

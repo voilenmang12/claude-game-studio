@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pixelorama": {
+      "command": "node",
+      "args": ["../tools/pixelorama-mcp/pixelorama-mcp.mjs"]
+    }
+  }
+}

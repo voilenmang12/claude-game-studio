@@ -1,0 +1,74 @@
+# Claude Game Studio
+
+A workspace for making many small Unity 2D games with Claude Code, one template shared by all of them, and rules
+that move improvements both ways: from the template to the games, and from the games back to the template.
+
+> **Fork notice.** `template/` is a fork of
+> [Claude Code Game Studios](https://github.com/donchitos/claude-code-game-studios) by Donchitos (MIT), taken at
+> `v1.2.0` (commit `05ad7c8`). The 49 agents, 74 skills, hooks, rules and docs in `template/.claude/` come from
+> there. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added. Upstream `v1.3.0` is
+> not merged.
+
+## What is here
+
+```
+claude-game-studio/            the workspace; game folders are created next to template/
+├─ CLAUDE.md                   workspace rules (template upkeep, versions, requests)
+├─ FORK.md                     what was taken from CCGS and what changed
+├─ template/                   the studio template applied to every game
+│  ├─ .claude/                 CCGS agents, skills, hooks, rules, docs (+ art-assets rule, game-ui-design skill)
+│  ├─ CLAUDE.md, project.yaml  CCGS config, already set up for Unity 6.6 URP 2D
+│  ├─ Assets/Editor/Art/       Pixelorama and raster import rules
+│  ├─ Assets/Integration/      PixelArt.md, UIPrompting.md, UIPopupStandard.md
+│  ├─ Tools/                   Pixelorama export, asset connector client, UI kit drawing and contrast check
+│  ├─ design/template-requests/README.md   how a game asks for a template change
+│  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
+├─ tools/pixelorama-mcp/       Pixelorama MCP extension + dependency-free server
+├─ new-game.sh                 apply the template to a new Unity project and start its git repo
+├─ sync-template.sh            port the template's shared files to an existing game
+├─ list-template-requests.sh   list the template requests of every game
+└─ licenses/                   upstream licenses (CCGS, pixelorama-mcp, game-ui-design)
+```
+
+The template is the **studio layer only**: no Unity `Assets/` content besides the Editor import scripts, no
+`Packages/` or `ProjectSettings/`, and no paid Asset Store plugins. You bring the Unity project.
+
+## Requirements
+
+- Claude Code; Git and bash (Git Bash on Windows); Node 20 or later; Python 3 with Pillow for `ui-kit-check.py`.
+- Unity 6000.6.7f1 (Unity 6.6), a 2D URP project, with the `com.unity.nuget.newtonsoft-json` package.
+- Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art; an asset connector
+  service for generated art (not part of this repo; `Tools/pixel-asset.mjs` is its client).
+
+## Start a game
+
+1. Clone this repo. In Unity Hub, create a "Universal 2D" project **inside the clone**, for example `CG01-MyGame`.
+2. Apply the template and start the game's git repo:
+   ```bash
+   bash new-game.sh CG01-MyGame
+   ```
+3. Start Claude Code **in the game folder** (hooks, rules and `.mcp.json` load only from where `claude` starts), then
+   run `/start`.
+
+Game folders are ignored by this repo's `.gitignore`: each game is its own repository.
+
+## The two-way rules
+
+**Template → games (versions).** `template/TEMPLATE_VERSION` holds the version (`1.00`, `1.01` … `2.00`).
+`template/TEMPLATE_CHANGELOG.md` has one entry per version with its **Port** steps. Each game keeps the version it
+is synced to and a copy of the changelog. Porting is `bash sync-template.sh <Game>` plus the entry's manual steps,
+ending with the commit `chore: sync template vX.YY`.
+
+**Games → template (requests).** A game never edits the template. When a game produces something every game should
+have (a fix in a template file, a tool, a rule, a better standard), it files a ticket `TR-<game code>-<NNN>` in its
+own `design/template-requests/` with a fixed form. `bash list-template-requests.sh --open` lists open tickets; the
+user accepts or rejects each one; the decision goes in the changelog's "Template requests" table. A changelog line
+that comes from a ticket ends with its ID, and each release lists the tickets it closes under **Requests**.
+
+Details: [`CLAUDE.md`](CLAUDE.md), [`template/TEMPLATE_CHANGELOG.md`](template/TEMPLATE_CHANGELOG.md),
+[`template/design/template-requests/README.md`](template/design/template-requests/README.md).
+
+## Licenses
+
+This repo: MIT ([`LICENSE`](LICENSE)). Upstream parts keep their licenses: Claude Code Game Studios (MIT),
+pixelorama-mcp (MIT), the `game-ui-design` skill (Apache-2.0); copies in [`licenses/`](licenses/).

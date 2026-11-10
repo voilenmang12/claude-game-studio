@@ -1,0 +1,13 @@
+{
+  "project_id": null,
+  "name": "TODO: game name",
+  "description": "",
+  "pipeline": "pixel",
+  "master_prompt": "TODO: style, palette and theme from the art bible. Keep it within the age rating and original.",
+  "defaults": {
+    "background": "transparent",
+    "output_root": "TODO: output folder on the connector machine"
+  },
+  "ai_plan": "TODO: image plan the connector worker uses",
+  "ai_license": "TODO: the plan's license; it must allow commercial use"
+}

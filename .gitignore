@@ -1,0 +1,25 @@
+# Workspace repo: track only the workspace files. Every game folder is its own git repo and is ignored here.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/CLAUDE.md
+!/FORK.md
+!/LICENSE
+!/new-game.sh
+!/sync-template.sh
+!/list-template-requests.sh
+!/template/
+!/tools/
+!/licenses/
+
+# Local state inside the template (same rules as a game repo)
+/template/.claude/settings.local.json
+/template/CLAUDE.local.md
+/template/project.local.yaml
+/template/production/session-logs/
+/template/production/session-state/
+/template/.claude/agent-memory/
+/template/.claude/worktrees/
+**/__pycache__/
+.DS_Store
