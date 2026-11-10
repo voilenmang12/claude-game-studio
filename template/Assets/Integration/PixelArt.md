@@ -82,8 +82,11 @@ connector jobs: exact pixels, symmetric corners, no quota. Tool choice and drawi
 
 ## 6. Generated assets (asset connector)
 
-Detailed assets come from an asset connector service, which is not part of this repo. It takes jobs over REST (default
-`http://127.0.0.1:3941`, `PIXEL_ASSET_API` to change it). Register the project once with `POST /v1/projects` and the
+Detailed assets come from [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), a separate repo: a local service that takes jobs over
+REST (default `http://127.0.0.1:3941`, `PIXEL_ASSET_API` to change it) and whose worker makes the image with Codex
+ImageGen. Set it up from its README (`node asset-connector/setup.mjs doctor`, then
+`node asset-connector/server.mjs --worker`), and set `PIXEL_ASSET_CONNECTOR_DIR` to its `asset-connector` folder
+so error hints show the right path. When it requires a token, put the project token in `ASSET_API_TOKEN`. Register the project once with `POST /v1/projects` and the
 master prompt from the art bible, and keep the returned `project_id`.
 
 1. Send `POST /v1/projects/{project_id}/jobs` and keep the returned `id`. Example body:

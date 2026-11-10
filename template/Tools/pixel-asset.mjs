@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Client for an asset connector service (not part of this repo), API v1 (tested with 1.2.0).
+// Client for Codex Asset Studio (https://github.com/voilenmang12/codex-asset-studio), the asset connector, API v1 (tested with 1.2.0).
 // PIXEL_ASSET_API sets its URL, PIXEL_ASSET_CONNECTOR_DIR the folder it runs from (only used in error hints).
 // Submit jobs and read the worker's PNG path. `pull` is an optional local copy into Assets/Art/ (pixel)
 // or Assets/ArtRaster/ (raster). Guide: Assets/Integration/PixelArt.md, section 6.
@@ -21,7 +21,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG_PATH = join(ROOT, "design/art/pixel-asset-project.json");
 const LEDGER_PATH = join(ROOT, "design/asset-ledger.csv");
 const API = process.env.PIXEL_ASSET_API || "http://127.0.0.1:3941";
-const CONNECTOR_DIR = process.env.PIXEL_ASSET_CONNECTOR_DIR || "<asset-connector folder>";
+const CONNECTOR_DIR = process.env.PIXEL_ASSET_CONNECTOR_DIR || "<codex-asset-studio>/asset-connector";
 const API_MAJOR = "1";
 // Unity import roots: PixelArtImporter owns Assets/Art/, RasterArtImporter owns Assets/ArtRaster/.
 const ART_ROOTS = { pixel: "Assets/Art", raster: "Assets/ArtRaster" };

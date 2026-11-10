@@ -40,8 +40,8 @@ The template is the **studio layer only**: no Unity `Assets/` content besides th
 
 - Claude Code; Git and bash (Git Bash on Windows); Node 20 or later; Python 3 with Pillow for `ui-kit-check.py`.
 - Unity 6000.6.7f1 (Unity 6.6), a 2D URP project, with the `com.unity.nuget.newtonsoft-json` package.
-- Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art; an asset connector
-  service for generated art (not part of this repo; `Tools/pixel-asset.mjs` is its client).
+- Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art;
+  [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) for generated art (see below).
 
 ## From idea to game
 
@@ -76,6 +76,25 @@ that comes from a ticket ends with its ID, and each release lists the tickets it
 
 Details: [`CLAUDE.md`](CLAUDE.md), [`template/TEMPLATE_CHANGELOG.md`](template/TEMPLATE_CHANGELOG.md),
 [`template/design/template-requests/README.md`](template/design/template-requests/README.md).
+
+## Generated art: Codex Asset Studio
+
+Detailed art (characters, items, painted UI) comes from [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), the asset connector these games
+use. It is a separate repo: a local REST service on `http://127.0.0.1:3941` whose worker drafts the prompt, makes
+the image with Codex ImageGen and exports a game-ready PNG (pixel grid recovery, raster, animation sheets, UI 9-slice).
+`template/Tools/pixel-asset.mjs` is its client; Claude never makes the image itself.
+
+```bash
+git clone https://github.com/voilenmang12/codex-asset-studio.git
+cd codex-asset-studio
+node asset-connector/setup.mjs doctor        # checks Codex CLI sign-in and the Python packages
+node asset-connector/server.mjs --worker     # keep it running; a second terminal: node asset-connector/setup.mjs smoke
+```
+
+Its README lists the requirements (Node 20.11+, Python 3.10+, Codex CLI signed in with ChatGPT). In a game:
+fill `design/art/pixel-asset-project.json`, run `node Tools/pixel-asset.mjs init` once, then `submit`, `status` and
+`pull` (`template/Assets/Integration/PixelArt.md`, section 6). Jobs use the worker account's image quota. When the
+connector sets `ASSET_API_TOKEN`, give each game a project token through the same variable; keep it out of git.
 
 ## Licenses
 

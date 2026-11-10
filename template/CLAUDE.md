@@ -50,7 +50,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
   Read `Assets/Integration/PixelArt.md` before producing or importing art. When the `pixelorama`
   MCP server is connected, draw small assets (icons, items, tiles, recolors) in the open Pixelorama
   project and save them under `ArtSource/`. Log every asset in `design/asset-ledger.csv`.
-  Detailed assets use the asset connector REST API (a separate service). Submit a job, wait for `done`, and use the
+  Detailed assets use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally). Submit a job, wait for `done`, and use the
   PNG at `export_path`. The connector worker generates the image and exports the sprite; never generate it yourself.
   Non-pixel art uses its raster pipeline and goes to `Assets/ArtRaster/`. Simple pixel UI pieces are
   drawn with Pixelorama MCP instead of a job (`Assets/Integration/UIPrompting.md`, section 3).
