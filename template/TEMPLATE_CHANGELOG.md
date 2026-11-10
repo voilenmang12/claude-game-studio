@@ -55,6 +55,12 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+(nothing yet)
+
+## v1.02 (2026-11-10)
+
+Minor. The asset connector is named and linked.
+
 **Changed**
 - The asset connector is named and linked: [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) in the workspace `README.md` (setup and
   use), `Assets/Integration/PixelArt.md` section 6, `CLAUDE.md` and `Tools/pixel-asset.mjs` (header and the
@@ -63,6 +69,9 @@ ticket to `released vX.YY`.
 **Port**
 - `bash sync-template.sh <Game>` copies `PixelArt.md` and `pixel-asset.mjs`. In `CLAUDE.md`, replace "the asset
   connector REST API (a separate service)" with the template's line.
+
+**Requests**
+- None.
 
 ## v1.01 (2026-11-10)
 
