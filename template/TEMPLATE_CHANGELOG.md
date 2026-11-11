@@ -55,6 +55,28 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+(nothing yet)
+
+## v2.50 (2026-11-11)
+
+Minor, numbered 2.50 for its size: one command sets up a whole machine, and the asset connector is Codex Asset Studio
+everywhere. Workspace files (not copied to games): `studio-setup.sh`, the `/studio-setup` skill, `docs/setup.md`.
+
+**Added**
+- `studio-setup.sh` and the workspace skill `/studio-setup` (`.claude/skills/studio-setup/`): check, install and
+  sign in to everything the studio uses, one part at a time: required `git`, `node`, `python`, `unity` (Hub, CLI,
+  sign-in, license, the template's Editor); optional `github`, `vercel`, `codex`, `agy`, `assetstudio`, `pixelorama`,
+  chosen with `--choose` (`setup` in `local/studio.config.json`). Installs through winget, npm or the Unity CLI;
+  sign-ins through each tool's own login (`--login <id>`, run by the user in their terminal; Claude never types a
+  password). `--asset-studio [dir]` clones Codex Asset Studio, installs its Python packages and runs its doctor;
+  `--autostart` starts its worker at Windows sign-in; `--smoke` runs one real image job. `docs/setup.md` has the
+  table of parts.
+- README "Quick start": paste the repo URL into Claude Code in an empty folder, then `/studio-setup` in it.
+- `Tools/asset-studio.mjs`: `--prompt-provider auto|codex|agy` picks who drafts the image prompt (AGY with Codex
+  fallback, Codex only, or AGY only); `defaults.prompt_provider` in `design/art/asset-studio-project.json` sets it per
+  project; `status` and the ledger row show the drafting model. `pull` downloads `artifacts.png` when the job hides the
+  worker's paths (project tokens). Tested with Asset Studio API 1.9.0.
+
 **Changed**
 - The asset connector is called by its name, Codex Asset Studio, everywhere: it makes assets in every style, not
   only pixel art. Renamed: `Tools/pixel-asset.mjs` → `Tools/asset-studio.mjs`, `design/art/pixel-asset-project.json`
@@ -72,8 +94,16 @@ ticket to `released vX.YY`.
 - Each game: `bash sync-template.sh <Game>` (renames `Tools/pixel-asset.mjs` and `design/art/pixel-asset-project.json`,
   adds `AssetStudio.md`). A game script that calls `Tools/pixel-asset.mjs` (for example `Tools/asset_batch.py`) moves
   to `Tools/asset-studio.mjs`.
+- In the game's `CLAUDE.md`, take the "Art style" bullet of `template/CLAUDE.md` (it says Asset Studio and points to
+  `AssetStudio.md`).
 - Once per workspace: rename the two keys in `local/studio.config.json` and point `assetStudioDir` at the repo
   folder; rename `PIXEL_ASSET_API` and `PIXEL_ASSET_CONNECTOR_DIR` if you set them.
+- Once per machine: `bash studio-setup.sh` (or `/studio-setup` in a Claude Code session started in the workspace) and
+  fix what it lists. A game made before 2.50 keeps its `design/art/asset-studio-project.json`; add
+  `"prompt_provider": "auto"` to its `defaults` only to record the choice (the worker default is `auto`).
+
+**Requests**
+- None.
 
 ## v2.03 (2026-11-11)
 
