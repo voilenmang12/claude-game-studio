@@ -57,7 +57,7 @@ listed here: TODO.
 
 Status: `planned`, `queued`, `in review`, `approved`, `in game`.
 
-Tool: `mcp` (Pixelorama MCP, `UIPrompting.md` section 3) or `job` (connector). Job ID is empty for `mcp` pieces.
+Tool: `mcp` (Pixelorama MCP, `UIPrompting.md` section 3) or `job` (Asset Studio). Job ID is empty for `mcp` pieces.
 
 | Name | Kind | Tool | Size | Colors | Border (L, B, R, T) | Tint | Used in | Job ID | Status |
 |---|---|---|---|---|---|---|---|---|---|

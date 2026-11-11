@@ -1,26 +1,33 @@
 #!/usr/bin/env node
-// Client for Codex Asset Studio (https://github.com/voilenmang12/codex-asset-studio), the asset connector, API v1 (tested with 1.2.0).
-// PIXEL_ASSET_API sets its URL, PIXEL_ASSET_CONNECTOR_DIR the folder it runs from (only used in error hints);
-// without them, pixelAssetApi and pixelAssetConnectorDir in the workspace's local/studio.config.json.
+// Client for Codex Asset Studio (https://github.com/voilenmang12/codex-asset-studio), API v1 (tested with 1.2.0).
+// ASSET_STUDIO_API sets its URL, ASSET_STUDIO_DIR its repo folder (only used in error hints);
+// without them, assetStudioApi and assetStudioDir in the workspace's local/studio.config.json.
 // Submit jobs and read the worker's PNG path. `pull` is an optional local copy into Assets/Art/ (pixel)
-// or Assets/ArtRaster/ (raster). Guide: Assets/Integration/PixelArt.md, section 6.
+// or Assets/ArtRaster/ (raster). Guide: Assets/Integration/AssetStudio.md.
 //
-//   node Tools/pixel-asset.mjs caps
-//   node Tools/pixel-asset.mjs init
-//   node Tools/pixel-asset.mjs submit --name Items/iron_sword --type item --view "front view" --asset "Common iron sword, grip at the bottom, tip pointing straight up" [--rarity common] [--size 32]
-//   node Tools/pixel-asset.mjs submit --name UI/Panels/panel_modal --type ui_9_slice --size 64 --border 16 --colors 8 --view "flat front view" --asset "..."   (UI: Assets/Integration/UIPrompting.md)
-//   node Tools/pixel-asset.mjs submit --pipeline raster --name Backgrounds/bg_menu --width 1600 --height 900 --background opaque --view "wide front view" --asset "..."
+//   node Tools/asset-studio.mjs caps
+//   node Tools/asset-studio.mjs init
+//   node Tools/asset-studio.mjs submit --name Items/iron_sword --type item --view "front view" --asset "Common iron sword, grip at the bottom, tip pointing straight up" [--rarity common] [--size 32]
+//   node Tools/asset-studio.mjs submit --name UI/Panels/panel_modal --type ui_9_slice --size 64 --border 16 --colors 8 --view "flat front view" --asset "..."   (UI: Assets/Integration/UIPrompting.md)
+//   node Tools/asset-studio.mjs submit --pipeline raster --name Backgrounds/bg_menu --width 1600 --height 900 --background opaque --view "wide front view" --asset "..."
 //   Any submit: [--ref <job-id | path/to/file.png> | --no-ref] [--style "..."]. --pipeline defaults to "pipeline" in the config.
-//   node Tools/pixel-asset.mjs status
-//   node Tools/pixel-asset.mjs pull <job-id>... | --all [--force]
+//   node Tools/asset-studio.mjs status
+//   node Tools/asset-studio.mjs pull <job-id>... | --all [--force]
 import { constants, copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const CONFIG_PATH = join(ROOT, "design/art/pixel-asset-project.json");
+const CONFIG_PATH = join(ROOT, "design/art/asset-studio-project.json");
+// Names before template v2.04, when this client was Tools/pixel-asset.mjs.
+const OLD_CONFIG_PATH = join(ROOT, "design/art/pixel-asset-project.json");
 const LEDGER_PATH = join(ROOT, "design/asset-ledger.csv");
+function fail(message) {
+  console.error(`ERROR: ${message}`);
+  process.exit(1);
+}
+
 // The studio config is local/studio.config.json in the nearest parent folder that has one (the workspace root for a
 // game, two levels up for local/project/).
 function studioConfig() {
@@ -38,17 +45,18 @@ function studioConfig() {
   }
 }
 const STUDIO = studioConfig();
-const API = process.env.PIXEL_ASSET_API || STUDIO.pixelAssetApi || "http://127.0.0.1:3941";
-const CONNECTOR_DIR =
-  process.env.PIXEL_ASSET_CONNECTOR_DIR || STUDIO.pixelAssetConnectorDir || "<codex-asset-studio>/asset-connector";
+for (const [old, now] of [["pixelAssetApi", "assetStudioApi"], ["pixelAssetConnectorDir", "assetStudioDir"]]) {
+  if (old in STUDIO) fail(`local/studio.config.json: rename "${old}" to "${now}" (template v2.04).`);
+}
+for (const [old, now] of [["PIXEL_ASSET_API", "ASSET_STUDIO_API"], ["PIXEL_ASSET_CONNECTOR_DIR", "ASSET_STUDIO_DIR"]]) {
+  if (process.env[old]) fail(`Environment variable ${old} is now ${now} (template v2.04).`);
+}
+if (existsSync(OLD_CONFIG_PATH)) fail(`Rename ${OLD_CONFIG_PATH} to ${CONFIG_PATH} (template v2.04: git mv).`);
+const API = process.env.ASSET_STUDIO_API || STUDIO.assetStudioApi || "http://127.0.0.1:3941";
+const STUDIO_DIR = process.env.ASSET_STUDIO_DIR || STUDIO.assetStudioDir || "<codex-asset-studio>";
 const API_MAJOR = "1";
 // Unity import roots: PixelArtImporter owns Assets/Art/, RasterArtImporter owns Assets/ArtRaster/.
 const ART_ROOTS = { pixel: "Assets/Art", raster: "Assets/ArtRaster" };
-
-function fail(message) {
-  console.error(`ERROR: ${message}`);
-  process.exit(1);
-}
 
 async function api(method, path, body) {
   let response;
@@ -63,7 +71,7 @@ async function api(method, path, body) {
       signal: AbortSignal.timeout(10000),
     });
   } catch (error) {
-    fail(`Connector not reachable at ${API} (${error.message}). Start it: cd "${CONNECTOR_DIR}" && node server.mjs --worker`);
+    fail(`Asset Studio not reachable at ${API} (${error.message}). Start it: cd "${STUDIO_DIR}" && node asset-connector/server.mjs --worker`);
   }
   const data = await response.json();
   if (!response.ok) fail(`${method} ${path}: ${data.error ?? response.status}`);
@@ -75,7 +83,7 @@ function readConfig() {
 }
 
 function requireProjectId(config) {
-  if (!config.project_id) fail(`No project_id in ${CONFIG_PATH}. Run: node Tools/pixel-asset.mjs init`);
+  if (!config.project_id) fail(`No project_id in ${CONFIG_PATH}. Run: node Tools/asset-studio.mjs init`);
   return config.project_id;
 }
 
@@ -101,7 +109,7 @@ async function init() {
 async function caps() {
   const data = await api("GET", "/v1/capabilities");
   console.log(JSON.stringify(data, null, 2));
-  if (!String(data.api_version).startsWith(`${API_MAJOR}.`)) fail(`Connector API ${data.api_version} is not ${API_MAJOR}.x; update this client.`);
+  if (!String(data.api_version).startsWith(`${API_MAJOR}.`)) fail(`Asset Studio API ${data.api_version} is not ${API_MAJOR}.x; update this client.`);
 }
 
 function readReference(values) {
@@ -123,7 +131,7 @@ async function submit(values) {
   const raster = pipeline === "raster";
   if (raster && values.colors) fail("--colors is for the pixel pipeline only.");
   if (!raster && (values.width || values.height || values.background)) fail("--width, --height and --background are for the raster pipeline; pixel jobs use --size.");
-  // The connector takes camera angle and orientation from the brief and has no default for them.
+  // Asset Studio takes camera angle and orientation from the brief and has no default for them.
   if (!values.name || !values.asset || !values.view) fail("submit needs --name, --view (camera angle) and --asset (with facing or orientation).");
   if (!raster && !values.type && !values.size) fail("submit needs --type or --size.");
   if (values.size && (values.width || values.height)) fail("Use --size or --width/--height, not both.");
@@ -181,7 +189,7 @@ function csvField(value) {
 function pngSize(png) {
   if (png.length < 33 || png.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a" ||
       png.readUInt32BE(8) !== 13 || png.toString("ascii", 12, 16) !== "IHDR") {
-    throw new Error("connector export is not a valid PNG");
+    throw new Error("Asset Studio export is not a valid PNG");
   }
   return [png.readUInt32BE(16), png.readUInt32BE(20)];
 }
@@ -215,9 +223,9 @@ function pullJob(job, config, force) {
     const exporter = job.pixelorama_project_path ? "Pixelorama" : "Pillow";
     const raster = job.request.pipeline === "raster";
     const row = [
-      assetPath, "ai-tool", `pixel-asset-connector job ${job.id}`, config.ai_license,
+      assetPath, "ai-tool", `asset-studio job ${job.id}`, config.ai_license,
       raster ? `${config.ai_plan}; Pillow` : `${config.ai_plan}; Pixel Art Fixer (MIT); ${exporter}`,
-      "connector worker", new Date().toISOString().slice(0, 10),
+      "Asset Studio worker", new Date().toISOString().slice(0, 10),
       raster ? "Resized with Pillow (Lanczos), raster pipeline" : `Grid recovered with Pixel Art Fixer, colors grouped, exported with ${exporter}`,
       `F1: ${job.image_path}; rules ${job.rules_version ?? "?"}`,
     ];
@@ -270,5 +278,5 @@ switch (command) {
   case "submit": await submit(values); break;
   case "status": await status(); break;
   case "pull": await pull(rest, values); break;
-  default: fail("Commands: caps, init, submit, status, pull. See the top of Tools/pixel-asset.mjs.");
+  default: fail("Commands: caps, init, submit, status, pull. See the top of Tools/asset-studio.mjs.");
 }

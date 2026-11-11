@@ -1,7 +1,8 @@
 # Pixel art: Pixelorama → Unity
 
-The default house style is pixel art drawn in Pixelorama (tested with v1.2.3). This file covers how art gets into
-Unity and how Claude draws alongside you.
+Pixel art, an optional style turned on by the `pixel-art` skill, is drawn in Pixelorama (tested with v1.2.3). This
+file covers how it gets into Unity and how Claude draws alongside you. Generated assets in any style come from
+Codex Asset Studio: `AssetStudio.md`.
 
 ## 1. Layout
 
@@ -64,7 +65,7 @@ Camera: add a **Pixel Perfect Camera** (URP 2D) with Assets PPU = PixelsPerUnit 
 Upstream: https://github.com/abidoo22/Pixelorama-MCP v0.2.1 (MIT). Claude draws live in the open Pixelorama
 (106 tools: pixels, lines, shapes, fills, layers, frames, animation tags, palettes, selections, dithering, outlines,
 tilesets, export); you watch the canvas and can undo with Ctrl+Z. Good for icons, items, tiles, UI pieces, recolors
-and short animations. Detailed characters still come from the connector (section 6).
+and short animations. Detailed characters still come from Asset Studio (`AssetStudio.md`).
 
 Pixelorama is optional: only a game whose art style is pixel art uses it. The `pixel-art` skill turns it on
 (`node Tools/pixel-art.mjs enable` writes the `pixelorama` server into the game's `.mcp.json`). The workspace ships
@@ -83,43 +84,9 @@ Suggested loop: Claude draws or edits → `save_project` to `ArtSource/...pxo` �
 Unity imports.
 
 Simple pixel UI (flat frames, buttons, slots, bars, line icons such as X, arrows, plus) is drawn this way instead of
-connector jobs: exact pixels, symmetric corners, no quota. Tool choice and drawing steps: `UIPrompting.md`, section 3.
+Asset Studio jobs: exact pixels, symmetric corners, no quota. Tool choice and drawing steps: `UIPrompting.md`, section 3.
 
-## 6. Generated assets (asset connector)
-
-Detailed assets come from [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), a separate repo: a local service that takes jobs over
-REST (default `http://127.0.0.1:3941`, `PIXEL_ASSET_API` to change it) and whose worker makes the image with Codex
-ImageGen. Set it up from its README (`node asset-connector/setup.mjs doctor`, then
-`node asset-connector/server.mjs --worker`), and set `PIXEL_ASSET_CONNECTOR_DIR` to its `asset-connector` folder
-so error hints show the right path. When it requires a token, put the project token in `ASSET_API_TOKEN`. Register the project once with `POST /v1/projects` and the
-master prompt from the art bible, and keep the returned `project_id`.
-
-1. Send `POST /v1/projects/{project_id}/jobs` and keep the returned `id`. Example body:
-   `{"request":{"asset":"Common iron sword, grip at the bottom, tip pointing straight up","asset_type":"item","view":"front view","rarity":"common"}}`.
-   A brief states the camera angle in `view` and the facing of the object or character in `asset`: the connector has
-   no default for either. Write the game's convention (for example weapon direction in the inventory) into the art
-   bible so every job matches.
-2. Poll `GET /v1/jobs/{id}` until `status: "done"`. On `failed`, read `error`.
-3. Take the PNG from `export_path`, a file path on the machine that runs the connector.
-
-UI elements (frames, buttons, icons) have their own rules: read `Assets/Integration/UIPrompting.md` and fill
-`design/art/ui-prompt-profile.md` before the first job. A PNG without a matching `.json` imports as one Single sprite,
-pivot center, no alpha slicing.
-
-`Tools/pixel-asset.mjs` is an optional CLI. `status` shows the PNG path; `pull <job-id>` copies the PNG into
-`Assets/Art/` and writes the ledger row. `caps` prints the connector API version (this client uses API 1.x, tested
-with 1.2.0).
-
-**Non-pixel styles (connector API 1.2):** add `--pipeline raster`, or set `"pipeline": "raster"` in
-`design/art/pixel-asset-project.json` for an all-raster game. Raster images can be rectangular (`--width`,
-`--height`, 8 to 2048 px), `--background opaque` for full-bleed images, `--style` for the material. `pull` copies into
-`Assets/ArtRaster/`, imported by `Assets/Editor/Art/RasterArtImporter.cs` (PPU 100, bilinear, compressed);
-`Assets/Art/` stays pixel only. Raster UI: `UIPrompting.md`, section 10.
-
-**Style references:** `--ref <job-id>` (a finished job of the same project) or `--ref path/to/image.png` (at most
-8 MiB, 2048 px) keeps the same style; `--no-ref` drops the project's default reference.
-
-## 7. Outside sources and the license ledger
+## 6. Outside sources and the license ledger
 
 - Every asset added to the game (drawn by you, by Claude, generated, Kenney, purchased) gets one row in
   `design/asset-ledger.csv`.

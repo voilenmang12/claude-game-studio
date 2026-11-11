@@ -62,10 +62,10 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
     (`node Tools/pixel-art.mjs enable`) and holds the workflow (`.pxo` sources in `ArtSource/`,
     `bash Tools/export-pixelorama.sh`, `Assets/Integration/PixelArt.md`). Without it the game has no `pixelorama`
     MCP server and needs no Pixelorama.
-  - **Raster** (any non-pixel style): connector jobs with the raster pipeline, files in `Assets/ArtRaster/`
+  - **Raster** (any non-pixel style): Asset Studio jobs with the raster pipeline, files in `Assets/ArtRaster/`
     (`UIPrompting.md` section 10).
-  Detailed assets in either style use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally). Submit a job, wait for `done`, and use the
-  PNG at `export_path`. The connector worker generates the image and exports the sprite; never generate it yourself.
+  Detailed assets in either style use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally; `Assets/Integration/AssetStudio.md`). Submit a job, wait for `done`, and use the
+  PNG at `export_path`. The Asset Studio worker generates the image and exports the sprite; never generate it yourself.
   Log every asset in `design/asset-ledger.csv`. Every popup and button follows
   `Assets/Integration/UIPopupStandard.md` (layer stack, shared kit, contrast).
 

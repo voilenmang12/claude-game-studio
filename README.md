@@ -21,8 +21,8 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  ├─ .claude/                 CCGS agents, skills, hooks, rules, docs (+ art-assets rule, game-ui-design skill)
 │  ├─ CLAUDE.md, project.yaml  CCGS config, already set up for Unity 6.6 URP 2D
 │  ├─ Assets/Editor/Art/       Pixelorama and raster import rules
-│  ├─ Assets/Integration/      PixelArt.md, UIPrompting.md, UIPopupStandard.md
-│  ├─ Tools/                   Pixelorama export, asset connector client, UI kit drawing and contrast check
+│  ├─ Assets/Integration/      AssetStudio.md, PixelArt.md, UIPrompting.md, UIPopupStandard.md
+│  ├─ Tools/                   Pixelorama export, Asset Studio client, UI kit drawing and contrast check
 │  ├─ design/template-requests/README.md   how a game asks for a template change
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       optional Pixelorama MCP for pixel-art games (Pixelorama-MCP 0.2.1, 106 tools)
@@ -106,10 +106,10 @@ previews that only the signed-in Vercel account can open; `--prod` gives a publi
 
 ## Generated art: Codex Asset Studio
 
-Detailed art (characters, items, painted UI) comes from [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), the asset connector these games
+Detailed art (characters, items, painted UI) comes from [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), which these games
 use. It is a separate repo: a local REST service on `http://127.0.0.1:3941` whose worker drafts the prompt, makes
 the image with Codex ImageGen and exports a game-ready PNG (pixel grid recovery, raster, animation sheets, UI 9-slice).
-`template/Tools/pixel-asset.mjs` is its client; Claude never makes the image itself.
+`template/Tools/asset-studio.mjs` is its client; Claude never makes the image itself.
 
 ```bash
 git clone https://github.com/voilenmang12/codex-asset-studio.git
@@ -119,9 +119,9 @@ node asset-connector/server.mjs --worker     # keep it running; a second termina
 ```
 
 Its README lists the requirements (Node 20.11+, Python 3.10+, Codex CLI signed in with ChatGPT). In a game:
-fill `design/art/pixel-asset-project.json`, run `node Tools/pixel-asset.mjs init` once, then `submit`, `status` and
-`pull` (`template/Assets/Integration/PixelArt.md`, section 6). Jobs use the worker account's image quota. When the
-connector sets `ASSET_API_TOKEN`, give each game a project token through the same variable; keep it out of git.
+fill `design/art/asset-studio-project.json`, run `node Tools/asset-studio.mjs init` once, then `submit`, `status` and
+`pull` (`template/Assets/Integration/AssetStudio.md`). Jobs use the worker account's image quota. When Asset
+Studio sets `ASSET_API_TOKEN`, give each game a project token through the same variable; keep it out of git.
 
 ## Licenses
 

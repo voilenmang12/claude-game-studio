@@ -56,9 +56,9 @@ upstream.
 | `.claude/rules/art-assets.md` | Art, asset job and license ledger rules |
 | `.claude/skills/game-ui-design/` | Third-party skill, vendored unchanged from omer-metin/skills-for-antigravity (Apache-2.0, `licenses/skills-for-antigravity-apache-2.0.txt`); `SOURCE.md` has the commit |
 | `Assets/Editor/Art/PixelArtImporter.cs`, `RasterArtImporter.cs` | Unity import rules for Pixelorama exports and raster art |
-| `Assets/Integration/PixelArt.md`, `UIPrompting.md`, `UIPopupStandard.md` | Art pipeline, UI prompting and popup standard |
+| `Assets/Integration/AssetStudio.md`, `PixelArt.md`, `UIPrompting.md`, `UIPopupStandard.md` | Generated assets, pixel art pipeline, UI prompting and popup standard |
 | `AgentScripts/ValidatePixelArtImport.cs` | Editor check of the Pixelorama import |
-| `Tools/export-pixelorama.sh`, `pixel-asset.mjs`, `ui-kit-template.mjs`, `ui-kit-check.py` | Export, asset connector client, UI kit drawing, contrast check |
+| `Tools/export-pixelorama.sh`, `asset-studio.mjs`, `ui-kit-template.mjs`, `ui-kit-check.py` | Export, Asset Studio client, UI kit drawing, contrast check |
 | `.claude/skills/pixel-art/`, `Tools/pixel-art.mjs` | Optional pixel-art pipeline: turns Pixelorama and its MCP server on or off per game |
 | `ArtSource/README.md`, `design/art/*`, `design/asset-ledger.csv` | Art source folder, per-game art config and profile, license ledger |
 | `.mcp.json`, `.editorconfig` | Pixelorama MCP server, editor settings |

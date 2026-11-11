@@ -1,6 +1,6 @@
 ---
 name: pixel-art
-description: Turns on and runs the optional pixel-art pipeline (Pixelorama, its MCP server, the .pxo to Unity export) for a game whose art style is pixel art. Use when the user picks pixel art (art bible, UI profile), asks for pixel art or Pixelorama, or a pixel asset must be drawn, exported or checked. Not for raster or hand-painted styles, which use the connector's raster pipeline.
+description: Turns on and runs the optional pixel-art pipeline (Pixelorama, its MCP server, the .pxo to Unity export) for a game whose art style is pixel art. Use when the user picks pixel art (art bible, UI profile), asks for pixel art or Pixelorama, or a pixel asset must be drawn, exported or checked. Not for raster or hand-painted styles, which use Asset Studio's raster pipeline.
 ---
 
 # Pixel art
@@ -16,7 +16,7 @@ Read the art style from `design/art/ui-prompt-profile.md` ("Art style" row) and 
 - **Pixel art** already recorded: go to step 2.
 - **Not decided**: ask the user whether the game is pixel art. Record the answer in the profile's "Art style" row
   (`pixel` or `raster`) before going on. If there is no art bible yet, suggest `/art-bible` first.
-- **Raster** (or any non-pixel style): stop. Say that this game uses the connector's raster pipeline
+- **Raster** (or any non-pixel style): stop. Say that this game uses Asset Studio's raster pipeline
   (`Assets/Integration/UIPrompting.md` section 10, `Assets/ArtRaster/`), and run `node Tools/pixel-art.mjs disable`
   if `.mcp.json` still declares `pixelorama`.
 
@@ -44,9 +44,9 @@ The rules are in `Assets/Integration/PixelArt.md` (read it before drawing or imp
 - Sources in `ArtSource/*.pxo`; `bash Tools/export-pixelorama.sh` writes `Assets/Art/<same path>.png` + `.json`;
   `Assets/Editor/Art/PixelArtImporter.cs` slices and animates them in Unity.
 - Draw small assets (icons, items, tiles, recolors, simple UI pieces) live in Pixelorama through the MCP tools, then
-  `save_project` to `ArtSource/`. Which UI piece is drawn and which goes to the connector: `UIPrompting.md` section 3.
+  `save_project` to `ArtSource/`. Which UI piece is drawn and which goes to Asset Studio: `UIPrompting.md` section 3.
 - The popup kit: `node Tools/ui-kit-template.mjs` (colors in `design/art/ui-kit-palette.json`).
-- Detailed assets (characters, scenes) still come from the asset connector (`PixelArt.md` section 6).
+- Detailed assets (characters, scenes) still come from Asset Studio (`Assets/Integration/AssetStudio.md`).
 - Every asset gets its row in `design/asset-ledger.csv` in the same change.
 
 ## 4. Turn it off

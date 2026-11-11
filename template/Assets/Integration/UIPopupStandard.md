@@ -2,7 +2,7 @@
 
 Every popup in every game is built from the same layer stack and one shared UI kit. Colors come from the game's
 `design/art/ui-prompt-profile.md`, never from this file. How to make each sprite: `UIPrompting.md` (pixel: section 3
-picks Pixelorama MCP or the connector; raster: section 10).
+picks Pixelorama MCP or Asset Studio; raster: section 10).
 
 Reference: the shop and journal popups of a shipped casual game (measured 2026-11-09). Its colors are an example of
 the contrast pattern only. Never copy a reference game's palette or art.
@@ -61,7 +61,7 @@ Pixel games keep every position and size a multiple of S, so art pixels line up.
   outline that is a dark shade of its own fill.
   - Pixel: draw the grid once with Pixelorama MCP and redraw it with each role's palette: the same `rows`, a different
     `palette`. The shapes are then identical by construction.
-  - Raster: send the first button as a connector job and get it approved. Send each other role with `--ref <first job-id>`
+  - Raster: send the first button as an Asset Studio job and get it approved. Send each other role with `--ref <first job-id>`
     and the same brief with only the colors changed. Reject a variant whose size, border or outline differs.
 - **States:** `Button` transition stays Color Tint (normal white, pressed about `#d8d8d8`). Disabled swaps the sprite to
   `button_disabled`, a gray variant, when the game has one; otherwise the Color Tint disabled color.
@@ -96,11 +96,11 @@ The minimum set every game makes before its first popup, listed in the profile's
 
 | Name | Layer | Pixel size and border | Tool (pixel) |
 |---|---|---|---|
-| `UI/Popup/popup_frame` | bg1 | 64, border 16 | Pixelorama MCP, or connector for an ornate frame |
+| `UI/Popup/popup_frame` | bg1 | 64, border 16 | Pixelorama MCP, or Asset Studio for an ornate frame |
 | `UI/Popup/popup_panel` | bg2 | 64, border 12 | Pixelorama MCP |
 | `UI/Popup/popup_well` | bg3 | 32, border 8 | Pixelorama MCP |
 | `UI/Popup/popup_card`, `popup_card_selected` | card | 32, border 8 | Pixelorama MCP |
-| `UI/Popup/popup_title` | title | 64×32, border L and R 16, T and B 0 | Pixelorama MCP (not a connector job: it is not square) |
+| `UI/Popup/popup_title` | title | 64×32, border L and R 16, T and B 0 | Pixelorama MCP (not an Asset Studio job: it is not square) |
 | `UI/Buttons/button_<role>` | buttons | 32, border L, R, T 8 and B 10 | Pixelorama MCP, one grid, one palette per role |
 | `UI/Buttons/button_close` | close | 24 or 32, Simple | Pixelorama MCP |
 

@@ -8,7 +8,7 @@ if it holds paid plugins or personal data.
 | Path | Read by | What it is |
 |---|---|---|
 | `RULES.md` | `CLAUDE.md` of the workspace and of every concept (`@local/RULES.md`) | your rules for workspace and concept sessions: language, platform, portfolio decisions |
-| `studio.config.json` | `deploy-test.sh`, `template/Tools/pixel-asset.mjs` | machine and account values (Vercel team, asset connector) |
+| `studio.config.json` | `deploy-test.sh`, `template/Tools/asset-studio.mjs` | machine and account values (Vercel team, Codex Asset Studio) |
 | `public-denylist.txt` | `tools/hooks/pre-commit` | words and patterns that must never reach the public workspace repo |
 | `overlay/` | `new-game.sh`, `sync-template.sh` | files laid over `template/` in every game, **every sync**: your rules (`.claude/studio-rules.md`, imported by each game's `CLAUDE.md`), your skills, your build scripts. Same path as in the game. |
 | `seed/` | `new-game.sh`, `sync-template.sh` | files a new game starts with that the game then owns (`project.yaml`, `design/art/…`): copied by `new-game.sh`, and by `sync-template.sh` only when the game has none |

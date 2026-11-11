@@ -1,7 +1,7 @@
 # UI element prompting rules
 
-Shared rules for making UI art, with the asset connector or with Pixelorama MCP. The per-game values live in
-`design/art/ui-prompt-profile.md`: fill that file before the first UI piece. Connector guide: `PixelArt.md`, section 6.
+Shared rules for making UI art, with Asset Studio or with Pixelorama MCP. The per-game values live in
+`design/art/ui-prompt-profile.md`: fill that file before the first UI piece. Asset Studio guide: `AssetStudio.md`.
 Sections 2 to 9 are for pixel-art games; section 10 covers games with a non-pixel (raster) style.
 Popups and buttons are built from one layer stack and one kit: `UIPopupStandard.md` decides what to make; this file
 says how to make it.
@@ -37,24 +37,24 @@ reference becomes a 400×225 art-pixel screen.
 - Expand scaling is not an integer at most window sizes, so some art pixels draw slightly wider. Never rely on a lone 1 px
   line to separate two shapes.
 
-## 3. Pick the tool: Pixelorama MCP or the connector
+## 3. Pick the tool: Pixelorama MCP or Asset Studio
 
 For pixel games, simple UI pieces are drawn by Claude in Pixelorama through the `pixelorama` MCP server, not sent as
-connector jobs. The result is exact: corners mirror to the pixel, straight edges repeat unchanged, the center is one
+Asset Studio jobs. The result is exact: corners mirror to the pixel, straight edges repeat unchanged, the center is one
 flat color, and the colors are the profile hex values. It also costs no image quota and leaves an editable `.pxo`.
 
 | Piece | Tool |
 |---|---|
 | Frame with a flat interior, 1 to 3 flat bands and a stepped or square corner: popup frame, panel, well, card, button, slot, bar track, tab, tooltip | **Pixelorama MCP** |
-| Title ribbon or plate (not square, so not a connector job) | **Pixelorama MCP** |
+| Title ribbon or plate (not square, so not an Asset Studio job) | **Pixelorama MCP** |
 | Button color variants: the same grid with a different palette per role | **Pixelorama MCP** |
 | Checkbox, toggle, radio, divider, scroll handle, arrow or caret | **Pixelorama MCP** |
 | Glyph icon of at most 4 colors, built from straight lines and diagonals: close, check, plus, minus, arrows, pause, play, menu, lock | **Pixelorama MCP** |
-| Icon of a shaded object or material: coin, gem, potion, food, weapon, item | Connector |
-| Emblem, badge, ornate or textured frame, a frame with carved corner ornaments | Connector |
-| Anything illustrative: portraits, scenes, characters | Connector |
+| Icon of a shaded object or material: coin, gem, potion, food, weapon, item | Asset Studio |
+| Emblem, badge, ornate or textured frame, a frame with carved corner ornaments | Asset Studio |
+| Anything illustrative: portraits, scenes, characters | Asset Studio |
 
-If a "simple" piece needs more than 4 colors or shading that follows a form, it is not simple: use the connector.
+If a "simple" piece needs more than 4 colors or shading that follows a form, it is not simple: use Asset Studio.
 
 **Drawing with Pixelorama MCP** (Pixelorama must be open; guide `PixelArt.md`, section 5):
 
@@ -75,7 +75,7 @@ Lessons from the pilot, 2026-11-09 (a 32 px button with an 8 px border, and a 16
 - A diagonal stroke 1 px wide reads as loose dots at 16 px. Diagonal strokes need a core 2 to 3 px wide with a 1 px outline.
 - A light gray button (fill `#e4e4ea`, 1 px white top band, 3 px gray bottom band, dark outline) tints well with Color Tint.
 
-## 4. What the connector can and cannot make
+## 4. What Asset Studio can and cannot make
 
 Every output is a square PNG. Regular sprites keep a clear margin of 1/16 of the grid on each side. Frames use
 `asset_type: ui_9_slice`, which fills the whole grid with zero margin: only the stepped corner notches are clear. The worker
@@ -84,12 +84,12 @@ rejects a frame whose center or straight edges are not fully opaque.
 | Need | Rule |
 |---|---|
 | Rectangular panel, button or bar | Square source, then 9-slice |
-| Full-screen or opaque background | Not a connector job. Use a flat palette color or a separate background asset |
-| Seamless tile or pattern | Not a connector job: the clear edge breaks tiling |
+| Full-screen or opaque background | Not an Asset Studio job. Use a flat palette color or a separate background asset |
+| Seamless tile or pattern | Not an Asset Studio job: the clear edge breaks tiling |
 | Logo or anything with words | Set the words in TextMesh Pro. Only a wordless emblem can be a job |
 | Dimmer, thin fill, divider | Flat Image with a palette color |
 | Pressed, hover, disabled state | Color Tint. Make art only if the shape changes |
-| Same style across jobs | The fixed style text in section 6, plus `--ref <job-id>` of an approved piece (connector API 1.2) |
+| Same style across jobs | The fixed style text in section 6, plus `--ref <job-id>` of an approved piece (Asset Studio API 1.2) |
 | Magenta in a frame | Avoid colors near `#FF00FF`: the worker removes matte-colored areas connected to the image edge |
 | Non-square piece | Not supported. Stretch it with 9-slice or lay out several squares |
 
@@ -132,15 +132,15 @@ Every brief must avoid: text, letters, numbers, drop shadows outside the shape, 
 background scenes, and more than one object.
 
 ```bash
-node Tools/pixel-asset.mjs submit --name UI/Panels/panel_modal --type ui_9_slice --size 64 --border 16 --colors 8 --view "flat front view" --asset "<UI_STYLE> <Frame block> Popup panel: light warm gray interior, a medium gray 3 pixel frame band."
-node Tools/pixel-asset.mjs submit --name UI/Icons/icon_coin --size 32 --colors 10 --view "flat front view" --asset "<UI_STYLE> <Icon block> A gold coin with a star, facing the viewer."
+node Tools/asset-studio.mjs submit --name UI/Panels/panel_modal --type ui_9_slice --size 64 --border 16 --colors 8 --view "flat front view" --asset "<UI_STYLE> <Frame block> Popup panel: light warm gray interior, a medium gray 3 pixel frame band."
+node Tools/asset-studio.mjs submit --name UI/Icons/icon_coin --size 32 --colors 10 --view "flat front view" --asset "<UI_STYLE> <Icon block> A gold coin with a star, facing the viewer."
 ```
 
 Names: `UI/Panels/panel_*`, `UI/Buttons/button_*`, `UI/Slots/slot_*`, `UI/Bars/bar_*`, `UI/Icons/icon_*`, `UI/Emblems/emblem_*`.
 
 ### Pilot result, 2026-11-06
 
-Real jobs through connector requirements v9, rendered in Unity at 1600×900, S 4, with the settings in section 2.
+Real jobs through Asset Studio requirements v9, rendered in Unity at 1600×900, S 4, with the settings in section 2.
 
 | Piece | Grid, border | Result |
 |---|---|---|
@@ -159,7 +159,7 @@ Real jobs through connector requirements v9, rendered in Unity at 1600×900, S 4
 Each job uses image-generation quota the moment it is submitted. Pixelorama MCP pieces cost no quota.
 
 1. Pilot one panel, one button and one icon. Have the user approve the look before anything else. Draw the pieces that
-   section 3 gives to Pixelorama MCP first: they set the palette and band style the connector briefs must match.
+   section 3 gives to Pixelorama MCP first: they set the palette and band style the Asset Studio briefs must match.
 2. Update `UI_STYLE` in the profile if the pilot needs it. Then send the rest of the kit.
 3. Reuse before you generate: one neutral frame with several tints beats several colored frames.
 4. Failed review: change the brief and send a new job. Do not repaint the PNG. For a stretch-edge defect only, a small fix in
@@ -178,7 +178,7 @@ Check the job's 8× `preview_path` and the native PNG:
 
 ## 9. Bringing it into Unity
 
-1. `node Tools/pixel-asset.mjs pull <job-id>` copies the PNG to `Assets/Art/UI/...` and writes the ledger row.
+1. `node Tools/asset-studio.mjs pull <job-id>` copies the PNG to `Assets/Art/UI/...` and writes the ledger row.
 2. Frames only: set the border to the job's `request.slice_border` on all four sides. It survives a reimport.
    ```bash
    unity command eval 'var i=(UnityEditor.TextureImporter)UnityEditor.AssetImporter.GetAtPath("Assets/Art/UI/Panels/panel_modal.png"); i.spriteBorder=new UnityEngine.Vector4(16,16,16,16); i.SaveAndReimport();'
@@ -189,8 +189,8 @@ Check the job's 8× `preview_path` and the native PNG:
 
 ## 10. Games with a raster (non-pixel) style
 
-The connector's raster pipeline makes smooth art: `--pipeline raster`, or `"pipeline": "raster"` in
-`design/art/pixel-asset-project.json` for a game that is raster throughout. Rules: connector `RASTER_REQUIREMENTS.md` and
+Asset Studio's raster pipeline makes smooth art: `--pipeline raster`, or `"pipeline": "raster"` in
+`design/art/asset-studio-project.json` for a game that is raster throughout. Rules: Asset Studio's `RASTER_REQUIREMENTS.md` and
 `UI_9_SLICE_RASTER.md`. Pixelorama is not used for a raster game.
 
 - **Import:** `pull` copies to `Assets/ArtRaster/`, handled by `RasterArtImporter` (PPU 100, bilinear, compressed, no

@@ -55,7 +55,25 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
-(nothing yet)
+**Changed**
+- The asset connector is called by its name, Codex Asset Studio, everywhere: it makes assets in every style, not
+  only pixel art. Renamed: `Tools/pixel-asset.mjs` → `Tools/asset-studio.mjs`, `design/art/pixel-asset-project.json`
+  → `design/art/asset-studio-project.json`, the variables `PIXEL_ASSET_API` → `ASSET_STUDIO_API` and
+  `PIXEL_ASSET_CONNECTOR_DIR` → `ASSET_STUDIO_DIR`, the `local/studio.config.json` keys `pixelAssetApi` →
+  `assetStudioApi` and `pixelAssetConnectorDir` → `assetStudioDir`. `ASSET_STUDIO_DIR` is the Asset Studio repo
+  folder (it was its `asset-connector/` subfolder). New ledger rows say `asset-studio job <id>`; old rows still count
+  as pulled (the client matches the job ID). The client stops with the new name when it finds an old one.
+- `PixelArt.md` section 6 is now its own guide, `Assets/Integration/AssetStudio.md`; `PixelArt.md` section 7 becomes
+  section 6. Docs and rules say "Asset Studio" instead of "the connector".
+- `sync-template.sh` renames files the template renamed (`git mv`, so a game keeps its history and its project JSON
+  with `project_id`) before it copies.
+
+**Port**
+- Each game: `bash sync-template.sh <Game>` (renames `Tools/pixel-asset.mjs` and `design/art/pixel-asset-project.json`,
+  adds `AssetStudio.md`). A game script that calls `Tools/pixel-asset.mjs` (for example `Tools/asset_batch.py`) moves
+  to `Tools/asset-studio.mjs`.
+- Once per workspace: rename the two keys in `local/studio.config.json` and point `assetStudioDir` at the repo
+  folder; rename `PIXEL_ASSET_API` and `PIXEL_ASSET_CONNECTOR_DIR` if you set them.
 
 ## v2.03 (2026-11-11)
 

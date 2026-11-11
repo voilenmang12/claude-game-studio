@@ -12,7 +12,7 @@ File a ticket when work in this game made or found something every game should h
   `Assets/Integration/`, `Assets/Editor/`, `AgentScripts/`, `Tools/`, `.claude/`).
 - **Tool**: a script, validator, importer, skill or workflow that other games can use unchanged or with settings.
 - **Rule**: a limit, pitfall or measured value learned the hard way (an engine quirk, a store or portal check, a
-  connector setting that works).
+  Asset Studio setting that works).
 - **Standard**: a template standard that turned out wrong, missing or too strict in a real game.
 
 Must file: every time this game edits a template-owned file to fix a bug. Without a ticket the next port overwrites

@@ -6,8 +6,8 @@
   "master_prompt": "TODO: style, palette and theme from the art bible. Keep it within the age rating and original.",
   "defaults": {
     "background": "transparent",
-    "output_root": "TODO: output folder on the connector machine"
+    "output_root": "TODO: output folder on the Asset Studio machine"
   },
-  "ai_plan": "TODO: image plan the connector worker uses",
+  "ai_plan": "TODO: image plan the Asset Studio worker uses",
   "ai_license": "TODO: the plan's license; it must allow commercial use"
 }

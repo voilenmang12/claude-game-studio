@@ -27,6 +27,7 @@ SHARED=(
   docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/CCGS-README.md docs/CCGS-UPGRADING.md docs/CCGS-CHANGELOG.md
   docs/CCGS-VERSION.txt
   Assets/Editor/Art
+  Assets/Integration/AssetStudio.md Assets/Integration/AssetStudio.md.meta
   Assets/Integration/PixelArt.md Assets/Integration/PixelArt.md.meta
   Assets/Integration/UIPrompting.md Assets/Integration/UIPrompting.md.meta
   Assets/Integration/UIPopupStandard.md Assets/Integration/UIPopupStandard.md.meta
@@ -39,7 +40,7 @@ SHARED=(
 # Inside the shared folders, files a game writes itself.
 EXCEPT=(.claude/docs/technical-preferences.md)
 # Game-owned files: created once if missing, then left alone.
-GAME_FILES=(design/art/pixel-asset-project.json design/art/ui-prompt-profile.md design/art/ui-kit-palette.json design/asset-ledger.csv
+GAME_FILES=(design/art/asset-studio-project.json design/art/ui-prompt-profile.md design/art/ui-kit-palette.json design/asset-ledger.csv
   .claude/studio-rules.md .mcp.json)
 
 # Your layer: overlay files replace the template's at the same path; seed files are game files.
@@ -58,6 +59,23 @@ if [ -n "$dirty" ]; then
   echo "$dirty" >&2
   exit 1
 fi
+
+# Files the template renamed: "<old> <new>". A game that has the old one and not the new one gets a git mv first,
+# so it keeps its history and its own values (a game file such as the project JSON is never recreated blank).
+RENAMED=(
+  "Tools/pixel-asset.mjs Tools/asset-studio.mjs"
+  "design/art/pixel-asset-project.json design/art/asset-studio-project.json"
+)
+PENDING=" "; PENDING_OLD=" "   # names a dry run would rename to and from
+for r in "${RENAMED[@]}"; do
+  old="${r%% *}"; new="${r#* }"
+  [ -f "$DST/$old" ] && [ ! -e "$DST/$new" ] || continue
+  PENDING+="$new "; PENDING_OLD+="$old "
+  printf '%-7s %s -> %s\n' rename "$old" "$new"
+  if [ $DRY -eq 0 ]; then
+    git -C "$DST" mv "$old" "$new" || { echo "git mv $old failed in $NAME" >&2; exit 1; }
+  fi
+done
 
 changes=()   # "update <path>" or "create <path>", relative to the template
 add_created() {   # every file under template path $1
@@ -80,6 +98,7 @@ for p in "${SHARED[@]}"; do
           d="${line#"Only in $SRC/"}"; add_created "${d%%: *}/${d#*: }" ;;
         "Only in $DST/"*)
           d="${line#"Only in $DST/"}"; f="${d%%: *}/${d#*: }"
+          case "$PENDING_OLD" in *" $f "*) continue ;; esac
           [ -e "$OVL/$f" ] || case "$f" in *.meta) ;; *) echo "only in game  $f" ;; esac ;;
       esac
     done < <(diff -rq "$SRC/$p" "$DST/$p" || true)
@@ -90,6 +109,7 @@ for p in "${SHARED[@]}"; do
   fi
 done
 for f in "${GAME_FILES[@]}"; do
+  case "$PENDING" in *" $f "*) continue ;; esac
   [ -f "$SEED/$f" ] || in_overlay "$f" || [ -f "$DST/$f" ] || changes+=("create $f")
 done
 lchanges=()   # "<action> <layer> <path>"
@@ -99,6 +119,7 @@ for f in ${OVL_FILES[@]+"${OVL_FILES[@]}"}; do
   fi
 done
 for f in ${SEED_FILES[@]+"${SEED_FILES[@]}"}; do
+  case "$PENDING" in *" $f "*) continue ;; esac
   in_overlay "$f" || [ -f "$DST/$f" ] || lchanges+=("create seed $f")
 done
 
