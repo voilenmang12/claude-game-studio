@@ -148,6 +148,7 @@ check_pixelorama() {
 
 check_all() {
   local chosen; chosen=" $(cfg setup) "
+  case "$chosen" in *" assetstudio "*) chosen="$chosen codex " ;; esac   # Asset Studio makes images with Codex CLI
   [ -d local ] && ok local "local/ layer" || need local "no local/ layer" "bash studio-doctor.sh --init"
   for c in "${REQUIRED[@]}"; do "check_$c"; done
   for c in "${OPTIONAL[@]}"; do
