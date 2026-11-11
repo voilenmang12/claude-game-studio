@@ -8,12 +8,24 @@ that move improvements both ways: from the template to the games, and from the g
 > `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`). The 49 agents, 78 skills, hooks, rules, genre sheets and
 > docs in `template/.claude/` come from there. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
 
+## Quick start
+
+Make an empty folder, start Claude Code in it and say:
+
+> Clone https://github.com/voilenmang12/claude-game-studio into this folder and set up the game studio for me.
+
+Then start Claude Code again in that folder and type `/studio-setup`. It installs what is missing, takes you through
+each sign-in (Git, GitHub, Unity, Vercel, Codex, AGY) one at a time, and sets up Codex Asset Studio. Everything it
+does is `bash studio-setup.sh` ([`docs/setup.md`](docs/setup.md)), which you can run yourself.
+
 ## What is here
 
 ```
 claude-game-studio/            the workspace; game folders are created next to template/
 ├─ CLAUDE.md                   workspace rules (template upkeep, versions, requests)
 ├─ local.example/              your own layer, copied to local/ (ignored): rules, config, overlay, Unity base
+├─ .claude/skills/studio-setup/ /studio-setup: set up this machine (tools, sign-ins, Asset Studio)
+├─ studio-setup.sh             check and set up tools, sign-ins and Codex Asset Studio
 ├─ studio-doctor.sh            set up local/, check the workspace before an update
 ├─ studio-commit.sh            commit one change in the workspace, local/ and local/project/ together
 ├─ FORK.md                     what was taken from CCGS and what changed
@@ -27,7 +39,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       optional Pixelorama MCP for pixel-art games (Pixelorama-MCP 0.2.1, 106 tools)
 ├─ tools/hooks/pre-commit      keeps private content out of commits to this repo
-├─ docs/                       game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md
+├─ docs/                       setup.md, game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
 ├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
@@ -56,10 +68,13 @@ What goes where, and how games get it: [`docs/local-layer.md`](docs/local-layer.
 
 ## Requirements
 
-- Claude Code; Git and bash (Git Bash on Windows); Node 20 or later; Python 3 with Pillow for `ui-kit-check.py`.
+`bash studio-setup.sh` checks all of these and installs most of them ([`docs/setup.md`](docs/setup.md)).
+
+- Claude Code; Git and bash (Git Bash on Windows); Node 20.11 or later; Python 3.10 or later with Pillow.
 - Unity 6000.6.7f1 (Unity 6.6), a 2D URP project, with the `com.unity.nuget.newtonsoft-json` package.
 - Optional: [Pixelorama](https://orama-interactive.itch.io/pixelorama) 1.2.x for pixel art;
-  [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) for generated art (see below);
+  [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) for generated art (Codex CLI signed in
+  with ChatGPT; AGY optional for prompt drafting); GitHub CLI for game repos;
   [Vercel CLI](https://vercel.com/docs/cli) for test deploys.
 
 ## From idea to game
@@ -111,14 +126,16 @@ use. It is a separate repo: a local REST service on `http://127.0.0.1:3941` whos
 the image with Codex ImageGen and exports a game-ready PNG (pixel grid recovery, raster, animation sheets, UI 9-slice).
 `template/Tools/asset-studio.mjs` is its client; Claude never makes the image itself.
 
+Set it up with `/studio-setup`, or by hand:
+
 ```bash
-git clone https://github.com/voilenmang12/codex-asset-studio.git
-cd codex-asset-studio
-node asset-connector/setup.mjs doctor        # checks Codex CLI sign-in and the Python packages
-node asset-connector/server.mjs --worker     # keep it running; a second terminal: node asset-connector/setup.mjs smoke
+bash studio-setup.sh --asset-studio      # clone it next to the workspace, Python packages, its doctor, assetStudioDir
+bash studio-setup.sh --autostart         # Windows: worker starts at sign-in, and now
+bash studio-setup.sh --smoke             # one real image job (uses image quota)
 ```
 
-Its README lists the requirements (Node 20.11+, Python 3.10+, Codex CLI signed in with ChatGPT). In a game:
+Its worker drafts each prompt with AGY (Antigravity CLI) when it is signed in, else with Codex, and always makes the
+image with Codex ImageGen; a game can pick the drafter (`--prompt-provider`, `defaults.prompt_provider`). In a game:
 fill `design/art/asset-studio-project.json`, run `node Tools/asset-studio.mjs init` once, then `submit`, `status` and
 `pull` (`template/Assets/Integration/AssetStudio.md`). Jobs use the worker account's image quota. When Asset
 Studio sets `ASSET_API_TOKEN`, give each game a project token through the same variable; keep it out of git.

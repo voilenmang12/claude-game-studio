@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Client for Codex Asset Studio (https://github.com/voilenmang12/codex-asset-studio), API v1 (tested with 1.2.0).
+// Client for Codex Asset Studio (https://github.com/voilenmang12/codex-asset-studio), API v1 (tested with 1.9.0).
 // ASSET_STUDIO_API sets its URL, ASSET_STUDIO_DIR its repo folder (only used in error hints);
 // without them, assetStudioApi and assetStudioDir in the workspace's local/studio.config.json.
 // Submit jobs and read the worker's PNG path. `pull` is an optional local copy into Assets/Art/ (pixel)
@@ -11,9 +11,10 @@
 //   node Tools/asset-studio.mjs submit --name UI/Panels/panel_modal --type ui_9_slice --size 64 --border 16 --colors 8 --view "flat front view" --asset "..."   (UI: Assets/Integration/UIPrompting.md)
 //   node Tools/asset-studio.mjs submit --pipeline raster --name Backgrounds/bg_menu --width 1600 --height 900 --background opaque --view "wide front view" --asset "..."
 //   Any submit: [--ref <job-id | path/to/file.png> | --no-ref] [--style "..."]. --pipeline defaults to "pipeline" in the config.
+//   [--prompt-provider auto|codex|agy]: who drafts the image prompt (default: the project's defaults.prompt_provider).
 //   node Tools/asset-studio.mjs status
 //   node Tools/asset-studio.mjs pull <job-id>... | --all [--force]
-import { constants, copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -77,6 +78,22 @@ async function api(method, path, body) {
   if (!response.ok) fail(`${method} ${path}: ${data.error ?? response.status}`);
   return data;
 }
+
+// A job's PNG: the worker's file when this machine can read it, else the artifact download (needed with project
+// tokens, which hide worker paths).
+async function jobPng(job) {
+  if (job.export_path && existsSync(job.export_path)) return readFileSync(job.export_path);
+  const url = job.artifacts?.png;
+  if (!url) throw new Error(`PNG not found: ${job.export_path ?? "no export_path and no artifacts.png"}`);
+  const response = await fetch(new URL(url, API), {
+    headers: process.env.ASSET_API_TOKEN ? { Authorization: `Bearer ${process.env.ASSET_API_TOKEN}` } : {},
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!response.ok) throw new Error(`GET ${url}: ${response.status}`);
+  return Buffer.from(await response.arrayBuffer());
+}
+
+const PROMPT_PROVIDERS = ["auto", "codex", "agy"];
 
 function readConfig() {
   return JSON.parse(readFileSync(CONFIG_PATH, "utf8"));
@@ -152,11 +169,15 @@ async function submit(values) {
     ...(values.colors ? { color_groups: Number(values.colors) } : {}),
     ...(values.border ? { slice_border: Number(values.border) } : {}),
   };
+  if (values["prompt-provider"]) {
+    if (!PROMPT_PROVIDERS.includes(values["prompt-provider"])) fail(`--prompt-provider must be ${PROMPT_PROVIDERS.join(", ")}`);
+    request.prompt_provider = values["prompt-provider"];
+  }
   const reference = readReference(values);
   const route = values.type === "ui_9_slice" ? "ui-9-slice" : "jobs";
   const job = await api("POST", `/v1/projects/${projectId}/${route}`, { request, ...(reference !== undefined ? { reference } : {}) });
   console.log(`Queued ${job.id} (${pipeline} ${job.request.width}x${job.request.height}, rules ${job.rules_version ?? "?"}) -> ${request.asset_path}`);
-  console.log(`GET ${API}/v1/jobs/${job.id}. When status is done, use export_path for the PNG.`);
+  console.log(`GET ${API}/v1/jobs/${job.id}. When status is done, pull it: node Tools/asset-studio.mjs pull ${job.id}`);
 }
 
 function ledgerText() {
@@ -169,7 +190,7 @@ async function status() {
   const ledger = ledgerText();
   for (const job of jobs) {
     const pulled = ledger.includes(job.id) ? "pulled" : "-";
-    console.log(`${job.id}  ${job.status.padEnd(10)}  ${pulled.padEnd(6)}  ${(job.request.pipeline ?? "pixel").padEnd(6)}  ${job.request.width}x${job.request.height}  ${job.export_path ?? assetPathFor(job.request) ?? "-"}${job.error ? `  ${job.error}` : ""}`);
+    console.log(`${job.id}  ${job.status.padEnd(10)}  ${pulled.padEnd(6)}  ${(job.request.pipeline ?? "pixel").padEnd(6)}  ${job.request.width}x${job.request.height}  ${(job.prompt_provider_used ?? job.prompt_model ?? "-").padEnd(16)}  ${job.export_path ?? assetPathFor(job.request) ?? "-"}${job.error ? `  ${job.error}` : ""}`);
   }
   if (!jobs.length) console.log("No jobs.");
 }
@@ -194,7 +215,7 @@ function pngSize(png) {
   return [png.readUInt32BE(16), png.readUInt32BE(20)];
 }
 
-function pullJob(job, config, force) {
+async function pullJob(job, config, force) {
   if (job.status !== "done") throw new Error(`job is ${job.status}, not done`);
   const assetPath = assetPathFor(job.request);
   const root = ART_ROOTS[job.request.pipeline ?? "pixel"];
@@ -207,16 +228,14 @@ function pullJob(job, config, force) {
   const alreadyPulled = ledger.includes(job.id);
   const targetExists = existsSync(target);
   if (alreadyPulled && targetExists && !force) return "up to date (already in the ledger)";
-  if (!job.export_path || !existsSync(job.export_path)) throw new Error(`PNG not found: ${job.export_path}`);
-
-  const incoming = readFileSync(job.export_path);
+  const incoming = await jobPng(job);
   const [width, height] = pngSize(incoming);
   if (width !== job.request.width || height !== job.request.height) throw new Error(`${assetPath} is ${width}x${height}, job grid is ${job.request.width}x${job.request.height}`);
   const sameContent = targetExists && readFileSync(target).equals(incoming);
   if (targetExists && !sameContent && !force) throw new Error(`${assetPath} already exists with other content; use --force to replace it`);
   if (!sameContent) {
     mkdirSync(dirname(target), { recursive: true });
-    copyFileSync(job.export_path, target, force ? 0 : constants.COPYFILE_EXCL);
+    writeFileSync(target, incoming, { flag: force ? "w" : "wx" });
   }
 
   if (!alreadyPulled) {
@@ -227,7 +246,7 @@ function pullJob(job, config, force) {
       raster ? `${config.ai_plan}; Pillow` : `${config.ai_plan}; Pixel Art Fixer (MIT); ${exporter}`,
       "Asset Studio worker", new Date().toISOString().slice(0, 10),
       raster ? "Resized with Pillow (Lanczos), raster pipeline" : `Grid recovered with Pixel Art Fixer, colors grouped, exported with ${exporter}`,
-      `F1: ${job.image_path}; rules ${job.rules_version ?? "?"}`,
+      `F1: ${job.image_path ?? "(worker path hidden)"}; prompt ${job.prompt_provider_used ?? job.prompt_model ?? "?"}; rules ${job.rules_version ?? "?"}`,
     ];
     appendFileSync(LEDGER_PATH, `${row.map(csvField).join(",")}\n`);
   }
@@ -252,7 +271,7 @@ async function pull(ids, values) {
   let failed = 0;
   for (const job of jobs) {
     try {
-      console.log(`OK    ${job.id}: ${pullJob(job, config, Boolean(values.force))}`);
+      console.log(`OK    ${job.id}: ${await pullJob(job, config, Boolean(values.force))}`);
     } catch (error) {
       console.error(`FAIL  ${job.id}: ${error.message}`);
       failed += 1;
@@ -269,6 +288,7 @@ const { values, positionals } = parseArgs({
     rarity: { type: "string" }, size: { type: "string" }, colors: { type: "string" }, border: { type: "string" }, all: { type: "boolean" }, force: { type: "boolean" },
     pipeline: { type: "string" }, width: { type: "string" }, height: { type: "string" }, background: { type: "string" },
     style: { type: "string" }, ref: { type: "string" }, "no-ref": { type: "boolean" },
+    "prompt-provider": { type: "string" },
   },
 });
 const [command, ...rest] = positionals;

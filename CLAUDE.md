@@ -5,6 +5,8 @@ Shared context for every game folder below this one. Each game folder has its ow
 workspace work: a new game, template upkeep, comparing games, triaging template requests.
 
 ## Working with the user
+- A new machine, a missing tool or a sign-in that stopped working: `/studio-setup` (`bash studio-setup.sh`). Sign-ins
+  are interactive: the user runs `! bash studio-setup.sh --login <id>`; never type or ask for their passwords or codes.
 - Reply in the user's language. Everything in the repos is English (code, docs, commits).
 - Do the work: run the scripts and the Unity CLI yourself. Ask only for decisions, approval of destructive actions,
   and what only a human can do (Play Mode testing, store uploads, payments, sign-ins).
@@ -16,12 +18,14 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ├─ CLAUDE.md, README.md, FORK.md
 ├─ local/                     YOUR layer, ignored by this repo (local.example/README.md): rules, config, overlay, Unity base
 ├─ local.example/             what studio-doctor.sh --init copies to local/
+├─ .claude/skills/studio-setup/  /studio-setup: tools, sign-ins, Asset Studio on this machine (docs/setup.md)
+├─ studio-setup.sh            bash studio-setup.sh [--choose|--install|--login|--asset-studio|--autostart|--smoke]
 ├─ studio-doctor.sh           bash studio-doctor.sh [--init] [--fetch]   checks the workspace before an update
 ├─ studio-commit.sh           bash studio-commit.sh "<msg>" [--push]      commits workspace, local/, local/project/
 ├─ template/                  studio template; every game gets a copy
 ├─ tools/pixelorama-mcp/      Pixelorama MCP (PixMcpBridge + server; games point to it with ../tools/...; README)
 ├─ tools/hooks/pre-commit     refuses workspace commits that match local/public-denylist.txt
-├─ docs/                      game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
+├─ docs/                      setup.md, game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md
 ├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)
 ├─ new-concept.sh             bash new-concept.sh <slug>       concepts/<slug>/: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                bash new-game.sh <Game> --concept <slug>   template + concept into a Unity project

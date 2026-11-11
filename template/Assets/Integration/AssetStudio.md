@@ -3,9 +3,9 @@
 Detailed assets in any art style (characters, items, icons, painted UI, backgrounds, animation sheets) come from
 [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio), a separate repo: a local service that takes
 jobs over REST (default `http://127.0.0.1:3941`, `ASSET_STUDIO_API` to change it) and whose worker makes the image
-with Codex ImageGen. Set it up from its README (`node asset-connector/setup.mjs doctor`, then
-`node asset-connector/server.mjs --worker`), and set `ASSET_STUDIO_DIR` to its folder (or `assetStudioDir` in the
-workspace's `local/studio.config.json`) so error hints show the right path. When it requires a token, put the project
+with Codex ImageGen. Set it up from the workspace with `/studio-setup` (`bash studio-setup.sh --asset-studio`,
+then `--autostart`); it writes `assetStudioDir` in the workspace's `local/studio.config.json` (`ASSET_STUDIO_DIR`
+wins), which error hints use. When it requires a token, put the project
 token in `ASSET_API_TOKEN`. Register the project once with `POST /v1/projects` and the master prompt from the art
 bible, and keep the returned `project_id`.
 
@@ -21,9 +21,15 @@ UI elements (frames, buttons, icons) have their own rules: read `Assets/Integrat
 `design/art/ui-prompt-profile.md` before the first job. A PNG without a matching `.json` imports as one Single sprite,
 pivot center, no alpha slicing.
 
+**Prompt drafting.** The worker turns the brief into an image prompt with AGY (Antigravity CLI) and falls back to
+Codex when AGY is missing or fails (`auto`); the image itself always comes from Codex ImageGen. Pick the drafter per
+project with `defaults.prompt_provider` in `design/art/asset-studio-project.json` (set before `init`) or per job with
+`--prompt-provider auto|codex|agy` (`agy` fails the job instead of falling back). `status` shows which model
+drafted each job, and `pull` writes it in the ledger row.
+
 `Tools/asset-studio.mjs` is an optional CLI with the settings in `design/art/asset-studio-project.json`. `init`
 registers the project; `status` shows the PNG path; `pull <job-id>` copies the PNG into `Assets/Art/` and writes the
-ledger row. `caps` prints the Asset Studio API version (this client uses API 1.x, tested with 1.2.0).
+ledger row; with a project token, which hides the worker's paths, it downloads the job's `artifacts.png` instead. `caps` prints the Asset Studio API version (this client uses API 1.x, tested with 1.9.0).
 
 **Pixel art** is the default pipeline (`"pipeline": "pixel"`): grid recovery and palette, PNGs in `Assets/Art/`
 (`Assets/Integration/PixelArt.md` for the import rules).

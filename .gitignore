@@ -15,12 +15,18 @@
 !/deploy-test.sh
 !/studio-doctor.sh
 !/studio-commit.sh
+!/studio-setup.sh
+!/.claude/
 !/local.example/
 !/docs/
 !/concept-kit/
 !/template/
 !/tools/
 !/licenses/
+
+/.claude/settings.local.json
+/.claude/agent-memory/
+/.claude/worktrees/
 
 # Local state inside the template (same rules as a game repo)
 /template/.claude/settings.local.json
