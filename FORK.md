@@ -28,7 +28,7 @@ upstream.
 | File | Change |
 |---|---|
 | `CLAUDE.md` | Fork note; Technology Stack set to Unity 6.6 URP 2D; Language section (reply in the user's language, repo in English); "Studio rules" section importing
-`.claude/studio-rules.md`; "Studio template" section (deleting files through `_to_delete/`, versioning, template requests, git, Unity CLI, art style: optional pixel art through the `pixel-art` skill); the engine import line set to Unity |
+`.claude/studio-rules.md`; "Studio template" section (deleting files through `_to_delete/`, versioning, template requests, git, Unity CLI, art style: optional pixel art through the `pixel-art` skill); Collaboration Protocol follows `modes.automation` (upstream states only the `collaborative` rules); new section "Goals, long runs and sessions"; the engine import line set to Unity |
 | `project.yaml` | `modes.rigor: minimal`; engine, specialists, naming and commands written by `/setup-engine unity`; build and run left `[TO BE CONFIGURED]` |
 | `.claude/docs/technical-preferences.md` | Engine, input, budgets, naming and specialists from `/setup-engine unity`; platforms left `[TO BE CONFIGURED]` |
 | `docs/engine-reference/unity/VERSION.md`, `breaking-changes.md`, `current-best-practices.md`, `deprecated-apis.md` | Pin moved from 6.3 LTS to 6.6 (6000.6.7f1); 6.4, 6.5 and 6.6 changes added under their own headings with sources |
@@ -71,7 +71,7 @@ upstream.
 | File | Relation to upstream `v1.3.0` |
 |---|---|
 | `concept-kit/project.yaml` | Upstream file plus `modes.rigor: minimal` at the end |
-| `concept-kit/CLAUDE.md` | Upstream file plus a concept note, a Language section, a "Local rules" section importing `local/RULES.md` and a "Concept stage" section after the stack note |
+| `concept-kit/CLAUDE.md` | Upstream file plus a concept note, a Language section, a "Local rules" section importing `local/RULES.md` and a "Concept stage" section after the stack note; the same Collaboration Protocol and "Goals, long runs and sessions" changes as `template/CLAUDE.md` |
 | `concept-kit/.claude/docs/technical-preferences.md` | Upstream file, unchanged (the unconfigured one) |
 | `concept-kit/.gitignore` | Upstream file, unchanged (covers web prototypes) |
 
