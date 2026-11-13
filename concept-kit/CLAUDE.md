@@ -93,6 +93,15 @@ follow from a phone (Remote Control), so a run never stops to ask.
 - **Decide and proceed.** Pick the option that best fits the brief, GDD and art bible, log it (`log_decision`, or
   the goal's Log), continue. No AskUserQuestion; the skills exempt in `automation-modes.md` (`setup-engine`,
   `gate-check`, `hotfix`, `day-one-patch`) still ask.
+- **Size the task first, and check only as much as its size needs.** Say the size in one line when you start.
+  | Size | Examples | Check | Report |
+  |---|---|---|---|
+  | **S** | an icon, a color, a text, one value, a small UI fix, one tuning value | reload the playtest, then **one** "after" screenshot of that screen (no "before" unless the request compares them); a logic bug also gets its test | no report file: the image and 2-3 sentences in the closing message |
+  | **M** | a feature, several screens, a new asset set | the tests it touches, one screenshot per touched screen | short report (`task-report.md`) |
+  | **L** | a goal, `/run-goal`, a rework or an audit | full checks | full report |
+  A task that turns out bigger moves up one size and says so. Aim for S in about 15 tool calls.
+- **Stay in scope.** Do what was asked, nothing next to it: no checking other screens "while you are there", no
+  finishing unrelated work in flight. Anything you notice goes on one line under "Left" in the closing message.
 - **Do and check the work yourself:** write and edit files, run the HTML playtest yourself (browser tools),
   look at the screenshots and judge them against the task's written criteria.
 - **One task, one branch, closed by you.** Start each task on a new branch from `main` (`task/<slug>`) and commit
@@ -103,8 +112,8 @@ follow from a phone (Remote Control), so a run never stops to ask.
 - **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
   sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
   rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".
-- **Report every task with images** (`.claude/docs/task-report.md`): screenshots before and after, checks, commits,
-  what you decided alone; sent to the user with `SendUserFile`.
+- **Report by size** (`.claude/docs/task-report.md`): S in the closing message with its one image; M and L as a
+  report file with screenshots, checks, commits and what you decided alone, sent with `SendUserFile`.
 - A project that sets `collaborative` or `guided` follows those modes in `automation-modes.md` instead.
 - Started outside this file's folder? Warn first: hooks, permissions and the goal check load only when Claude Code
   starts here.
@@ -125,6 +134,10 @@ follow from a phone (Remote Control), so a run never stops to ask.
   recompile) runs as one background command (`run_in_background`) and its notification wakes you. Never wait turn
   after turn or sleep in the foreground beyond a few seconds. Run a check once after a batch of changes, not after
   each edit; do not repeat `git status` or `unity status` between steps when nothing changed.
+- **Audit and QA run in two passes, never mixed.** Pass 1, find: one sweep of the playtest, no fixes, ending in a findings list ranked blocker / major / minor, each with its screen or file and one
+  image or line of proof (`production/qa/audit-<date>.md`). Pass 2, fix: each finding becomes one goal item, highest
+  first, checked as an S task; minors left at the end are listed, not chased. Load the playtest once per
+  sweep, not once per finding.
 - **Retry cap.** The same failure three times with three different fixes: mark the item `[~]` with the reason, move
   on, and list it in the report. Never repeat an identical command hoping for a different result.
 - **Sessions.** One goal or task per session. Before ending, update `active.md` (done, open, next step); the next

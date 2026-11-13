@@ -1,10 +1,16 @@
 # Task report (with images)
 
-The user often follows from a phone (Remote Control). Every finished task that changed something, and every goal
-(done or stalled), ends with a report the user can judge without opening the project.
+The user often follows from a phone (Remote Control), so every finished task shows its result in a form they can
+judge without opening the project. How much depends on the task size (`CLAUDE.md`, "Autonomy"):
+
+| Size | What the user gets |
+|---|---|
+| **S** | No report file. The closing message: what changed in 2-3 sentences, **one** "after" image of the screen (a "before" only when the request compares them), the merge commit and its undo line. Non-visual: the one line that proves it (test or check output). |
+| **M** | A short report file (sections 1-3), one image per touched screen, no "before" shots unless they show the change. |
+| **L** (goals, audits, reworks) | The full report below, before and after shots. |
 
 ## 1. Images
-- **Visual work** (UI, scenes, art, effects): a Play Mode screenshot of every screen touched, taken by you (the
+- **Visual work, L** (UI, scenes, art, effects): a Play Mode screenshot of every screen touched, taken by you (the
   unity-cli skill's play-mode loop; confirm frames advance first). Take a **before** shot when you start, an **after**
   shot when you finish, same screen and window size. HTML playtests and WebGL builds: browser screenshots.
 - **New art:** the PNGs themselves, or one contact sheet of them.
