@@ -57,6 +57,33 @@ ticket to `released vX.YY`.
 
 (nothing yet)
 
+## v2.51 (2026-11-13)
+
+Minor. Fewer questions, fewer wasted turns: rules for `/goal`, long runs and one task per session, and a
+Collaboration Protocol that follows `modes.automation`. From a review of CG01's sessions: a goal whose last part was
+the user's own judgment kept its Stop hook firing about 25 times in a few minutes, a batch of 886 asset jobs was
+waited on with 71 polling turns, and one session ran for three days (1,350 turns, six compactions).
+
+**Changed**
+- `CLAUDE.md` (template and `concept-kit/`): the Collaboration Protocol states the rules of each `modes.automation`
+  mode (`collaborative` when unset, `guided`, `autonomous`) instead of only the collaborative ones, so a project in
+  `guided` no longer asks before every write. "No commits without user instruction" stays for every mode.
+
+**Added**
+- `CLAUDE.md` (template and `concept-kit/`), section "Goals, long runs and sessions": check that every part of a
+  `/goal` can be shown in the transcript and reword one that ends in the user's own step; when only the user's step is
+  left, say so once with `/goal clear`; run anything over about two minutes as one background command, never poll turn
+  after turn; one session per task, with `production/session-state/active.md` updated before the next.
+
+**Port**
+- Each game: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the Collaboration Protocol bullets
+  and add the "Goals, long runs and sessions" section from `template/CLAUDE.md`.
+- Optional: `modes.automation: guided` under `modes:` in the game's `project.yaml` (or `/project-settings
+  modes.automation=guided`) to ask only for major decisions.
+
+**Requests**
+- None.
+
 ## v2.50 (2026-11-11)
 
 Minor, numbered 2.50 for its size: one command sets up a whole machine, and the asset connector is Codex Asset Studio
