@@ -55,7 +55,18 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
-(nothing yet)
+**Changed**
+- Branch per task (`CLAUDE.md` "Autonomy" and Git bullet, `concept-kit/CLAUDE.md`, `docs/git-rules.md` section 2,
+  workspace `CLAUDE.md`): every task or goal runs on its own branch from `main` (`task/<slug>`, `story/<id>`,
+  `fix/<what>`); at its end Claude, without asking, merges it with `git merge --no-ff` (one merge commit per task,
+  undone with `git revert -m 1 <merge>`), pushes `main` (games only; concepts have no remote) and deletes the
+  branch locally and on `origin`. Never asks "commit?", "merge?", "push?" or "delete the branch?".
+- `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
+  undo it.
+
+**Port** (not released yet; the standard flow is still being settled, so no game gets it until a release)
+- Each game: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the "Commit as you go" bullet
+  of "Autonomy" and the Git bullet's last clause with the template's.
 
 ## v2.60 (2026-11-13)
 

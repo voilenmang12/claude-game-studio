@@ -1,6 +1,6 @@
 ---
 name: run-goal
-description: Runs a goal autonomously to the end - turns the request into a checklist of checkable items in production/session-state/goal.md, works through it without asking the user (plays the game, judges by written criteria and screenshots, commits), and finishes with an illustrated report. A Stop hook (goal-check, no model judge) keeps it going and stops it when no progress is made. Use when the user gives a goal, says "run this to the end", "làm hết", or asks for unattended work.
+description: Runs a goal autonomously to the end on its own branch - turns the request into a checklist of checkable items in production/session-state/goal.md, works through it without asking the user (plays the game, judges by written criteria and screenshots, commits), and finishes with an illustrated report. A Stop hook (goal-check, no model judge) keeps it going and stops it when no progress is made. Use when the user gives a goal, says "run this to the end", "làm hết", or asks for unattended work.
 ---
 
 # Run a goal
@@ -55,6 +55,6 @@ The Stop hook nudges you to the next item each time you stop with open items, an
 changing: a stop with no tick and no Log line ends the goal as `stalled`.
 
 ## 3. Finish
-When every item is `[x]` or `[~]`: run the full check once (tests, scan, the main screens), push the game's private
-repo, set `Status: done`, then write and send the report (`.claude/docs/task-report.md`). A stalled goal gets the
+When every item is `[x]` or `[~]`: run the full check once (tests, scan, the main screens), close the branch
+(`CLAUDE.md`, "Autonomy": merge `--no-ff` into `main`, push `main`, delete the branch), set `Status: done`, then write and send the report (`.claude/docs/task-report.md`). A stalled goal gets the
 same report with what is left and why.

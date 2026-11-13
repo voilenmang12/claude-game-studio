@@ -25,6 +25,7 @@ Request: <user's words>
 - <item> — <evidence>   (tests: N passed; scan: 0 faults at 4 sizes; build: 38 MB)
 ## Commits
 - <hash> <subject>      (pushed: yes/no)
+- <merge hash> Merge branch '<branch>' (branch deleted: yes/no; undo: `git revert -m 1 <merge hash>`)
 ## Decided alone
 - <decision> — <why>    (from the goal Log or the decision log)
 ## Needs you

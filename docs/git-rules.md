@@ -20,13 +20,17 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
 
 ## 2. Branches and history
 
-- Trunk-based: `main` is the only long-lived branch. Short branches (`story/<story-id>`, `fix/<what>`) are fine for
-  work that takes more than one sitting; merge them back fast-forward or with a merge commit, then delete them.
+- Trunk-based: `main` is the only long-lived branch. **One task, one branch:** every task or goal starts a branch
+  from an up-to-date `main` (`task/<slug>`, `story/<story-id>`, `fix/<what>`) and ends with Claude, without asking,
+  merging it into `main` with `git merge --no-ff` (one merge commit per task: `git revert -m 1 <merge>` undoes the
+  task, and later tasks can build on it), pushing `main` where the repo has a remote, and deleting the branch
+  locally and on `origin`. A task is done only when the tree is clean, `main` matches `origin/main` and no task
+  branch is left. A conflict Claude cannot resolve with confidence keeps its branch and goes to the user.
 - Never rewrite pushed history: no `push --force` on `main`, no rebase of pushed commits, no amend of a pushed commit.
 - Never commit with `--no-verify`: the CCGS hooks are the safety net. Fix what a hook reports.
-- Workspace and `local/`: commit and push only when the user asks **(user)**. Game and concept repos: Claude commits
-  each finished item and pushes the game's own private repo at the end of a task or goal (`template/CLAUDE.md`,
-  "Autonomy"). Making a repo public, store uploads and `--prod` deploys stay **(user)**.
+- Workspace and `local/`: commit and push only when the user asks **(user)**, unless the user's `local/RULES.md`
+  sets the branch-per-task flow for them too. Game and concept repos: Claude commits each finished item on the task
+  branch and closes the branch at the end of the task (`template/CLAUDE.md`, "Autonomy"); never ask about it. Making a repo public, store uploads and `--prod` deploys stay **(user)**.
 
 ## 3. Commit messages
 
