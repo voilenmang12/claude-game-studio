@@ -37,9 +37,9 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 ## Studio template (read before writing game code)
 
 - **Deleting files.** The CCGS settings deny `rm -rf`. To get rid of a file or folder you made (scratch output,
-  screenshots, a replaced asset), move it to `_to_delete/` at the project root, which git ignores, and tell the
-  user; the user empties it by hand. Never move tracked files there to dodge a review: delete those with `git rm`
-  in a commit the user asked for.
+  screenshots, a replaced asset), move it to `_to_delete/` at the project root, which git ignores, and list it in the report;
+  the user empties it by hand. Never move tracked files there to dodge a review: delete those with `git rm`
+  in a commit.
 - `TEMPLATE_VERSION` — template version this project is synced to; `TEMPLATE_CHANGELOG.md` — what
   each version changed and how to port it. In a game, change both only when porting a template version.
 - **Template requests.** When work in a game makes or finds something every game should have (a fix in a
@@ -49,15 +49,17 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 - **Git.** This repo is the game's own, private GitHub repo (`origin`). Follow the workspace's
   `docs/git-rules.md`: trunk `main`, Conventional Commits with the story ID, the fixed messages (`chore: sync
   template vX.YY`, `docs: template request TR-...`), no force-push, no `--no-verify`, nothing generated or
-  secret, commit and push only when the user asks. The concept's design (`design/game-brief.md`,
+  secret; commit as you work and push at the end of a task or goal (Autonomy). The concept's design (`design/game-brief.md`,
   `design/production-gdd.md`, `design/playtest-record.md`, `design/name-lock.md`) and its HTML playtest
   (`prototypes/`, the feel reference) came in at the first commit.
 - Code root is `Assets/`; there is no `src/`. Tests go in `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/`.
 - The Unity CLI drives the open Editor. Pass `--project-path` when more than one Editor is open. Editor-side helper
   scripts live in `AgentScripts/` and run with `unity command run_script`.
-- **Play Mode is run by the user.** For CCGS "run and observe", ask the user to play and supply the screenshot.
+- **Play Mode.** Claude runs it: the unity-cli skill's play-mode loop (`unity command set_autotick`,
+  `editor_play`, confirm frames advance, screenshot, `editor_stop`). Judge what you see against the task's criteria;
+  the screenshots go in the report. WebGL builds: `/cg-webgl-build` and the browser tools.
 - **Art style** is the game's choice, made in the art bible (`/art-bible`) and recorded in the "Art style" row of
-  `design/art/ui-prompt-profile.md` (`pixel` or `raster`). Ask before producing art when it is not set.
+  `design/art/ui-prompt-profile.md` (`pixel` or `raster`). When it is not set, choose it from the brief, record it and say so in the report.
   - **Pixel art** is optional: the `pixel-art` skill turns on Pixelorama and its MCP server for the game
     (`node Tools/pixel-art.mjs enable`) and holds the workflow (`.pxo` sources in `ArtSource/`,
     `bash Tools/export-pixelorama.sh`, `Assets/Integration/PixelArt.md`). Without it the game has no `pixelorama`
@@ -98,43 +100,48 @@ after it runs `project.yaml` holds the real values.
 
 @.claude/docs/coordination-rules.md
 
-## Collaboration Protocol
+## Autonomy
 
-**User-driven collaboration, not autonomous execution.** How much you ask is set by
-`modes.automation` in `project.yaml` (`.claude/docs/automation-modes.md`; unset means `collaborative`):
+CGS games run without the user in the loop: `modes.automation: autonomous` in `project.yaml`
+(`.claude/docs/automation-modes.md`), full tool permissions in `.claude/settings.json`. The user may be away and
+follow from a phone (Remote Control), so a run never stops to ask.
 
-- `collaborative`: every task follows **Question -> Options -> Decision -> Draft -> Approval**;
-  ask "May I write this to [filepath]?" before using Write/Edit tools (exempt: `active.md` appends,
-  agent memory, a subagent's new file at the path its orchestrating skill named; see
-  `.claude/rules/agent-memory.md`); show drafts before requesting approval; multi-file changes
-  require explicit approval for the full changeset
-- `guided`: ask only for major decisions (`automation-modes.md`, "Major vs Minor"); state the
-  recommendation for minor ones and proceed; ask before creating a new file, not before editing one
-- `autonomous`: decide, log with `log_decision`, proceed; ask only for `modes.automation_always_ask`
-- Every mode: no commits without user instruction
-- A skipped or dismissed question is not an answer: act on nothing, re-ask in
-  plain text and wait
-- Started outside this file's folder? Warn first: hooks, deny rules and the
-  ask-first mode load only when Claude Code starts here
+- **Decide and proceed.** Pick the option that best fits the brief, GDD and art bible, log it (`log_decision`, or
+  the goal's Log), continue. No AskUserQuestion; the skills exempt in `automation-modes.md` (`setup-engine`,
+  `gate-check`, `hotfix`, `day-one-patch`) still ask.
+- **Do and check the work yourself:** write and edit files, run tests, builds and Play Mode (Studio template,
+  "Play Mode"), look at the screenshots and judge them against the task's written criteria.
+- **Commit as you go:** one Conventional Commit per finished item on the current branch; push the game's own private
+  repo at the end of a task or goal. Never force-push, rewrite pushed history or use `--no-verify`.
+- **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
+  sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
+  rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".
+- **Report every task with images** (`.claude/docs/task-report.md`): screenshots before and after, checks, commits,
+  what you decided alone; sent to the user with `SendUserFile`.
+- A project that sets `collaborative` or `guided` follows those modes in `automation-modes.md` instead.
+- Started outside this file's folder? Warn first: hooks, permissions and the goal check load only when Claude Code
+  starts here.
 
-See `docs/COLLABORATIVE-DESIGN-PRINCIPLE.md` for full protocol and examples.
+## Autonomous runs (keep the context small)
 
-## Goals, long runs and sessions (keep the context small)
-
-- **Goals (`/goal`).** A goal adds a Stop hook: each time you stop, a model checks the condition against the
-  transcript and sends you back to work if it is not met. Before working toward a goal, check that every part of it
-  can be shown in the transcript (a test passes, a scan finds no fault, a file exists). A part only the user can do
-  (play the game, judge the look, approve a commit, upload to a store) can never be shown: say so in your first reply
-  and propose the goal reworded to end at "ready for the user to ...", for the user to set with `/goal <condition>`.
-  When only the user's part is left, say once what you need from them and that `/goal clear` stops the checks, then
-  end the turn. To a repeated Stop-hook message with nothing new to do, answer in one line and run no tools.
-- **Long runs.** Anything that takes more than about two minutes (an asset batch, a build, a test suite, waiting for
-  Unity to recompile or import) runs as one background command (`run_in_background`) that works to the end and writes
-  a summary; the notification wakes you when it ends. Never wait turn after turn with a polling or sleep script, and
-  never sleep in the foreground for more than a few seconds: each extra turn re-reads the whole context.
-- **One session per task** (a feature, a fix, a port, an audit, an asset batch). When a task ends, or after the
-  second compaction, update `production/session-state/active.md` (done, uncommitted, next step) and tell the user to
-  start the next task in a new session (or `/clear`); the new session reads `active.md` first.
+- **Goals: `/run-goal <what>`.** It writes `production/session-state/goal.md` (a checklist where every item names
+  its check), works through it and reports. The `goal-check` Stop hook keeps the run going while items are open and
+  goal.md keeps changing; it has no model judge, so it never loops: a stop with no new tick or Log line ends the
+  goal as `stalled`, and so does reaching `Max nudges`. Prefer it to the built-in `/goal`, whose model judge
+  re-checks the whole transcript at every stop. If a built-in `/goal` is set, mirror it into goal.md, end each turn
+  with a short "Goal status" block (every item and its evidence), and if part of it can never be shown say once
+  that `/goal clear` stops it.
+- **Read once.** Read a file once per task and trust your own edits; for big docs Grep the heading and read that
+  range (`md-section.sh`). Wide searches and audits over many files go to a subagent that returns a summary. Keep
+  progress in goal.md and `production/session-state/active.md`; after a compaction read those two, not the history.
+- **No polling, no re-checking.** Anything over about two minutes (asset batch, build, test suite, Unity import or
+  recompile) runs as one background command (`run_in_background`) and its notification wakes you. Never wait turn
+  after turn or sleep in the foreground beyond a few seconds. Run a check once after a batch of changes, not after
+  each edit; do not repeat `git status` or `unity status` between steps when nothing changed.
+- **Retry cap.** The same failure three times with three different fixes: mark the item `[~]` with the reason, move
+  on, and list it in the report. Never repeat an identical command hoping for a different result.
+- **Sessions.** One goal or task per session. Before ending, update `active.md` (done, open, next step); the next
+  session starts from it.
 
 > **First session?** Say "make me a game" (`/prototype`), or run `/start` to begin
 > the guided onboarding flow.

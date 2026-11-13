@@ -8,8 +8,17 @@
     "baseRef": "head"
   },
   "permissions": {
-    "defaultMode": "default",
+    "defaultMode": "acceptEdits",
     "allow": [
+      "Bash",
+      "PowerShell",
+      "Read",
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "mcp__pixelorama",
       "Bash(dir *)",
       "Bash(python -m pytest *)",
       "Bash(py -m pytest *)",
@@ -280,6 +289,11 @@
       {
         "matcher": "",
         "hooks": [
+          {
+            "type": "command",
+            "command": "echo `# <#` >/dev/null; bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/goal-check.sh\"; exit $? #> ; exit 0",
+            "timeout": 15
+          },
           {
             "type": "command",
             "command": "echo `# <#` >/dev/null; bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-stop.sh\"; exit $? #> ; exit 0",

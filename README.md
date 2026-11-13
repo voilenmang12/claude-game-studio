@@ -3,10 +3,11 @@
 A workspace for making many small Unity 2D games with Claude Code, one template shared by all of them, and rules
 that move improvements both ways: from the template to the games, and from the games back to the template.
 
-> **Fork notice.** `template/` is a fork of
+> **Fork notice.** `template/` is a hard fork of
 > [Claude Code Game Studios](https://github.com/donchitos/claude-code-game-studios) by Donchitos (MIT), taken at
-> `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`). The 49 agents, 78 skills, hooks, rules, genre sheets and
-> docs in `template/.claude/` come from there. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
+> `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`) and maintained on its own since template v2.60. The 49
+> agents, 78 skills, hooks, rules, genre sheets and docs in `template/.claude/` come from there, changed for
+> autonomous runs. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
 
 ## Quick start
 

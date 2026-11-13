@@ -28,3 +28,5 @@ framework:
 
 modes:
   rigor: minimal
+  # CGS: Claude decides, works, checks and commits without asking (CLAUDE.md, "Autonomy").
+  automation: autonomous

@@ -24,7 +24,9 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
   work that takes more than one sitting; merge them back fast-forward or with a merge commit, then delete them.
 - Never rewrite pushed history: no `push --force` on `main`, no rebase of pushed commits, no amend of a pushed commit.
 - Never commit with `--no-verify`: the CCGS hooks are the safety net. Fix what a hook reports.
-- Commit and push only when the user asks **(user)**. Pushing is publishing.
+- Workspace and `local/`: commit and push only when the user asks **(user)**. Game and concept repos: Claude commits
+  each finished item and pushes the game's own private repo at the end of a task or goal (`template/CLAUDE.md`,
+  "Autonomy"). Making a repo public, store uploads and `--prod` deploys stay **(user)**.
 
 ## 3. Commit messages
 

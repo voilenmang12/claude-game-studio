@@ -1,6 +1,9 @@
 # Fork record
 
-`template/` is a fork of **Claude Code Game Studios** (CCGS) by Donchitos:
+`template/` is a **hard fork** of **Claude Code Game Studios** (CCGS) by Donchitos. Since template v2.60
+(2026-11-13) CCGS files are edited in place for autonomous runs and upstream releases are no longer merged; the
+tables below are the history up to that point, and "Taking a newer upstream release" is kept only for reference.
+Notable later changes to CCGS files are listed under "Hard fork changes".
 
 | | |
 |---|---|
@@ -19,6 +22,16 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 |---|---|---|---|
 | 2026-11-10 | `v1.2.0` | v1.00 | First fork |
 | 2026-11-10 | `v1.2.0` → `v1.3.0` | v1.01 | 401 files taken as they are; 3 test specs renamed with their skills (`help` → `next-step`, `settings` → `project-settings`, `changelog` → `write-changelog`; the old skills stay as shims); `project.yaml` and Unity `VERSION.md` merged with no conflict; `CLAUDE.md` conflict resolved by hand: the fork's Unity stack kept, upstream's new engine-import comment taken with the Unity import line under it |
+
+## Hard fork changes (template v2.60 and later)
+
+| Version | Files | Change |
+|---|---|---|
+| 2.60 | `CLAUDE.md` (template, `concept-kit/`) | "Collaboration Protocol" replaced by "Autonomy" and "Autonomous runs"; Play Mode run by Claude; commits as it works |
+| 2.60 | `project.yaml` (template, `concept-kit/`) | `modes.automation: autonomous` |
+| 2.60 | `.claude/settings.json` | `defaultMode: acceptEdits`, all tools allowed (the deny list stays), `goal-check` Stop hook |
+| 2.60 | `.claude/hooks/yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`, `effects-map.md` | `automation_always_ask` defaults to none |
+| 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
 ## Upstream files changed in `template/`
 

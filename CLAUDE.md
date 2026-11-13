@@ -9,7 +9,7 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
   are interactive: the user runs `! bash studio-setup.sh --login <id>`; never type or ask for their passwords or codes.
 - Reply in the user's language. Everything in the repos is English (code, docs, commits).
 - Do the work: run the scripts and the Unity CLI yourself. Ask only for decisions, approval of destructive actions,
-  and what only a human can do (Play Mode testing, store uploads, payments, sign-ins).
+  and what only a human can do (store uploads, payments, sign-ins); Claude runs Play Mode itself.
 - No commits without the user's instruction.
 
 ## Layout
@@ -62,7 +62,9 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
 
 ## Git (`docs/git-rules.md`)
 - Workspace repo public (workspace files only); concept repos local with no remote; one private GitHub repo per game.
-- Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. Commit and push only when the user asks.
+- Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. In this workspace and `local/`, commit
+  and push only when the user asks; inside a game or concept, Claude commits as it works and pushes the game's private
+  repo at the end of a task (`template/CLAUDE.md`, "Autonomy").
 - Conventional Commits, plus the fixed messages in `git-rules.md` (start, sync, request, release, GDD, name lock).
 
 ## The template
@@ -80,8 +82,8 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
   closes under **Requests**.
 - `template/.gitignore` is the **standard gitignore** for every game repo. Change it there and copy it to existing
   games (`sync-template.sh` does); never edit one game's copy alone without a reason written in that commit.
-- **Upstream.** `template/` is a fork of Claude Code Game Studios `v1.3.0`. `FORK.md` lists every upstream file we
-  changed, removed or added, and how to take a newer upstream release. Keep it current with every change to an
-  upstream file.
+- **Upstream.** `template/` started as a fork of Claude Code Game Studios `v1.3.0` and is a hard fork since template
+  v2.60: CCGS files are edited in place and upstream releases are no longer merged. `FORK.md` keeps the history and
+  the license notice; log notable changes to CCGS files in it.
 - **Public repo.** This workspace repo is public. Never add paid Asset Store plugins, game content, credentials or
   machine-specific paths to it. Game repos that hold paid plugins stay private.

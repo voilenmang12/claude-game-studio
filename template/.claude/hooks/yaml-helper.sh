@@ -54,8 +54,7 @@
 #     Membership check on modes.automation_always_ask. Returns 0 if the
 #     category is in the configured list (or in the default list when
 #     unset), 1 otherwise. Skills use this in autonomous mode to know
-#     when to prompt anyway. Default list: scope_changes, file_deletions,
-#     schema_changes.
+#     when to prompt anyway. Default list: empty (CGS).
 #
 #   log_decision <skill> <point> <options> <chosen> <reason> <category>
 #     Append a decision-log entry to production/session-logs/decision-log.md.
@@ -1124,11 +1123,9 @@ EOF
 # Returns 0 if the named category is in modes.automation_always_ask (or in
 # the default list when unset), 1 otherwise. Used by skills in autonomous
 # mode to know which decisions still warrant a prompt.
-# Default list (when modes.automation_always_ask absent from both files):
-#   scope_changes, file_deletions, schema_changes
-_yaml_helper_always_ask_default="scope_changes
-file_deletions
-schema_changes"
+# Default list (when modes.automation_always_ask absent from both files): empty.
+# CGS runs autonomously; a project that wants prompts lists the categories itself.
+_yaml_helper_always_ask_default=""
 
 is_always_ask_category() {
   local category="$1"

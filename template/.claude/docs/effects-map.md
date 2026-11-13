@@ -954,7 +954,7 @@ appends to the existing log.
 
 **Controls:** Decision categories that ALWAYS trigger AskUserQuestion regardless of automation mode
 **Values:** list of category names
-**Default:** `[scope_changes, file_deletions, schema_changes]`
+**Default:** `[]` (CGS; upstream CCGS: `[scope_changes, file_deletions, schema_changes]`)
 **Set by:** `/project-settings`
 **Read by:** All skills that respect `modes.automation`
 

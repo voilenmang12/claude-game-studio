@@ -55,7 +55,8 @@ the right rule.
 | `guided` | Balanced | High — major decisions are the user's, minor ones proceed automatically | AI states recommendation and proceeds for minor decisions. AskUserQuestion reserved for major decisions. |
 | `autonomous` | Fastest | Low — AI decides, logs, and proceeds | No AskUserQuestion (except `automation_always_ask` categories). All decisions logged. |
 
-**Default**: `collaborative`. New projects start here.
+**Default** when `modes.automation` is unset: `collaborative`. CGS projects set `autonomous` in `project.yaml`
+(the template ships it), so a game runs to the end without questions; see `CLAUDE.md`, "Autonomy".
 
 **Set by**: `/start`, `/project-settings`.
 
@@ -142,13 +143,14 @@ Even in `autonomous` mode, certain decision categories ALWAYS trigger
 `AskUserQuestion`. The configured list lives at
 `modes.automation_always_ask` in `project.yaml`.
 
-**Default** (when unset): `[scope_changes, file_deletions, schema_changes]`.
+**Default** (when unset): `[]` in CGS: no category interrupts an autonomous run. List categories here to get prompts
+back (upstream CCGS defaulted to `[scope_changes, file_deletions, schema_changes]`).
 
 ### Recognized categories
 
 **This table is the set you may configure, NOT the set that always asks.** Only
-the categories actually listed in `modes.automation_always_ask` — the three
-defaults above, unless the project overrides them — interrupt an `autonomous`
+the categories actually listed in `modes.automation_always_ask` — none by
+default in CGS — interrupt an `autonomous`
 run. The other rows do nothing until a project opts into them. Read the resolved
 list with `resolve_config` rather than assuming a row here is active. Treating a
 category the project never configured, such as `architecture_decisions`, as

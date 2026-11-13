@@ -86,7 +86,7 @@ story_granularity: balanced (rigor:standard)
 qa.level: standard (rigor:standard)
 team.size: individual (rigor:standard)
 project.stage: Systems Design (production/stage.txt)
-automation_always_ask: scope_changes, file_deletions, schema_changes (default)
+automation_always_ask: (none) (default)
 engine: Godot 4.7 (project.yaml)
 testing.strict: logic=true integration=false visual=unset ui=unset config=unset (unset = each skill applies its own default)
 system_overrides: combat=full inventory=minimal
