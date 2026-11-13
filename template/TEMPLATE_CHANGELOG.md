@@ -57,6 +57,47 @@ ticket to `released vX.YY`.
 
 (nothing yet)
 
+## v2.60 (2026-11-13)
+
+Minor, numbered 2.60 for its weight: CGS becomes a hard fork of CCGS built for full-AI runs. A goal runs to the end
+with no action from the user, cannot loop on its stop check, reads less, and ends with an illustrated report.
+
+**Changed**
+- Hard fork: CCGS files are edited in place; upstream releases are no longer merged (`FORK.md`, "Hard fork changes").
+- `CLAUDE.md` (template, `concept-kit/`): "Collaboration Protocol" and "Goals, long runs and sessions" become
+  "Autonomy" (decide and proceed, do and check the work, commit as you go and push the private repo at the end, a
+  short list of things never done alone, a report with images) and "Autonomous runs" (`/run-goal`, read once,
+  no polling or re-checking, a retry cap of three, one task per session). Claude runs Play Mode itself (unity-cli
+  play-mode loop); an unset art style is chosen from the brief.
+- `project.yaml` (template, `concept-kit/`): `modes.automation: autonomous`.
+- `.claude/settings.json`: `defaultMode: acceptEdits` and every tool allowed (Bash, PowerShell, edits, web, the
+  Pixelorama MCP); the destructive deny list stays. `sync-template.sh` now copies this file to games.
+- `automation_always_ask` defaults to none (`yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`,
+  `effects-map.md`): no category interrupts an autonomous run unless the project lists it.
+- Workspace `CLAUDE.md` and `docs/git-rules.md`: Claude commits in game and concept repos as it works; the workspace
+  and `local/` still commit only when the user asks.
+
+**Added**
+- `/run-goal` (`.claude/skills/run-goal/`): writes `production/session-state/goal.md`, a checklist in which every
+  item names its check, works through it without questions, commits per item and reports at the end.
+- `goal-check` Stop hook (`.claude/hooks/goal-check.sh`, `goal-check.mjs`): no model judge. While goal.md has open
+  items it sends Claude to the next one, but only if goal.md changed since the last nudge; a stop with no new tick or
+  Log line, or `Max nudges` (default 40), ends the goal as `stalled`. All items ticked: one last nudge to verify,
+  report and set `Status: done`.
+- `.claude/docs/task-report.md`: every task and goal ends with `production/reports/<date>-<slug>.md` (result,
+  before/after screenshots, checks, commits, decisions taken alone, "Needs you"), sent with `SendUserFile`.
+
+**Port**
+- Each game: `bash sync-template.sh <Game>` (copies `settings.json`, the hook, the skill and the doc), then in the
+  game's `CLAUDE.md` replace "Collaboration Protocol" (and "Goals, long runs and sessions") with "Autonomy" and
+  "Autonomous runs" from `template/CLAUDE.md`, the Play Mode bullet with the template's, and the Git bullet's "commit
+  and push only when the user asks" with "commit as you work and push at the end of a task or goal".
+- In the game's `project.yaml`: `automation: autonomous` under `modes:`.
+- Start a new Claude Code session in the game: settings and hooks load at session start.
+
+**Requests**
+- None.
+
 ## v2.51 (2026-11-13)
 
 Minor. Fewer questions, fewer wasted turns: rules for `/goal`, long runs and one task per session, and a
