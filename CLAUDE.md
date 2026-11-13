@@ -63,8 +63,9 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
 ## Git (`docs/git-rules.md`)
 - Workspace repo public (workspace files only); concept repos local with no remote; one private GitHub repo per game.
 - Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. In this workspace and `local/`, commit
-  and push only when the user asks; inside a game or concept, Claude commits as it works and pushes the game's private
-  repo at the end of a task (`template/CLAUDE.md`, "Autonomy").
+  and push only when the user asks (a user's `local/RULES.md` may set otherwise); inside a game or concept, one
+  branch per task, merged `--no-ff` into `main`, pushed and deleted at its end without asking (`template/CLAUDE.md`,
+  "Autonomy").
 - Conventional Commits, plus the fixed messages in `git-rules.md` (start, sync, request, release, GDD, name lock).
 
 ## The template

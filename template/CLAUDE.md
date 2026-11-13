@@ -49,7 +49,7 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 - **Git.** This repo is the game's own, private GitHub repo (`origin`). Follow the workspace's
   `docs/git-rules.md`: trunk `main`, Conventional Commits with the story ID, the fixed messages (`chore: sync
   template vX.YY`, `docs: template request TR-...`), no force-push, no `--no-verify`, nothing generated or
-  secret; commit as you work and push at the end of a task or goal (Autonomy). The concept's design (`design/game-brief.md`,
+  secret; one branch per task, merged into `main` with `--no-ff`, pushed and deleted at its end (Autonomy). The concept's design (`design/game-brief.md`,
   `design/production-gdd.md`, `design/playtest-record.md`, `design/name-lock.md`) and its HTML playtest
   (`prototypes/`, the feel reference) came in at the first commit.
 - Code root is `Assets/`; there is no `src/`. Tests go in `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/`.
@@ -111,8 +111,14 @@ follow from a phone (Remote Control), so a run never stops to ask.
   `gate-check`, `hotfix`, `day-one-patch`) still ask.
 - **Do and check the work yourself:** write and edit files, run tests, builds and Play Mode (Studio template,
   "Play Mode"), look at the screenshots and judge them against the task's written criteria.
-- **Commit as you go:** one Conventional Commit per finished item on the current branch; push the game's own private
-  repo at the end of a task or goal. Never force-push, rewrite pushed history or use `--no-verify`.
+- **One task, one branch, closed by you.** Start each task or goal on a new branch from an up-to-date `main`
+  (`task/<slug>`, or `story/<id>`, `fix/<what>`) and commit each finished item there (Conventional Commits). At the
+  end, without asking: commit what is left, `git switch main`, `git merge --no-ff <branch>` (one merge commit per
+  task, so `git revert -m 1 <merge>` undoes the whole task), push `main` to the game's own private repo, then delete
+  the branch locally and on `origin` if it was pushed. Done means a clean tree, `main` equal to `origin/main` and no
+  task branch left. Never ask "commit?", "merge?", "push?" or "delete the branch?"; the report's Commits section
+  lists the merge. A conflict you cannot resolve with confidence: keep the branch, put it under "Needs you". Never
+  force-push, rewrite pushed history or use `--no-verify`.
 - **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
   sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
   rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".

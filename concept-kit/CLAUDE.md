@@ -51,8 +51,8 @@ Then the game project is made from the workspace root (stage 6): the user create
 
 - **No engine here.** Never run `/setup-engine`, and never grow the one-shot into a web project: the playtest is the
   feel reference, the game is made in Unity.
-- **Git.** This folder has a local git repo with no remote. Commit each accepted playtest iteration (the skill
-  offers it) and each approved document version; the skill's tags (`one-shot/<name>`) stay. Never create a GitHub
+- **Git.** This folder has a local git repo with no remote. Each task runs on its own branch and is merged into
+  `main` at its end (Autonomy); commit each accepted playtest iteration and each approved document version; the skill's tags (`one-shot/<name>`) stay. Never create a GitHub
   repo for a concept and never push it.
 - A working title is fine until stage 5. Folder, repo and product names come only from the locked name.
 
@@ -95,8 +95,11 @@ follow from a phone (Remote Control), so a run never stops to ask.
   `gate-check`, `hotfix`, `day-one-patch`) still ask.
 - **Do and check the work yourself:** write and edit files, run the HTML playtest yourself (browser tools),
   look at the screenshots and judge them against the task's written criteria.
-- **Commit as you go:** one Conventional Commit per finished item on the current branch; push the game's own private
-  repo at the end of a task or goal. Never force-push, rewrite pushed history or use `--no-verify`.
+- **One task, one branch, closed by you.** Start each task on a new branch from `main` (`task/<slug>`) and commit
+  each finished item there (Conventional Commits). At the end, without asking: commit what is left,
+  `git switch main`, `git merge --no-ff <branch>` (one merge commit per task, so `git revert -m 1 <merge>` undoes
+  it), then delete the branch. Concepts have no remote: never push. Done means a clean tree on `main` and no task
+  branch left. Never ask "commit?", "merge?" or "delete the branch?". Never rewrite history or use `--no-verify`.
 - **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
   sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
   rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".
