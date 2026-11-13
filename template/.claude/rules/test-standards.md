@@ -32,7 +32,8 @@ paths:
 - Performance tests must specify acceptable thresholds and fail if exceeded
 - Test data must be defined in the test or in dedicated fixtures, never shared mutable state
 - Mock external dependencies — tests should be fast and deterministic
-- Every bug fix must have a regression test that would have caught the original bug —
+- Every **logic** bug fix (rules, data, state, saves) must have a regression test that would have caught the original
+  bug (a visual-only fix to layout, art, color or text is checked with a screenshot instead) —
   and **you must watch it fail before you trust it.** Run the new test against the
   unfixed code, confirm it fails, then apply the fix and confirm it passes. A
   regression test that has only ever been seen passing is not known to test anything.

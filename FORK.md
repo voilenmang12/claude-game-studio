@@ -31,6 +31,9 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.60 | `project.yaml` (template, `concept-kit/`) | `modes.automation: autonomous` |
 | 2.60 | `.claude/settings.json` | `defaultMode: acceptEdits`, all tools allowed (the deny list stays), `goal-check` Stop hook |
 | 2.60 | `.claude/hooks/yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`, `effects-map.md` | `automation_always_ask` defaults to none |
+| Unreleased | `CLAUDE.md` (template, `concept-kit/`) | branch per task; task size S / M / L; stay in scope; report by size; audit and QA in two passes |
+| Unreleased | `.claude/rules/ui-code.md` | fitted to 2D web games: reference resolution, gamepad, localization and colorblind only when the GDD asks |
+| Unreleased | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
 ## Upstream files changed in `template/`

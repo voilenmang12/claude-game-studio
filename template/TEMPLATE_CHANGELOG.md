@@ -61,12 +61,25 @@ ticket to `released vX.YY`.
   `fix/<what>`); at its end Claude, without asking, merges it with `git merge --no-ff` (one merge commit per task,
   undone with `git revert -m 1 <merge>`), pushes `main` (games only; concepts have no remote) and deletes the
   branch locally and on `origin`. Never asks "commit?", "merge?", "push?" or "delete the branch?".
+- Task size S / M / L (`CLAUDE.md` and `concept-kit/CLAUDE.md`, "Autonomy"): Claude sizes each task first and checks
+  only as much as the size needs. S (an icon, a color, a text, a small UI fix) is a recompile and one "after"
+  screenshot, reported in the closing message with no report file; M gets a short report; L (goals, audits,
+  reworks) the full one. New "Stay in scope" rule: nothing next to the request, extras go under "Left".
+- Audit and QA in two passes (`CLAUDE.md`, "Autonomous runs"): find first (one sweep, a ranked findings list in
+  `production/qa/audit-<date>.md`, no fixes), then fix finding by finding; one Play Mode session per sweep.
+- Play Mode bullet: only the screenshots the task size asks for, one Play Mode session per check.
+- `.claude/docs/task-report.md`: what each size delivers; the full before/after report is for L only.
+- `.claude/rules/ui-code.md`: fitted to 2D web games: check at the reference resolution, other sizes only when layout,
+  anchors or scaling change; gamepad, full localization and colorblind modes only when the GDD asks.
+- `.claude/rules/test-standards.md`: the regression-test rule covers logic bugs; visual-only fixes are checked with a
+  screenshot.
 - `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
   undo it.
 
 **Port** (not released yet; the standard flow is still being settled, so no game gets it until a release)
 - Each game: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the "Commit as you go" bullet
-  of "Autonomy" and the Git bullet's last clause with the template's.
+  of "Autonomy" and the Git bullet's last clause with the template's; add the "Size the task first", "Stay in
+  scope", "Report by size" and "Audit and QA" bullets and the new Play Mode bullet from the template.
 
 ## v2.60 (2026-11-13)
 
