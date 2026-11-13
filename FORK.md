@@ -32,6 +32,7 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.60 | `.claude/settings.json` | `defaultMode: acceptEdits`, all tools allowed (the deny list stays), `goal-check` Stop hook |
 | 2.60 | `.claude/hooks/yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`, `effects-map.md` | `automation_always_ask` defaults to none |
 | Unreleased | `CLAUDE.md` (template, `concept-kit/`) | branch per task; task size S / M / L; stay in scope; report by size; audit and QA in two passes |
+| Unreleased | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
 | Unreleased | `.claude/rules/ui-code.md` | fitted to 2D web games: reference resolution, gamepad, localization and colorblind only when the GDD asks |
 | Unreleased | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
@@ -74,6 +75,7 @@ upstream.
 | `Assets/Editor/Art/PixelArtImporter.cs`, `RasterArtImporter.cs` | Unity import rules for Pixelorama exports and raster art |
 | `Assets/Integration/AssetStudio.md`, `PixelArt.md`, `UIPrompting.md`, `UIPopupStandard.md` | Generated assets, pixel art pipeline, UI prompting and popup standard |
 | `AgentScripts/ValidatePixelArtImport.cs` | Editor check of the Pixelorama import |
+| `Tools/playmode.mjs`, `Assets/Editor/PlayMode/PlayModeDriver.cs` | One-command Play Mode check: recompile, play once, click by name, screenshots, console errors |
 | `Tools/export-pixelorama.sh`, `asset-studio.mjs`, `ui-kit-template.mjs`, `ui-kit-check.py` | Export, Asset Studio client, UI kit drawing, contrast check |
 | `.claude/skills/pixel-art/`, `Tools/pixel-art.mjs` | Optional pixel-art pipeline: turns Pixelorama and its MCP server on or off per game |
 | `ArtSource/README.md`, `design/art/*`, `design/asset-ledger.csv` | Art source folder, per-game art config and profile, license ledger |

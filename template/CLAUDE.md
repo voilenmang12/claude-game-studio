@@ -55,10 +55,17 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 - Code root is `Assets/`; there is no `src/`. Tests go in `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/`.
 - The Unity CLI drives the open Editor. Pass `--project-path` when more than one Editor is open. Editor-side helper
   scripts live in `AgentScripts/` and run with `unity command run_script`.
-- **Play Mode.** Claude runs it: the unity-cli skill's play-mode loop (`unity command set_autotick`,
-  `editor_play`, confirm frames advance, screenshot, `editor_stop`). Judge what you see against the task's criteria;
-  take only the screenshots the task size asks for (Autonomy). One Play Mode session per check: enter once, visit
-  every screen you need, stop. WebGL builds: `/cg-webgl-build` and the browser tools.
+- **Play Mode.** Claude runs it with `node Tools/playmode.mjs`, one command per check: it refreshes and recompiles,
+  enters Play Mode once from the first build scene, confirms frames advance, runs the steps (`click:<button name,
+  path or @label>`, `show:`/`hide:` a panel, `scene:`, `waitfor:`, `wait:`, `eval:<C#>`), saves `<name>.png`
+  after each step written `<name>=<step>`, stops, and prints one line per step with the image and any console
+  errors. Example: `node Tools/playmode.mjs home=snap "shop=click:Btn Shop" "click:Btn Back"`; `list` shows the
+  buttons on screen; `--out production/qa/evidence/<story>` for screenshots a story keeps; `--keep` then
+  `--no-compile` reuses one Play Mode session across runs; `node Tools/playmode.mjs --help` for the rest. Never
+  write your own ev/click/snap/restart helpers; a game-only step (start a level, grant gold) is a static method in
+  the game's own Editor code, called with `eval:`. Judge what you see against the task's criteria; take only the
+  screenshots the task size asks for (Autonomy). One Play Mode session per check: enter once, visit every screen
+  you need, stop. WebGL builds: `/cg-webgl-build` and the browser tools.
 - **Art style** is the game's choice, made in the art bible (`/art-bible`) and recorded in the "Art style" row of
   `design/art/ui-prompt-profile.md` (`pixel` or `raster`). When it is not set, choose it from the brief, record it and say so in the report.
   - **Pixel art** is optional: the `pixel-art` skill turns on Pixelorama and its MCP server for the game

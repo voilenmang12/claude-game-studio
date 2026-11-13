@@ -26,7 +26,7 @@ SHARED=(
   docs/engine-reference docs/WORKFLOW-GUIDE.md docs/CLAUDE.md docs/skill-flow-diagrams.md docs/migration-guide-v1.1.md
   docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/CCGS-README.md docs/CCGS-UPGRADING.md docs/CCGS-CHANGELOG.md
   docs/CCGS-VERSION.txt
-  Assets/Editor/Art
+  Assets/Editor/Art Assets/Editor/PlayMode
   Assets/Integration/AssetStudio.md Assets/Integration/AssetStudio.md.meta
   Assets/Integration/PixelArt.md Assets/Integration/PixelArt.md.meta
   Assets/Integration/UIPrompting.md Assets/Integration/UIPrompting.md.meta
