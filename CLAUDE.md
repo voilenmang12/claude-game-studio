@@ -7,7 +7,8 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
 ## Working with the user
 - A new machine, a missing tool or a sign-in that stopped working: `/studio-setup` (`bash studio-setup.sh`). Sign-ins
   are interactive: the user runs `! bash studio-setup.sh --login <id>`; never type or ask for their passwords or codes.
-- Reply in the user's language. Everything in the repos is English (code, docs, commits).
+- Reply in the user's language, and write everything meant for the user in it (closing messages, recaps, questions,
+  captions, task reports). Everything else in the repos is English (code, docs, commits).
 - Do the work: run the scripts and the Unity CLI yourself. Ask only for decisions, approval of destructive actions,
   and what only a human can do (store uploads, payments, sign-ins); Claude runs Play Mode itself.
 - No commits without the user's instruction.

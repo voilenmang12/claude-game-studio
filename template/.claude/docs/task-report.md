@@ -43,4 +43,7 @@ Request: <user's words>
   write; `normal` when replying), in one call, with a one-line caption. Where that tool does not exist, list the
   file paths.
 - The closing message, in the user's language: result in two or three sentences, the images, then "Needs you".
+- **Language.** The report file, its headings and the captions are in the user's language too (`CLAUDE.md`,
+  "Language"); the skeleton above is in English only as a shape. Commit hashes, subjects, paths and test output stay
+  as they are.
   No question unless something is actually waiting on them.

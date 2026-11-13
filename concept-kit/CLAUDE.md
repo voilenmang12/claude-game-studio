@@ -20,7 +20,13 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Language
 
-- **Reply to the user in the language they write in.** Everything written into this folder is English.
+- **Reply to the user in the language they write in.** Everything written into this folder is English, except task
+  reports and audit findings lists, which are written for the user.
+- **Every word meant for the user is in their language:** closing messages, the next-step recap and question, image
+  captions, task reports (headings included) and audit findings lists.
+  This holds after a compaction, after `/run-goal` or a skill, and when everything else in the session (code, docs,
+  logs, another session's note) is English: translate what you report, never paste English summaries. Keep code,
+  paths, commands, commit subjects and approved game text in English as they are, inside backticks or quotes.
 - When the user describes a mechanic or text in another language, translate it into short, natural game English and
   show the wording in your reply so they can approve it.
 

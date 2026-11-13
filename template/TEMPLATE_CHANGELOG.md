@@ -89,6 +89,10 @@ ticket to `released vX.YY`.
   anchors or scaling change; gamepad, full localization and colorblind modes only when the GDD asks.
 - `.claude/rules/test-standards.md`: the regression-test rule covers logic bugs; visual-only fixes are checked with a
   screenshot.
+- Language (`CLAUDE.md`, `concept-kit/CLAUDE.md`, workspace `CLAUDE.md`, `task-report.md`): everything meant for the
+  user is in their language (closing messages, recap and question, captions, task reports with their headings,
+  audit findings lists), also after a compaction or skill and in English-heavy sessions; task reports and audit
+  lists are the one exception to "the repo is English".
 - `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
   undo it.
 
