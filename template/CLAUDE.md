@@ -21,9 +21,14 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 ## Language
 
 - **Reply to the user in the language they write in**, including questions, options, summaries and review results.
+- **Every word meant for the user is in their language:** closing messages, the next-step recap and question, image
+  captions, task reports (`production/reports/`, headings included) and audit findings lists (`production/qa/`).
+  This holds after a compaction, after `/run-goal` or a skill, and when everything else in the session (code, docs,
+  logs, another session's note) is English: translate what you report, never paste English summaries. Keep code,
+  paths, commands, commit subjects and approved game text in English as they are, inside backticks or quotes.
 - **Everything that ships or lives in the repo is English:** player-facing text, asset and scene names, C#
   identifiers, code comments, log messages, design docs under `design/`, stories and sprint files under
-  `production/`, commit messages. Change this rule here if the game ships in other languages.
+  `production/`, commit messages. Exception: task reports and audit findings lists, which are written for the user. Change this rule here if the game ships in other languages.
 - When the user describes a mechanic or text in another language, translate it into short, natural game English and
   show the wording in your reply so they can approve it.
 
