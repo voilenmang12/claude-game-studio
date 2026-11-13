@@ -43,8 +43,8 @@ Request: <the user's words, verbatim>
 ## 2. Work loop
 For the first open item:
 1. Do it. Read only what the item needs (Grep, section reads); do not re-read files you already have.
-2. Run its check once. Visual items: Play Mode screenshot (the unity-cli skill's play-mode loop: `set_autotick`,
-   `editor_play`, confirm frames advance, screenshot, `editor_stop`), saved under `production/reports/<goal-slug>/`.
+2. Run its check once. Visual items: Play Mode screenshot with `node Tools/playmode.mjs --out production/reports/<goal-slug>
+   <name>=<step>...` (`CLAUDE.md`, "Play Mode"; one run visits every screen the item needs).
 3. Pass: tick it `- [x] <item> — evidence: <result or path>`, commit (`feat|fix|...: <item>`, body
    `Goal: <title>`), add a Log line. Fail: fix and re-check; after 3 different attempts mark
    `- [~] <item> — <why>`, add a Log line, move on.

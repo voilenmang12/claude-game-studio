@@ -55,6 +55,20 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+**Added**
+- `Tools/playmode.mjs`: one Play Mode check in one command. Refreshes assets and recompiles (stops on compile
+  errors), enters Play Mode once from the first build scene, proves frames advance, runs the given steps, saves
+  `<out>/<name>.png` after each named step (`<name>=<step>`), stops, and prints one line per step with the image
+  path and the console errors that step raised. Steps: `snap`, `click:<GameObject name | path suffix | @label>`,
+  `show:`/`hide:`, `scene:`, `waitfor:<target>[@sec]`, `wait:<sec>`, `eval:<C#>`, `state`, `list`; options
+  `--out`, `--size`, `--scene`, `--settle`, `--no-compile`, `--keep` (`--keep` then `--no-compile` reuses one Play
+  Mode session). Replaces the `ev.sh` / `click.sh` / `snap.sh` / `restart.sh` helpers sessions wrote themselves.
+- `Assets/Editor/PlayMode/PlayModeDriver.cs` (`GameStudio.Editor.PlayModeDriver`): the generic Editor side of the
+  tool: clicks uGUI clickables as a pointer would (UI Toolkit buttons as a fallback), activates panels, loads scenes,
+  lists what is clickable, and keeps `PlayerSettings.runInBackground` on only while the tool plays (an unfocused
+  Editor otherwise freezes the game at frame 1), restoring it and the Play Mode start scene afterwards.
+- `sync-template.sh`: `Assets/Editor/PlayMode` is template-owned.
+
 **Changed**
 - Branch per task (`CLAUDE.md` "Autonomy" and Git bullet, `concept-kit/CLAUDE.md`, `docs/git-rules.md` section 2,
   workspace `CLAUDE.md`): every task or goal runs on its own branch from `main` (`task/<slug>`, `story/<id>`,
@@ -67,7 +81,9 @@ ticket to `released vX.YY`.
   reworks) the full one. New "Stay in scope" rule: nothing next to the request, extras go under "Left".
 - Audit and QA in two passes (`CLAUDE.md`, "Autonomous runs"): find first (one sweep, a ranked findings list in
   `production/qa/audit-<date>.md`, no fixes), then fix finding by finding; one Play Mode session per sweep.
-- Play Mode bullet: only the screenshots the task size asks for, one Play Mode session per check.
+- Play Mode bullet: only the screenshots the task size asks for, one Play Mode session per check, run with
+  `Tools/playmode.mjs` (no hand-written helpers; game-only steps are static Editor methods called with `eval:`).
+  `/run-goal` takes its visual checks with the same tool.
 - `.claude/docs/task-report.md`: what each size delivers; the full before/after report is for L only.
 - `.claude/rules/ui-code.md`: fitted to 2D web games: check at the reference resolution, other sizes only when layout,
   anchors or scaling change; gamepad, full localization and colorblind modes only when the GDD asks.
@@ -80,6 +96,9 @@ ticket to `released vX.YY`.
 - Each game: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the "Commit as you go" bullet
   of "Autonomy" and the Git bullet's last clause with the template's; add the "Size the task first", "Stay in
   scope", "Report by size" and "Audit and QA" bullets and the new Play Mode bullet from the template.
+  The sync copies `Tools/playmode.mjs` and `Assets/Editor/PlayMode/`; recompile in the Editor, then check with
+  `node Tools/playmode.mjs list home=snap`. A game with its own Play Mode helper (for example a `Click` that calls
+  `onClick.Invoke()`) can keep its game-only methods and drop the generic ones.
 
 ## v2.60 (2026-11-13)
 
