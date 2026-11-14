@@ -13,6 +13,21 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
   and what only a human can do (store uploads, payments, sign-ins); Claude runs Play Mode itself.
 - No commits without the user's instruction.
 
+## Working style (sessions started here)
+The same economy as game sessions (`template/CLAUDE.md`, "Autonomy" and "Autonomous runs"), for workspace, `local/`
+and `local/project/` work:
+- **Size the task** (S / M / L) and check only as much as it needs. S: the edit and one check, reported in the closing
+  message. **Stay in scope:** nothing next to the request; extras go on one line under "Left".
+- **Read once.** Each file once per task; trust your own edits; Grep the heading of a big doc and read that range.
+  Wide searches over many files, games or session logs go to a subagent that returns a summary.
+- **No polling, no re-checking.** Anything over about two minutes (a Unity import, a build, a sync over several games)
+  runs as one background command; never sleep-loop. Run `git status`, `unity status` or a test once after a batch of
+  changes, not between steps when nothing changed.
+- **Edit with the Edit tool.** Scripted replacements only for many mechanical edits at once, and they keep the file's
+  line endings (most files here are CRLF).
+- **Retry cap.** The same failure after three different fixes: stop, say what was tried, move on.
+- **One task per session** where possible; an unrelated request is a new session.
+
 ## Layout
 ```
 <workspace>/

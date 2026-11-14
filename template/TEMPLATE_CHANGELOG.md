@@ -93,6 +93,12 @@ ticket to `released vX.YY`.
   user is in their language (closing messages, recap and question, captions, task reports with their headings,
   audit findings lists), also after a compaction or skill and in English-heavy sessions; task reports and audit
   lists are the one exception to "the repo is English".
+- UI on one screen (`CLAUDE.md`, `concept-kit/CLAUDE.md`, `ui-code.md`, `/run-goal`, `task-report.md`): every UI
+  task, L included, is done and checked on the standard 16:9 screen only (9:16 for a portrait game).
+- Added `/ui-resolution-check` (`.claude/skills/ui-resolution-check/`): the deep check across sizes and aspect ratios,
+  run only when the user asks; an audit that lists faults and fixes nothing.
+- Workspace `CLAUDE.md`: "Working style" for sessions started in the workspace (task size, stay in scope, read once,
+  no polling, Edit tool, retry cap, one task per session).
 - `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
   undo it.
 

@@ -34,7 +34,7 @@ Request: <the user's words, verbatim>
 - 3 to 15 items, in build order, each small enough for one commit. Every item names its **check**: something you can
   run or capture yourself (EditMode/PlayMode test, Unity CLI scan, Play Mode screenshot compared with the criteria,
   build size, a file that exists). A subjective wish ("looks better") becomes concrete criteria (contrast ratio,
-  nothing outside its frame at 4 window sizes, matches `UIPopupStandard.md`) plus before/after screenshots.
+  nothing outside its frame on the standard 16:9 screen, matches `UIPopupStandard.md`) plus before/after screenshots.
 - Anything only a human can do goes under "Needs the user", never in the checklist.
 - If the built-in `/goal` is also active, its condition is judged by a model: end every turn with a short
   "Goal status" block (each checklist item, ticked or not, with its evidence) so it can confirm. If part of its

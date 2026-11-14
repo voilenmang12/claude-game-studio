@@ -15,5 +15,5 @@ paths:
 - UI sounds trigger through the audio event system, not directly
 - UI must never block the game thread
 - Text stays readable at the reference resolution (contrast, size); colorblind modes only when the GDD asks
-- Check a UI change at the reference resolution only. Check other sizes (the smallest and largest supported) when the
-  change touches layout, anchors, safe areas or scaling, not for a color, icon or text change
+- Check every UI change on the standard 16:9 screen only (the Canvas reference resolution; a portrait game: 9:16),
+  whatever the change. Other sizes and aspect ratios: `/ui-resolution-check`, only when the user asks for it
