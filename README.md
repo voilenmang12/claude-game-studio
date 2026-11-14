@@ -40,7 +40,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       optional Pixelorama MCP for pixel-art games (Pixelorama-MCP 0.2.1, 106 tools)
 ├─ tools/hooks/pre-commit      keeps private content out of commits to this repo
-├─ docs/                       setup.md, game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md
+├─ docs/                       setup.md, game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md, commands.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
 ├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
