@@ -64,7 +64,8 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
   enters Play Mode once from the first build scene, confirms frames advance, runs the steps (`click:<button name,
   path or @label>`, `show:`/`hide:` a panel, `scene:`, `waitfor:`, `wait:`, `eval:<C#>`), saves `<name>.png`
   after each step written `<name>=<step>`, stops, and prints one line per step with the image and any console
-  errors. Example: `node Tools/playmode.mjs home=snap "shop=click:Btn Shop" "click:Btn Back"`; `list` shows the
+  errors. `audit` (`"shop-audit=audit"`) measures the UI on screen and fails on layout faults (text cut or wrapped,
+  pieces off screen, outside or on the rim of their frame, overlaps): run it on every screen a UI task touches. Example: `node Tools/playmode.mjs home=snap "shop=click:Btn Shop" "click:Btn Back"`; `list` shows the
   buttons on screen; `--out production/qa/evidence/<story>` for screenshots a story keeps; `--keep` then
   `--no-compile` reuses one Play Mode session across runs; `node Tools/playmode.mjs --help` for the rest. Never
   write your own ev/click/snap/restart helpers; a game-only step (start a level, grant gold) is a static method in

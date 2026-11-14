@@ -15,6 +15,9 @@
 //   waitfor:<target>[@sec]   wait until an active GameObject matches (default 10 s)
 //   wait:<seconds>           let the game run
 //   eval:<C#>                run C# in the Editor (return a value to print it); call the game's own helpers here
+//   audit[:<WxH>]            UI layout audit of the screen now (Assets/Editor/PlayMode/UiAudit.cs): text cut or
+//                            wrapped, pieces off screen, outside or on the rim of their frame, overlaps; fails on any
+//                            fault. WxH first sets the Game view to that size. Named ("hub=audit") also saves hub.txt
 //   state | list             print scene/frame/screen, or the clickables on screen now
 //   e.g.  node Tools/playmode.mjs home=snap  "shop=click:Btn Shop"  "click:Btn Back"  "pause=click:@Pause"
 //
@@ -59,7 +62,8 @@ const OUT = resolve(ROOT, opt.out ?? join("Logs", "playmode", stamp));
 const INSIDE = !relative(ROOT, OUT).startsWith("..") && !isAbsolute(relative(ROOT, OUT));
 const UNITY = process.env.UNITY_CLI || findUnity();
 const DRIVER = "GameStudio.Editor.PlayModeDriver";
-const ACTIONS = ["snap", "click", "show", "hide", "scene", "waitfor", "wait", "eval", "state", "list"];
+const ACTIONS = ["snap", "click", "show", "hide", "scene", "waitfor", "wait", "eval", "audit", "state", "list"];
+const AUDIT = "GameStudio.Editor.UiAudit";
 
 function usage() {
   const src = readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n");
@@ -189,7 +193,7 @@ for (const raw of opt.steps) {
   if (!ACTIONS.includes(action)) { console.log(`FAIL ${raw}: unknown action '${action}'`); failed++; continue; }
 
   const cursor = consoleCursor();
-  let r = { ok: true, value: "" };
+  let r = { ok: true, value: "" }, detail = [];
   if (action === "click") r = driver("Click", arg);
   else if (action === "show") r = driver("Show", arg);
   else if (action === "hide") r = driver("Hide", arg);
@@ -203,6 +207,29 @@ for (const raw of opt.steps) {
     const end = Date.now() + (Number(sec) || 10) * 1000;
     do { r = driver("Exists", target); if (r.value === "yes") break; sleep(0.5); } while (Date.now() < end);
     r = r.value === "yes" ? { ok: true, value: `found ${target}` } : { ok: false, value: r.ok ? `timed out waiting for ${target}` : r.value };
+  }
+  else if (action === "audit") {
+    const view = /^(\d+)x(\d+)$/.exec(arg);
+    if (arg && !view) r = { ok: false, value: `audit size must be WxH, got '${arg}'` };
+    else {
+      if (view) {
+        const sv = evalCs(`return ${AUDIT}.SetGameView(${view[1]}, ${view[2]});`);
+        if (!opt.size) [w, h] = [Number(view[1]), Number(view[2])];
+        sleep(Math.max(opt.settle, 1));
+        if (!sv.ok) r = { ok: false, value: String(sv.value) };
+      }
+      if (r.ok) {
+        const a = evalCs(`return ${AUDIT}.Run();`, 60);
+        const text = String(a.value ?? "");
+        if (!a.ok) r = { ok: false, value: /UiAudit|GameStudio/.test(text) ? "UiAudit missing: copy Assets/Editor/PlayMode/ from the template and recompile" : text };
+        else {
+          const lines = text.split(/\r?\n/);
+          r = { ok: lines[0].startsWith("OK"), value: lines[0] };
+          detail = lines.slice(1);
+          if (name) { const txt = join(OUT, `${name}.txt`); writeFileSync(txt, text + "\n"); r.value += ` (report ${shown(txt)})`; }
+        }
+      }
+    }
   }
   if (r.ok && ["click", "show", "hide", "scene"].includes(action)) sleep(action === "scene" ? Math.max(opt.settle, 1.5) : opt.settle);
 
@@ -219,6 +246,8 @@ for (const raw of opt.steps) {
   if (!r.ok) failed++;
   const label = raw.length > 80 ? raw.slice(0, 77) + "..." : raw;
   console.log(`${r.ok ? "ok  " : "FAIL"} ${label}${r.value ? ": " + r.value : ""}${png ? " -> " + png : ""} | errors: ${errs.length}`);
+  for (const d of detail.slice(0, 30)) console.log("     " + d);
+  if (detail.length > 30) console.log(`     ... ${detail.length - 30} more${name ? "" : " (name the step to save the full report)"}`);
   for (const e of errs.slice(0, 5)) console.log("     ! " + e);
 }
 

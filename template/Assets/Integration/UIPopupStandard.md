@@ -116,6 +116,7 @@ Order: frame, panel and one button first; run `Tools/ui-kit-check.py` on them; g
 | Kit sources and sprites | The script writes `ArtSource/UI/{Popup,Buttons}/*.pxo` and exports `Assets/Art/UI/{Popup,Buttons}/*.png` |
 | Contrast check | `python Tools/ui-kit-check.py` (section 4) |
 | Title text | A TMP material with a white face and an outline in the title's outline color |
+| Layout audit | `Assets/Editor/PlayMode/UiAudit.cs`, run in Play Mode with `node Tools/playmode.mjs "<screen>=audit"` (or `audit:1280x720`): text cut or wrapped, pieces off screen, outside their frame or on its rim, text and buttons overlapping, framed panels covering each other. It measures what is drawn (glyphs, opaque pixels, masks, veils), which a screenshot review misses. The game's names go in `ProjectSettings/UiAudit.json` (`decor`, `tooltip`, `popupPrefix`, `veils`, `edgePieces`, `badgeSuffix`, `notFrames`, `tolerance`; see the `Settings` class) |
 | Popup prefabs | Project-specific. Build each popup with the section 1 names, and add an Editor check (an AgentScript) that fails when a popup breaks section 1: order, Black Panel color, kit sprites, Close last, Color Tint buttons |
 
 Template kit colors are placeholders: teal frame, cream panel, gray-green well, orange title, orange primary, teal
@@ -130,4 +131,5 @@ script reads colors from. A role added there (for example `danger`) becomes one 
 - [ ] The project's popup check passes, if it has one.
 - [ ] Buttons from the shared set at the large or small size; role colors match their function in other popups.
 - [ ] Text colors from the profile; `ui-kit-check.py --text` passes for each text color on its surface.
+- [ ] `audit` passes on the popup open (`node Tools/playmode.mjs ... "popup=audit"`), on the standard 16:9 screen.
 - [ ] Screenshot at the smallest and largest window size in the profile.
