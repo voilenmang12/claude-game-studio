@@ -24,11 +24,9 @@ person's idea and a pillar or a dependency GDD is shown the same way.
   where elements combine; feedback loops. See `lens-systems-designer.md`.
 - **economy-designer** — faucets and sinks; prices against progression;
   dominant purchases; registry values for items.
-- **ai-programmer** — what enemies or agents perceive and decide; telegraphs
   and reaction windows readable by the player; cost of the behaviour.
 - **gameplay-programmer** — feasibility: frame-rate independence, input
   buffering, which rules are data-driven; what is expensive to build.
-- **engine-programmer** — integration: loading, save format, threading, what
   the engine already gives.
 - **ux-designer** — the flow and its steps; the most important information is
   the most prominent; feedback for every action; accessibility floor (nothing
@@ -45,7 +43,6 @@ person's idea and a pillar or a dependency GDD is shown the same way.
 - **audio-director** / **sound-designer** — what each event sounds like and
   why; the mix priority of a warning cue.
 - **level-designer** — the spaces the system needs; pacing across a level.
-- **world-builder** — lore consistency of names, factions, places.
 
 ## Visual/Audio (the art-director row)
 

@@ -22,7 +22,7 @@
 > the feature matrix across all systems, the test plan, and the audit history.
 > It is created once during Technical Setup by the UX designer with
 > `/ux-design accessibility` — you pick the tier, against the criteria
-> accessibility-specialist sets and audits against — then updated as features
+> ux-designer sets and audits against — then updated as features
 > are added and audits are completed. If a feature conflicts with a commitment
 > made here, this document wins — change the feature, not the commitment,
 > unless the producer approves a formal revision.

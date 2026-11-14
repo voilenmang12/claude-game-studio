@@ -1,7 +1,7 @@
 # Faction Design: [Faction Name]
 
 *Created: [Date]*
-*Owner: world-builder*
+*Owner: narrative-director*
 *Status: [Draft / Approved / Implemented]*
 
 ---

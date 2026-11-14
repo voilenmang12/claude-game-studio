@@ -1,6 +1,6 @@
 ---
 name: team-combat
-description: "Orchestrate the combat team — game-designer, gameplay-programmer, ai-programmer, technical-artist, sound-designer, qa-tester — design through implement and validate."
+description: "Orchestrate the combat team — game-designer, gameplay-programmer, technical-artist, sound-designer, qa-tester — design through implement and validate."
 argument-hint: "[combat feature description] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, TaskCreate, TaskGet, TaskList, TaskUpdate, Bash(bash "*/.claude/skills/team-combat/../../hooks/yaml-helper.sh" resolve_config *)
@@ -47,7 +47,7 @@ the mechanic defines numeric rules (a combat mechanic almost always does); at
 those five sections and tell the user it is optional at this workflow level.
 
 **`team.size`**: which agents are active (orthogonal to review_mode gate-depth and workflow docs).
-- **`individual`** (default): `gameplay-programmer` runs the pipeline; escalate `ai-programmer` only if the feature flags AI work. Other Team Composition agents are consulted via the gameplay-programmer, not spawned separately.
+- **`individual`** (default): `gameplay-programmer` runs the pipeline, AI work included. Other Team Composition agents are consulted via the gameplay-programmer, not spawned separately.
 - **`small`**: the full Team Composition pipeline below, as documented.
 - **`studio`**: full pipeline + engine sub-specialists + an adversarial review pass. *Engine sub-specialists*: the primary engine specialist's prompt says it may hand parts of its review to the sub-specialists its `tools:` grant names (for example `ue-gas-specialist` for abilities); below `studio` it answers alone. *Adversarial review pass*: Phase 5's qa-tester is told "your job is not to confirm this works — find how it breaks", and the report says the pass ran.
 A non-core agent needed at `individual` routes through the nearest active core agent with an informational note. **"Phase gate" means any phase that ends in an `AskUserQuestion` decision point this pipeline itself lists** — a transition under Decision Points above, or a **Gate** step written into the pipeline below — **whatever the `automation` mode.** `guided` and `autonomous` change how a gate is passed (it auto-advances, or is recorded with `log_decision`), not whether it is one, so bounded-exception condition (3) below holds at it in every mode. An agent restricted to "phase gates only" is spawned at those points and no others. This active-set scoping applies throughout the pipeline below: any phase that names an agent outside the active set routes through the nearest core agent rather than spawning it.
@@ -80,7 +80,6 @@ enforced.**
 ## Team Composition
 - **game-designer** — Design the mechanic, define formulas and edge cases
 - **gameplay-programmer** — Implement the core gameplay code
-- **ai-programmer** — Implement NPC/enemy AI behavior for the feature
 - **technical-artist** — Create VFX, shader effects, and visual feedback
 - **sound-designer** — Define audio events, impact sounds, and ambient combat audio
 - **engine specialist** (primary) — Validate architecture and implementation patterns are idiomatic for the engine (the primary specialist is `<engine>-specialist` from `engine.name` — Godot→`godot-specialist`, Unity→`unity-specialist`, Unreal→`unreal-specialist`, Web→`lead-programmer`; fall back to the Primary line of `## Engine Specialists` in `technical-preferences.md`)
@@ -91,7 +90,6 @@ enforced.**
 Use the `Agent` tool to spawn each team member as a subagent:
 - `subagent_type: game-designer` — Design the mechanic, define formulas and edge cases
 - `subagent_type: gameplay-programmer` — Implement the core gameplay code
-- `subagent_type: ai-programmer` — Implement NPC/enemy AI behavior
 - `subagent_type: technical-artist` — Create VFX, shader effects, visual feedback
 - `subagent_type: sound-designer` — Define audio events, impact sounds, ambient audio
 - `subagent_type: [primary engine specialist]` — Engine idiom validation for architecture and implementation
@@ -109,7 +107,7 @@ names one; most are fixed by the skill that already reads them:
 | 1 game-designer (draft) | `production/combat/[feature]-gdd-draft.md` | this skill — you write the final `design/gdd/[feature].md` (Phase 1) |
 | 2 gameplay-programmer | `docs/architecture/[feature]-sketch.md` | see note below |
 | 2 engine specialist | `docs/architecture/[feature]-engine-notes.md` | see note below |
-| 3 gameplay-programmer, ai-programmer, technical-artist | the code root and `assets/` — the files the Phase 3 approval lists | outside the bounded exception: asked once for the set (File Write Protocol) |
+| 3 gameplay-programmer, technical-artist | the code root and `assets/` — the files the Phase 3 approval lists | outside the bounded exception: asked once for the set (File Write Protocol) |
 | 3 sound-designer | `production/combat/[feature]-audio-events.md` | this skill |
 | 5 qa-tester (test cases) | `production/qa/test-cases/[feature]-cases.md` | `/team-qa` Phase 4 |
 | 5 qa-tester (bugs) | `production/qa/bugs/BUG-[NNNN].md` | `/team-qa` Phase 5 |
@@ -145,7 +143,7 @@ via `AskUserQuestion`: "May I write the design document to
 `design/` before that answer.
 
 ### Phase 2: Architecture
-Delegate to **gameplay-programmer** (with **ai-programmer** if AI is involved):
+Delegate to **gameplay-programmer** (AI included):
 - Review the design document, reading it by section: find the headings you need with the Grep tool (pattern `^#`, content mode) and Read those ranges with offset and limit
 - Design the code architecture: class structure, interfaces, data flow
 - Identify integration points with existing systems
@@ -162,7 +160,7 @@ If no engine is configured, skip the specialist spawn. **Record ``Engine validat
 Use `AskUserQuestion`:
 - Prompt: "Architecture sketch complete. Approve to proceed with parallel implementation."
 - Options:
-  - `[A] Proceed — spawn implementation agents (gameplay-programmer, ai-programmer, technical-artist, sound-designer)`
+  - `[A] Proceed — spawn implementation agents (gameplay-programmer, technical-artist, sound-designer)`
   - `[B] Revise the architecture first — I'll describe what needs to change`
   - `[C] Stop here — I'll continue later`
 
@@ -175,7 +173,6 @@ critical or irreversible decision, so it follows the standard pipeline rule.)
 ### Phase 3: Implementation (parallel where possible)
 Delegate in parallel:
 - **gameplay-programmer**: Implement core combat mechanic code
-- **ai-programmer**: Implement AI behaviors (if the feature involves NPC reactions)
 - **technical-artist**: Create VFX and shader effects
 - **sound-designer**: Define audio event list and mixing notes, drafted to `production/combat/[feature]-audio-events.md`
 

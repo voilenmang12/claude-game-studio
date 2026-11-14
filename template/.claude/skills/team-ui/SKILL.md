@@ -40,7 +40,7 @@ below), and the agents that work at them are team members, not director gates.
 
 **`team.size`**: which agents are active (orthogonal to review_mode gate-depth and workflow docs).
 - **`individual`** (default): `ui-programmer` + `ux-designer`. Other agents consulted via these two, not spawned separately.
-- **`small`**: + `accessibility-specialist` + `art-director`.
+- **`small`**: + `ux-designer` + `art-director`.
 - **`studio`**: + engine UI specialist + an adversarial review pass: Phase 4's reviewers are told "your job is not to confirm this matches the spec — find where it fails it", and the report says the pass ran.
 A non-core agent needed at `individual` routes through the nearest active core agent with an informational note. **"Phase gate" means any phase that ends in an `AskUserQuestion` decision point this pipeline itself lists** — a transition under Decision Points above, or a **Gate** step written into the pipeline below — **whatever the `automation` mode.** `guided` and `autonomous` change how a gate is passed (it auto-advances, or is recorded with `log_decision`), not whether it is one, so bounded-exception condition (3) below holds at it in every mode. An agent restricted to "phase gates only" is spawned at those points and no others. This active-set scoping applies throughout the pipeline below: any phase that names an agent outside the active set routes through the nearest core agent rather than spawning it.
 
@@ -74,7 +74,6 @@ enforced.**
 - **ui-programmer** — UI framework, screens, widgets, data binding, implementation
 - **art-director** — Visual style, layout polish, consistency with art bible
 - **engine UI specialist** — Validates UI implementation patterns against engine-specific best practices (`specialists.ui` from `project.yaml`; if absent, the UI Specialist line of `## Engine Specialists` in `.claude/docs/technical-preferences.md`)
-- **accessibility-specialist** — Audits accessibility compliance at Phase 4
 
 > **`specialists.ui: null` means UNSET.** Treat it as absent and skip the engine
 > UI specialist; never spawn `null` as an agent name. The v1.0 migration writes
@@ -93,8 +92,7 @@ Use the `Agent` tool to spawn each team member as a subagent:
 - `subagent_type: ux-designer` — User flows, wireframes, accessibility, input handling
 - `subagent_type: ui-programmer` — UI framework, screens, widgets, data binding
 - `subagent_type: art-director` — Visual style, layout polish, art bible consistency
-- `subagent_type: [UI engine specialist]` — Engine-specific UI pattern validation (e.g., unity-ui-specialist, ue-umg-specialist, godot-specialist)
-- `subagent_type: accessibility-specialist` — Accessibility compliance audit
+- `subagent_type: [UI engine specialist]` — Engine-specific UI pattern validation (`unity-ui-specialist`)
 
 **Brief each agent — do not dump context.** Read the shared inputs **once** and pass a distilled brief inline: the lines each agent actually needs, never a file path for a document you have already read (an agent handed a path re-reads the whole file). Pass a path only for a document you have not read and only that agent needs.
 
@@ -109,7 +107,7 @@ uses. One file per agent, so the parallel Phase 4 reviews never share one:
 | 2 art-director | `production/ui/[feature-name]/visual-design.md` |
 | 3 engine UI specialist | `production/ui/[feature-name]/engine-notes.md` |
 | 3 ui-programmer | the code root — the files the one implementation ask lists (File Write Protocol), outside the bounded exception |
-| 4 ux-designer, art-director, accessibility-specialist | `production/ui/[feature-name]/review-[agent].md`, one each |
+| 4 ux-designer, art-director | `production/ui/[feature-name]/review-[agent].md`, one each |
 
 The UX spec itself (Phase 1b) and any pattern-library update are under `design/`,
 outside the bounded exception: `/ux-design` or the agent asks before writing them.
@@ -226,7 +224,6 @@ Delegate to **ui-programmer**:
 Delegate in parallel:
 - **ux-designer**: Verify implementation matches wireframes and interaction spec. Test keyboard-only and gamepad-only navigation. Check accessibility features function correctly.
 - **art-director**: Verify visual consistency with art bible. Check at minimum and maximum supported resolutions.
-- **accessibility-specialist**: Verify compliance against the committed accessibility tier documented in `design/accessibility-requirements.md`. Flag any violations as blockers. **If that file is absent there is no committed tier, so this gate has no criterion: report `Accessibility: NOT ASSESSED — no committed tier (design/accessibility-requirements.md absent)` and do NOT report the gate as passed**. Carry forward whatever tier Phase 1a recorded as assumed, and say plainly that it was assumed.
 
 All three review streams must report before proceeding to Phase 5.
 

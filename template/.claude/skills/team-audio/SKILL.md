@@ -42,7 +42,7 @@ below), and the agents that work at them are team members, not director gates.
 **`team.size`**: which agents are active (orthogonal to review_mode gate-depth and workflow docs).
 - **`individual`** (default): `sound-designer` only. Other agents consulted via the sound-designer, not spawned separately.
 - **`small`**: + `audio-director` + `technical-artist` + `gameplay-programmer`.
-- **`studio`**: + `accessibility-specialist` + the primary engine specialist (the full pipeline as documented).
+- **`studio`**: + `ux-designer` + the primary engine specialist (the full pipeline as documented).
 A non-core agent needed at `individual` routes through the nearest active core agent with an informational note. **"Phase gate" means any phase that ends in an `AskUserQuestion` decision point this pipeline itself lists** — a transition under Decision Points above, or a **Gate** step written into the pipeline below — **whatever the `automation` mode.** `guided` and `autonomous` change how a gate is passed (it auto-advances, or is recorded with `log_decision`), not whether it is one, so bounded-exception condition (3) below holds at it in every mode. An agent restricted to "phase gates only" is spawned at those points and no others. This active-set scoping applies throughout the pipeline below: any phase that names an agent outside the active set routes through the nearest core agent rather than spawning it.
 
 **Announce the active set before Step 1 — never let the collapse be silent.**
@@ -93,7 +93,6 @@ enforced.**
 Use the `Agent` tool to spawn each team member as a subagent:
 - `subagent_type: audio-director` — Sonic identity, emotional tone, audio palette
 - `subagent_type: sound-designer` — SFX specifications, audio events, mixing groups
-- `subagent_type: accessibility-specialist` — Visual fallbacks and subtitles for critical audio, auditory sensitivity
 - `subagent_type: technical-artist` — Audio middleware, bus structure, memory budgets
 - `subagent_type: [primary engine specialist]` — Validate audio integration patterns for the engine
 - `subagent_type: gameplay-programmer` — Audio manager, gameplay triggers, adaptive music
@@ -111,7 +110,6 @@ the "Save to" step uses. One file per agent, so parallel steps never share one:
 |---|---|
 | 1 audio-director | `production/audio/[feature]/direction.md` |
 | 2 sound-designer | `production/audio/[feature]/sfx-spec.md` |
-| 2 accessibility-specialist | `production/audio/[feature]/accessibility.md` |
 | 3 technical-artist | `production/audio/[feature]/integration-plan.md` |
 | 3 engine specialist | `production/audio/[feature]/engine-notes.md` |
 | 4 gameplay-programmer | the code root and the engine's test root — the files the one implementation ask lists (File Write Protocol), outside the bounded exception |
@@ -139,7 +137,7 @@ Spawn the `sound-designer` agent to:
 - Plan audio event list with trigger conditions
 - Define mixing groups and ducking rules
 
-Spawn the `accessibility-specialist` agent in parallel to:
+Spawn the `ux-designer` agent in parallel to:
 - Identify which audio events carry critical gameplay information (damage received, enemy nearby, objective complete) and require visual alternatives for hearing-impaired players
 - Specify subtitle requirements: which audio events need captions, what text format, on-screen duration
 - Check that no gameplay state is communicated by audio alone (all must have a visual fallback)

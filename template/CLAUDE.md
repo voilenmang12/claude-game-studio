@@ -1,6 +1,6 @@
 # Claude Code Game Studios -- Game Studio Agent Architecture
 
-Indie game development managed through 49 coordinated Claude Code subagents.
+Indie game development managed through 26 coordinated Claude Code subagents, all autonomous.
 Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 > This project was made from the `claude-game-studio` template, a fork of
@@ -121,9 +121,8 @@ follow from a phone (Remote Control), so a run never stops to ask.
 
 - **Decide and proceed.** Pick the option that best fits the brief, GDD and art bible, log it (`log_decision`, or
   the goal's Log), continue. No AskUserQuestion; the skills exempt in `automation-modes.md` (`setup-engine`,
-  `gate-check`, `hotfix`, `day-one-patch`) still ask. Subagents follow the same mode: an agent's "Collaboration
-  Protocol" (ask, propose, "May I write?") applies only in `collaborative`, and every brief to a subagent says
-  "autonomous: decide, write, report; no questions". A question already answered in this session or in the
+  `gate-check`, `hotfix`, `day-one-patch`) still ask. The 26 agents in `.claude/agents/` are autonomous only (their "Working
+  protocol": decide, write, check, report; never a question), whatever `modes.automation` says. A question already answered in this session or in the
   decision log is never asked again.
 - **Size the task first, and check only as much as its size needs.** Say the size in one line when you start.
   | Size | Examples | Check | Report |

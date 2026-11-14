@@ -35,7 +35,8 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.61 | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
 | 2.61 | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
 | 2.61 | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
-| Unreleased | `.claude/agents/*.md` (all 49), `.claude/rules/art-assets.md` | "Mode first" paragraph at the top of each "Collaboration Protocol": no questions or "May I write?" in `autonomous`; no art bible means `/art-bible` from the brief, not a question |
+| Unreleased | `.claude/agents/` | 23 agents removed (Godot, Unreal, DOTS, and roles a solo 2D web game does not need); the 26 kept have one "Working protocol (autonomous)" in place of "Collaboration Protocol"; `/team-live-ops` removed; references moved to the kept agent that covers the work (`agent-roster.md`) |
+| Unreleased | `.claude/rules/art-assets.md` | no art bible means `/art-bible` from the brief, not a question |
 | 3.00 | `CLAUDE.md` (template, `concept-kit/`) | small follow-ups stay in the session with no new branch; `try/<slug>` branches stay unmerged until the user keeps or drops them; a new session only for work that runs apart |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
@@ -51,7 +52,7 @@ upstream.
 | `project.yaml` | `modes.rigor: minimal`; engine, specialists, naming and commands written by `/setup-engine unity`; build and run left `[TO BE CONFIGURED]` |
 | `.claude/docs/technical-preferences.md` | Engine, input, budgets, naming and specialists from `/setup-engine unity`; platforms left `[TO BE CONFIGURED]` |
 | `docs/engine-reference/unity/VERSION.md`, `breaking-changes.md`, `current-best-practices.md`, `deprecated-apis.md` | Pin moved from 6.3 LTS to 6.6 (6000.6.7f1); 6.4, 6.5 and 6.6 changes added under their own headings with sources |
-| `.claude/agents/*.md` (all 49) | "Mode first" paragraph under "Collaboration Protocol": the protocol applies only in `collaborative` |
+| `.claude/agents/*.md` (26 kept) | "Collaboration Protocol" replaced by "Working protocol (autonomous)"; links to removed agents moved to the kept ones |
 | `.claude/rules/art-assets.md` | No art bible: `/art-bible` from the brief in `autonomous`, a question only in other modes |
 | `.gitignore` | Replaced by the standard game-repo file: Unity + CCGS local state + build output + secrets |
 | `README.md` | Upstream README moved, unchanged, to `docs/CCGS-README.md`; `template/README.md` describes the template |
@@ -66,6 +67,8 @@ upstream.
 | `.github/` (issue and PR templates, CODEOWNERS, FUNDING) | Upstream project's own repo files |
 | `CONTRIBUTING.md`, `SECURITY.md` | Upstream project's own files |
 | `production/session-state/.gitkeep` | `production/session-state/` is gitignored local state |
+| `.claude/agents/`: the 5 `godot-*`, 4 `ue-*`, `unreal-specialist`, `unity-dots-specialist`, `ai-programmer`, `engine-programmer`, `tools-programmer`, `network-programmer`, `security-engineer`, `devops-engineer`, `analytics-engineer`, `localization-lead`, `accessibility-specialist`, `world-builder`, `live-ops-designer`, `community-manager` (and their `studio-tests/agents/` specs) | The template is Unity 2D for solo web games; none was ever spawned in a studio session; the kept agent that covers each is in `agent-roster.md` |
+| `.claude/skills/team-live-ops/` (and its `studio-tests` spec) | Its whole team was removed |
 
 ## Files added to `template/`
 

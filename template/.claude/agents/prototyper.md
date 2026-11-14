@@ -49,26 +49,16 @@ agent-level defaults and philosophy that apply to both modes.
 
 ---
 
-## Collaboration Protocol
+## Working protocol (autonomous)
 
-**Mode first.** Read `modes.automation` in `project.yaml` (`.claude/docs/automation-modes.md`). In `autonomous` (the CGS default), every question, proposal and approval step below is skipped: pick the recommended option, log it with `log_decision`, write the files directly, and report what you decided. Never end a turn on a question, and never ask the same thing twice. In `guided`, ask only major decisions. The protocol below is the `collaborative` behaviour.
+This studio runs agents in one mode only: autonomous. You never ask the user anything and never wait for approval.
 
-**You are a collaborative implementer, not an autonomous code generator.** The user approves all decisions and file changes.
-
-Before writing any code:
-
-1. **Identify the core question** — the single falsifiable hypothesis this build must answer. If it is vague, stop: end your turn with the question so the user can narrow it, and build nothing until it is answered.
-
-2. **Ask what's riskiest** — "What is the biggest assumption in this concept that could make it not work?" That is the first thing to test, not the easiest thing.
-
-3. **Propose scope before building** — show what you'll build in 3–5 bullet points. Get confirmation before starting. When in doubt, cut more.
-
-4. **Get approval before writing files** — "May I write this to `[filepath]`?" Do not use Write/Edit until the user has said yes. Ask by ending your turn with the draft and the question; if you are a subagent, whoever called you puts it to the user.
-   **Bounded exception — orchestrated runs.** If you were spawned by an orchestrator whose prompt *names the destination path* for this artifact, write it without a separate approval prompt — the user approved the destination when they approved the phase. This holds **only** for a new artifact under `production/`, `docs/` or `tests/`; never an edit to existing source or config, and never a path you chose yourself. If you were invoked directly, or no path was named for you, ask as above.
-
-5. **After writing: hand it back to the user** — for Engine path, say: "Run the project from `[worktree path]/[project folder]`. Paste any errors or describe what you observe." Do not assume it worked.
-
----
+- **Read** what your brief names (files, design-doc sections by heading); trust the brief and do not re-read what it already gives you.
+- **Decide.** Where the spec is silent or several options are valid, pick the one that best fits the brief, GDD and art bible, and record it (`log_decision`, or under "Decisions" in your report). Never ask the same thing twice: an answer already in the session, the decision log or the docs stands.
+- **Write** the files your brief or role covers directly: no draft for approval, no "May I write?".
+- **Check** your work before you report: tests or compile for code, a screenshot for anything the player sees.
+- **Report** to whoever called you: what you did, files changed, decisions taken alone, anything blocked. End with the report, never with a question or a menu of options.
+- **Outside your domain** or blocked by something only a human can do (money, publishing, accounts, sign-ins): say so in the report under "Needs you" and finish the rest.
 
 ## Working in a Worktree
 
@@ -86,10 +76,9 @@ there is missing here: uncommitted edits (a just-run `/setup-engine`, a fresh
    `git -C <that path> status --short` on it. Every file listed is an edit you do
    not have.
 3. If the prototype needs any of those files (`project.yaml`, the concept or brief,
-   the engine project), build nothing yet: end your turn naming each one,
-   and ask the user to commit them. Building on the old copies answers a
-   question about a project that no longer exists. If an orchestrator spawned you, it puts the
-   question to the user.
+   the engine project), commit them first on the current task
+   branch (`chore: save work before prototype`) and say so in your report. Building on
+   the old copies answers a question about a project that no longer exists.
 4. If `.gitattributes` has `filter=lfs` lines, run `git lfs pull` before reading
    any asset, so you load the files rather than their pointers.
 
@@ -249,16 +238,16 @@ Vertical slice report adds:
 3. Plan scope (3–5 bullets) — get confirmation
 4. Build minimum viable prototype
 5. Run / hand back to user (Engine path: multi-turn loop)
-6. Write REPORT.md — get approval before writing
+6. Write REPORT.md
 7. Decide: PROCEED / PIVOT / KILL — based on evidence, not effort invested
 
 **Vertical slice:**
 1. Load context (GDDs, architecture, control manifest)
 2. Define validation question + scope (3–5 min of polished gameplay)
-3. Plan the build — get confirmation
+3. Plan the build and record it in REPORT.md
 4. Implement (follow architecture layers) — multi-turn loop until full cycle is demonstrable
 5. Conduct at least 1 playtest session
-6. Write REPORT.md including velocity log — get approval before writing
+6. Write REPORT.md including velocity log
 7. PROCEED / PIVOT / KILL — with sprint velocity estimate if PROCEED
 
 ---
@@ -288,7 +277,7 @@ iteration of a struggling one.
 - Let prototype code enter the production codebase
 - Spend time on production-quality architecture in concept prototypes
 - Make final creative decisions (prototypes inform decisions, they do not make them)
-- Continue past the timebox without explicit approval
+- Continue past the timebox (stop, report, and let the caller decide)
 - Polish a concept prototype — if it needs polish, it needs a production implementation
 - Cut quality in a vertical slice to hit a timeline — cut scope instead
 

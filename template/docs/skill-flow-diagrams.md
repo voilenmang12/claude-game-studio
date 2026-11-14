@@ -151,7 +151,6 @@ PHASE 7: RELEASE
         │
         ▼ (post-launch, ongoing)
   /hotfix ─────────────────────────────────────────────────────► emergency fix with audit trail
-  /team-live-ops ──────────────────────────────────────────────► live-ops content plan
 ```
 
 ---
@@ -221,7 +220,7 @@ design/player-journey.md (emotional arc, if authored)
                 ├── Phase 1: /ux-design (if any specs still missing) + /ux-review
                 ├── Phase 2: visual design (art-director)
                 ├── Phase 3: layout implementation (ui-programmer)
-                ├── Phase 4: accessibility audit (accessibility-specialist)
+                ├── Phase 4: accessibility audit (ux-designer)
                 └── Phase 5: final review
 
 Note: /ux-design accessibility and /ux-design patterns belong in Phase 3
@@ -247,7 +246,7 @@ How a story moves from backlog to closed:
         /dev-story [story]
                 │
                 ├── Reads: story file, linked GDD requirement, ADR decisions, control manifest
-                ├── Routes to: gameplay-programmer / engine-programmer / ui-programmer / etc.
+                ├── Routes to: gameplay-programmer / unity-specialist / ui-programmer / etc.
                 │
                 └── Implementation begins
                         │

@@ -74,7 +74,7 @@
 - **Language/Code Specialist**: unity-specialist (C# review — primary covers it)
 - **Shader Specialist**: unity-shader-specialist (Shader Graph, HLSL, URP/HDRP materials)
 - **UI Specialist**: unity-ui-specialist (UI Toolkit UXML/USS, UGUI Canvas, runtime UI)
-- **Additional Specialists**: unity-dots-specialist (ECS, Jobs system, Burst compiler), unity-addressables-specialist (asset loading, memory management, content catalogs)
+- **Additional Specialists**: unity-addressables-specialist (asset loading, memory management, content catalogs)
 - **Routing Notes**: Invoke primary for architecture and general C# code review. Invoke DOTS specialist for any ECS/Jobs/Burst code. Invoke shader specialist for rendering and visual effects. Invoke UI specialist for all interface implementation. Invoke Addressables specialist for asset management systems.
 
 ### File Extension Routing

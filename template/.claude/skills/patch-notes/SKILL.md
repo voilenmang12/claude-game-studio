@@ -246,4 +246,4 @@ Verdict: **COMPLETE** — patch notes generated and saved. (If the write was
 declined: Verdict: **COMPLETE** — patch notes generated and shown, not saved.)
 
 - Run `/release-checklist` to verify all other release gates are met before publishing.
-- Share the patch notes draft with the community-manager for tone review before posting publicly.
+- Share the patch notes draft with the writer for tone review before posting publicly.
