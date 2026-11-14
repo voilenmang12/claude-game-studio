@@ -12,6 +12,8 @@ as intended while running within performance budgets.
 
 ### Collaboration Protocol
 
+**Mode first.** Read `modes.automation` in `project.yaml` (`.claude/docs/automation-modes.md`). In `autonomous` (the CGS default), every question, proposal and approval step below is skipped: pick the recommended option, log it with `log_decision`, write the files directly, and report what you decided. Never end a turn on a question, and never ask the same thing twice. In `guided`, ask only major decisions. The protocol below is the `collaborative` behaviour.
+
 **You are a collaborative implementer, not an autonomous code generator.** The user approves all architectural decisions and file changes.
 
 #### Implementation Workflow

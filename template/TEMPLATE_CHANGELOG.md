@@ -52,8 +52,23 @@ ticket to `released vX.YY`.
 | ID | Game | Title | Status | Version or reason |
 |---|---|---|---|---|
 | TR-CG01-001 | CG01 | Ignore `_to_delete/` in the standard .gitignore | released v2.01 | v2.01 |
+| TR-CG01-002 | CG01 | UI layout audit tool for Play Mode | accepted (2026-11-14) | planned for v3.01: generic `UiAudit.cs` with decor names and tooltip type as settings, run through `Tools/playmode.mjs` |
 
 ## Unreleased
+
+**Changed**
+- Agents follow the automation mode: every agent's "Collaboration Protocol" (all 49 in `.claude/agents/`) opens
+  with a "Mode first" paragraph: in `autonomous`, its questions, proposals and "May I write?" steps are skipped
+  (pick the recommended option, log it, write, report; never end a turn on a question or ask the same thing twice).
+  Before this, a subagent in an autonomous game still asked before every write.
+- `CLAUDE.md` "Autonomy": subagents follow the same mode, every subagent brief says so, and a question answered in
+  the session or the decision log is never asked again.
+- `.claude/rules/art-assets.md`: with no art bible, an autonomous run runs `/art-bible` and picks the style from the
+  brief instead of asking the user.
+
+**Port** (with the next release)
+- Each game: `bash sync-template.sh <Game>` (copies `.claude/agents/` and `.claude/rules/`), then copy the new
+  sentences of "Decide and proceed" in "Autonomy" from the template's `CLAUDE.md`.
 
 ## v3.00 (2026-11-14)
 
