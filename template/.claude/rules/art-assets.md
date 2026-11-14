@@ -23,7 +23,7 @@ is only for a game whose style is pixel art, after the `pixel-art` skill turned 
 - Every asset you add, generate, draw or import gets a row in `design/asset-ledger.csv` in the same change: path, source type (`self`, `claude-mcp`, `ai-tool`, `cc0`, `purchased`, `commissioned`), source URL or tool, license, plan/tier, author, date, how it was modified. A missing row is an unfinished task.
 - Allowed licenses: CC0, CC-BY (credit added to the credits screen), purchased royalty-free, paid AI plans that grant commercial use. Refuse NC, ND, "personal use", unknown licenses, and free AI tiers without commercial rights; tell the user why.
 - External assets must be recolored to the game's palette and fitted to its sizes before use. An unmodified pack is an asset flip.
-- Use the palette and frame sizes from the game's art bible. If there is no art bible yet, ask the user to run `/art-bible` before producing art.
+- Use the palette and frame sizes from the game's art bible. If there is no art bible yet, run `/art-bible` before producing art (in `autonomous` mode choose the style from the brief and record it, `CLAUDE.md` "Art style"; ask the user only in `collaborative` or `guided`).
 - Pixel games: do not change `PixelArtImporter.PixelsPerUnit` after the first asset is placed in a scene; keep
   Pixelorama's default spritesheet layout, one tag per animation.
 - Content stays within the game's age rating and original: no characters, logos or styles copied from existing games or brands.

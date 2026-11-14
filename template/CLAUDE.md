@@ -121,7 +121,10 @@ follow from a phone (Remote Control), so a run never stops to ask.
 
 - **Decide and proceed.** Pick the option that best fits the brief, GDD and art bible, log it (`log_decision`, or
   the goal's Log), continue. No AskUserQuestion; the skills exempt in `automation-modes.md` (`setup-engine`,
-  `gate-check`, `hotfix`, `day-one-patch`) still ask.
+  `gate-check`, `hotfix`, `day-one-patch`) still ask. Subagents follow the same mode: an agent's "Collaboration
+  Protocol" (ask, propose, "May I write?") applies only in `collaborative`, and every brief to a subagent says
+  "autonomous: decide, write, report; no questions". A question already answered in this session or in the
+  decision log is never asked again.
 - **Size the task first, and check only as much as its size needs.** Say the size in one line when you start.
   | Size | Examples | Check | Report |
   |---|---|---|---|

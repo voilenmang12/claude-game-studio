@@ -35,6 +35,7 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.61 | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
 | 2.61 | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
 | 2.61 | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
+| Unreleased | `.claude/agents/*.md` (all 49), `.claude/rules/art-assets.md` | "Mode first" paragraph at the top of each "Collaboration Protocol": no questions or "May I write?" in `autonomous`; no art bible means `/art-bible` from the brief, not a question |
 | 3.00 | `CLAUDE.md` (template, `concept-kit/`) | small follow-ups stay in the session with no new branch; `try/<slug>` branches stay unmerged until the user keeps or drops them; a new session only for work that runs apart |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
@@ -50,6 +51,8 @@ upstream.
 | `project.yaml` | `modes.rigor: minimal`; engine, specialists, naming and commands written by `/setup-engine unity`; build and run left `[TO BE CONFIGURED]` |
 | `.claude/docs/technical-preferences.md` | Engine, input, budgets, naming and specialists from `/setup-engine unity`; platforms left `[TO BE CONFIGURED]` |
 | `docs/engine-reference/unity/VERSION.md`, `breaking-changes.md`, `current-best-practices.md`, `deprecated-apis.md` | Pin moved from 6.3 LTS to 6.6 (6000.6.7f1); 6.4, 6.5 and 6.6 changes added under their own headings with sources |
+| `.claude/agents/*.md` (all 49) | "Mode first" paragraph under "Collaboration Protocol": the protocol applies only in `collaborative` |
+| `.claude/rules/art-assets.md` | No art bible: `/art-bible` from the brief in `autonomous`, a question only in other modes |
 | `.gitignore` | Replaced by the standard game-repo file: Unity + CCGS local state + build output + secrets |
 | `README.md` | Upstream README moved, unchanged, to `docs/CCGS-README.md`; `template/README.md` describes the template |
 | `UPGRADING.md`, `CHANGELOG.md` | Moved, unchanged, to `docs/CCGS-UPGRADING.md` and `docs/CCGS-CHANGELOG.md` |
