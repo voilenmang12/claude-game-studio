@@ -31,10 +31,11 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.60 | `project.yaml` (template, `concept-kit/`) | `modes.automation: autonomous` |
 | 2.60 | `.claude/settings.json` | `defaultMode: acceptEdits`, all tools allowed (the deny list stays), `goal-check` Stop hook |
 | 2.60 | `.claude/hooks/yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`, `effects-map.md` | `automation_always_ask` defaults to none |
-| Unreleased | `CLAUDE.md` (template, `concept-kit/`) | branch per task; task size S / M / L; stay in scope; report by size; audit and QA in two passes |
-| Unreleased | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
-| Unreleased | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
-| Unreleased | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
+| 2.61 | `CLAUDE.md` (template, `concept-kit/`) | branch per task; task size S / M / L; stay in scope; report by size; audit and QA in two passes |
+| 2.61 | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
+| 2.61 | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
+| 2.61 | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
+| Unreleased | `CLAUDE.md` (template, `concept-kit/`) | small follow-ups stay in the session with no new branch; `try/<slug>` branches stay unmerged until the user keeps or drops them; a new session only for work that runs apart |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
 ## Upstream files changed in `template/`

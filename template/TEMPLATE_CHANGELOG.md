@@ -55,6 +55,20 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+**Changed**
+- Small follow-ups (`CLAUDE.md`, `concept-kit/CLAUDE.md`, "Autonomy"; `docs/git-rules.md` section 2): a small
+  change asked after a task stays in the same session with no new branch: on the task's branch while it is open,
+  otherwise one commit straight on `main`.
+- Tries: `try/<slug>` is the one branch Claude does not close. Asked to try or preview a change, Claude makes it on
+  that branch with before and after screenshots and leaves it unmerged until the user says keep (merge) or drop
+  (delete). Two options are two `try/` branches in one session, not two sessions.
+- A new session only for work that runs apart (other topic, other files, no Unity Editor at the same time) or when
+  the context is too long; two sessions never recompile or run Play Mode in one project at once.
+
+**Port** (with the next release)
+- Each game: in `CLAUDE.md` "Autonomy", copy the template's "Small follow-ups", "Tries" and "A new session" bullets
+  and the "(an open `try/` branch excepted)" clause.
+
 ## v2.61 (2026-11-14)
 
 Minor. Leaner autonomous runs: one branch per task closed without asking, tasks sized S / M / L, audits in two
