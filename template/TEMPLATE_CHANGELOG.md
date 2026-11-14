@@ -55,6 +55,16 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.00 (2026-11-14)
+
+Major: the flow and rules every project follows are reset to one version. A game on any 2.xx takes it in one
+migration: the "Autonomy", "Autonomous runs" and "Language" sections of its `CLAUDE.md` are replaced whole by the
+template's, not patched bullet by bullet. Includes everything in v2.61 for games that have not ported it.
+
+**Added**
+- `docs/commands.md` (workspace): useful commands per folder (game, concept, workspace root, built into Claude
+  Code), the phrases that hand work to Claude (small follow-ups, "try", "run it to the end") and what each brings.
+
 **Changed**
 - Small follow-ups (`CLAUDE.md`, `concept-kit/CLAUDE.md`, "Autonomy"; `docs/git-rules.md` section 2): a small
   change asked after a task stays in the same session with no new branch: on the task's branch while it is open,
@@ -65,9 +75,29 @@ ticket to `released vX.YY`.
 - A new session only for work that runs apart (other topic, other files, no Unity Editor at the same time) or when
   the context is too long; two sessions never recompile or run Play Mode in one project at once.
 
-**Port** (with the next release)
-- Each game: in `CLAUDE.md` "Autonomy", copy the template's "Small follow-ups", "Tries" and "A new session" bullets
-  and the "(an open `try/` branch excepted)" clause.
+**Breaking**
+- Git flow: not every change is a branch any more. Small follow-ups land on the open task branch or straight on
+  `main`; `try/` branches stay unmerged until the user answers. A game still on the 2.xx rules opens a branch per
+  follow-up and merges tries without asking.
+- `CLAUDE.md` sections are replaced whole: a game's own edits inside "Autonomy", "Autonomous runs" or "Language"
+  are lost unless moved first (game-specific rules belong in their own section or in `.claude/studio-rules.md`).
+
+**Port** (from any 2.xx, in the game's own session, working tree clean)
+1. `bash sync-template.sh <Game> --dry-run`, then `bash sync-template.sh <Game>` (copies `Tools/playmode.mjs`,
+   `Assets/Editor/PlayMode/`, `settings.json`, the `goal-check` hook, `/run-goal`, `/ui-resolution-check`,
+   `ui-code.md`, `test-standards.md`, `task-report.md`).
+2. In the game's `CLAUDE.md`: move any game-only lines out of "Autonomy", "Autonomous runs" and "Language", then
+   replace those three sections and the "Play Mode" and "Git" bullets of "Studio template" with the template's.
+   A game from before v2.60 also replaces "Collaboration Protocol" / "Goals, long runs and sessions" (v2.60 Port).
+3. `project.yaml`: `modes.automation: autonomous`.
+4. Recompile in the Editor, then `node Tools/playmode.mjs list home=snap`. A game with its own Play Mode helper keeps
+   its game-only methods and drops the generic ones.
+5. Copy `TEMPLATE_CHANGELOG.md`, write `3.00` into `TEMPLATE_VERSION`, commit `chore: sync template v3.00`, then
+   start a new Claude Code session in the game (rules and hooks load at session start).
+- Each open concept: replace "Autonomy" in `concepts/<slug>/CLAUDE.md` with `concept-kit/CLAUDE.md`'s.
+
+**Requests**
+- None.
 
 ## v2.61 (2026-11-14)
 

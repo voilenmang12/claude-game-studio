@@ -35,7 +35,7 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.61 | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
 | 2.61 | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
 | 2.61 | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
-| Unreleased | `CLAUDE.md` (template, `concept-kit/`) | small follow-ups stay in the session with no new branch; `try/<slug>` branches stay unmerged until the user keeps or drops them; a new session only for work that runs apart |
+| 3.00 | `CLAUDE.md` (template, `concept-kit/`) | small follow-ups stay in the session with no new branch; `try/<slug>` branches stay unmerged until the user keeps or drops them; a new session only for work that runs apart |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 
 ## Upstream files changed in `template/`
