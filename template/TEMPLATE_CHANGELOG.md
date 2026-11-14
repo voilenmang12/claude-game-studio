@@ -55,6 +55,12 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v2.61 (2026-11-14)
+
+Minor. Leaner autonomous runs: one branch per task closed without asking, tasks sized S / M / L, audits in two
+passes, a one-command Play Mode check, UI checked on the 16:9 screen only, replies in the user's language, and
+edits through the Edit tool. No game takes it automatically: each game ports it from its own session when ready.
+
 **Added**
 - `Tools/playmode.mjs`: one Play Mode check in one command. Refreshes assets and recompiles (stops on compile
   errors), enters Play Mode once from the first build scene, proves frames advance, runs the given steps, saves
@@ -104,13 +110,19 @@ ticket to `released vX.YY`.
 - `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
   undo it.
 
-**Port** (not released yet; the standard flow is still being settled, so no game gets it until a release)
-- Each game: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the "Commit as you go" bullet
-  of "Autonomy" and the Git bullet's last clause with the template's; add the "Size the task first", "Stay in
-  scope", "Report by size" and "Audit and QA" bullets and the new Play Mode bullet from the template.
-  The sync copies `Tools/playmode.mjs` and `Assets/Editor/PlayMode/`; recompile in the Editor, then check with
+**Port**
+- Each game, from its own session: `bash sync-template.sh <Game>`, then in the game's `CLAUDE.md` replace the
+  "Commit as you go" bullet of "Autonomy" and the Git bullet's last clause with the template's; add the "Size the
+  task first", "Stay in scope", "UI on one screen", "Report by size" bullets, the "Audit and QA", "Edit with the
+  Edit tool" bullets of "Autonomous runs", the new Play Mode bullet and the "Language" section from the template.
+- The sync copies `Tools/playmode.mjs`, `Assets/Editor/PlayMode/`, `/ui-resolution-check`, `ui-code.md`,
+  `test-standards.md` and `task-report.md`; recompile in the Editor, then check with
   `node Tools/playmode.mjs list home=snap`. A game with its own Play Mode helper (for example a `Click` that calls
   `onClick.Invoke()`) can keep its game-only methods and drop the generic ones.
+- Start a new Claude Code session in the game: rules load at session start.
+
+**Requests**
+- None.
 
 ## v2.60 (2026-11-13)
 
