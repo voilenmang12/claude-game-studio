@@ -23,8 +23,9 @@ and `local/project/` work:
 - **No polling, no re-checking.** Anything over about two minutes (a Unity import, a build, a sync over several games)
   runs as one background command; never sleep-loop. Run `git status`, `unity status` or a test once after a batch of
   changes, not between steps when nothing changed.
-- **Edit with the Edit tool.** Scripted replacements only for many mechanical edits at once, and they keep the file's
-  line endings (most files here are CRLF).
+- **Edit with the Edit tool**, after reading only the range you need (`offset`/`limit`); it keeps CRLF endings.
+  No `python - <<` or `sed -i` rewrites for a few changes; a script only for many mechanical edits, keeping each
+  file's line endings (most files here are CRLF).
 - **Retry cap.** The same failure after three different fixes: stop, say what was tried, move on.
 - **One task per session** where possible; an unrelated request is a new session.
 

@@ -99,6 +99,8 @@ ticket to `released vX.YY`.
   run only when the user asks; an audit that lists faults and fixes nothing.
 - Workspace `CLAUDE.md`: "Working style" for sessions started in the workspace (task size, stay in scope, read once,
   no polling, Edit tool, retry cap, one task per session).
+- "Edit with the Edit tool" (`CLAUDE.md`, `concept-kit/CLAUDE.md`, "Autonomous runs"): read the needed range, then
+  Edit; no `python - <<` or `sed -i` rewrites for a few changes (about 240 such edits in the 2026-11-14 session audit).
 - `/run-goal` finishes by closing the goal's branch; `.claude/docs/task-report.md` lists the merge commit and how to
   undo it.
 
