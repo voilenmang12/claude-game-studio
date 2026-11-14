@@ -28,7 +28,7 @@ Request: <user's words>
 ## Images
 ![Main menu, after](<date>-<slug>/main-menu-after.png)
 ## Checks
-- <item> — <evidence>   (tests: N passed; scan: 0 faults at 4 sizes; build: 38 MB)
+- <item> — <evidence>   (tests: N passed; scan: 0 faults on 16:9; build: 38 MB)
 ## Commits
 - <hash> <subject>      (pushed: yes/no)
 - <merge hash> Merge branch '<branch>' (branch deleted: yes/no; undo: `git revert -m 1 <merge hash>`)

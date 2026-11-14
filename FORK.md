@@ -33,7 +33,7 @@ requests, the concept kit's own documents, the pixel art and UI pipeline) is new
 | 2.60 | `.claude/hooks/yaml-helper.sh`, `automation-modes.md`, `config-resolution.md`, `effects-map.md` | `automation_always_ask` defaults to none |
 | Unreleased | `CLAUDE.md` (template, `concept-kit/`) | branch per task; task size S / M / L; stay in scope; report by size; audit and QA in two passes |
 | Unreleased | `CLAUDE.md` (template), `.claude/skills/run-goal/SKILL.md` | Play Mode checks run with `Tools/playmode.mjs` (added, with `Assets/Editor/PlayMode/PlayModeDriver.cs`) |
-| Unreleased | `.claude/rules/ui-code.md` | fitted to 2D web games: reference resolution, gamepad, localization and colorblind only when the GDD asks |
+| Unreleased | `.claude/rules/ui-code.md` | fitted to 2D web games: standard 16:9 screen only (other sizes through `/ui-resolution-check` on request), gamepad, localization and colorblind only when the GDD asks |
 | Unreleased | `.claude/rules/test-standards.md` | regression tests for logic bugs; visual fixes checked by screenshot |
 | 2.60 | added: `.claude/hooks/goal-check.sh`, `goal-check.mjs`, `.claude/skills/run-goal/`, `.claude/docs/task-report.md` | autonomous goals with a deterministic Stop hook; illustrated task reports |
 

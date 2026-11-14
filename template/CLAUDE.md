@@ -70,7 +70,7 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
   write your own ev/click/snap/restart helpers; a game-only step (start a level, grant gold) is a static method in
   the game's own Editor code, called with `eval:`. Judge what you see against the task's criteria; take only the
   screenshots the task size asks for (Autonomy). One Play Mode session per check: enter once, visit every screen
-  you need, stop. WebGL builds: `/cg-webgl-build` and the browser tools.
+  you need, stop. UI checks use the standard 16:9 screen (Autonomy, "UI on one screen"). WebGL builds: `/cg-webgl-build` and the browser tools.
 - **Art style** is the game's choice, made in the art bible (`/art-bible`) and recorded in the "Art style" row of
   `design/art/ui-prompt-profile.md` (`pixel` or `raster`). When it is not set, choose it from the brief, record it and say so in the report.
   - **Pixel art** is optional: the `pixel-art` skill turns on Pixelorama and its MCP server for the game
@@ -127,10 +127,13 @@ follow from a phone (Remote Control), so a run never stops to ask.
   |---|---|---|---|
   | **S** | an icon, a color, a text, one value, a small UI fix, one-file bug | recompile, then **one** "after" screenshot of that screen (no "before" unless the request compares them); a logic bug also gets its test | no report file: the image and 2-3 sentences in the closing message |
   | **M** | a feature, several screens, a new asset set | the tests it touches, one screenshot per touched screen | short report (`task-report.md`) |
-  | **L** | a goal, `/run-goal`, a rework or an audit | full checks | full report |
+  | **L** | a goal, `/run-goal`, a rework or an audit | full checks, UI on the standard 16:9 screen | full report |
   A task that turns out bigger moves up one size and says so. Aim for S in about 15 tool calls.
 - **Stay in scope.** Do what was asked, nothing next to it: no checking other screens "while you are there", no
   finishing unrelated work in flight. Anything you notice goes on one line under "Left" in the closing message.
+- **UI on one screen.** UI work, of any size, is done and checked on the standard 16:9 landscape screen only (the
+  Canvas reference resolution; a portrait game: 9:16): Game view at that size, screenshots `--size 1280x720`. Other
+  sizes and aspect ratios are checked only by `/ui-resolution-check`, and only when the user asks for it.
 - **Do and check the work yourself:** write and edit files, run tests, builds and Play Mode (Studio template,
   "Play Mode"), look at the screenshots and judge them against the task's written criteria.
 - **One task, one branch, closed by you.** Start each task or goal on a new branch from an up-to-date `main`

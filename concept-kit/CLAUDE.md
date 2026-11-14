@@ -104,10 +104,13 @@ follow from a phone (Remote Control), so a run never stops to ask.
   |---|---|---|---|
   | **S** | an icon, a color, a text, one value, a small UI fix, one tuning value | reload the playtest, then **one** "after" screenshot of that screen (no "before" unless the request compares them); a logic bug also gets its test | no report file: the image and 2-3 sentences in the closing message |
   | **M** | a feature, several screens, a new asset set | the tests it touches, one screenshot per touched screen | short report (`task-report.md`) |
-  | **L** | a goal, `/run-goal`, a rework or an audit | full checks | full report |
+  | **L** | a goal, `/run-goal`, a rework or an audit | full checks, UI on the standard 16:9 screen | full report |
   A task that turns out bigger moves up one size and says so. Aim for S in about 15 tool calls.
 - **Stay in scope.** Do what was asked, nothing next to it: no checking other screens "while you are there", no
   finishing unrelated work in flight. Anything you notice goes on one line under "Left" in the closing message.
+- **UI on one screen.** UI work, of any size, is done and checked on the standard 16:9 landscape screen only (a
+  portrait game: 9:16): browser viewport 1280x720. Other
+  sizes and aspect ratios are checked only on request, when the user asks for it.
 - **Do and check the work yourself:** write and edit files, run the HTML playtest yourself (browser tools),
   look at the screenshots and judge them against the task's written criteria.
 - **One task, one branch, closed by you.** Start each task on a new branch from `main` (`task/<slug>`) and commit
