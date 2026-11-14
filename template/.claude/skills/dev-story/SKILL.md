@@ -134,12 +134,12 @@ I write [data file]?", and edit it. Go to Phase 6.
 
 | Story | Programmer agent |
 |---|---|
-| Foundation layer, any type | `engine-programmer` |
+| Foundation layer, any type | `unity-specialist` |
 | Type UI | `ui-programmer` |
 | Type Visual/Feel | `gameplay-programmer` |
 | Core or Feature, gameplay | `gameplay-programmer` |
-| Core or Feature, AI or pathfinding | `ai-programmer` |
-| Core or Feature, networking | `network-programmer` |
+| Core or Feature, AI or pathfinding | `gameplay-programmer` |
+| Core or Feature, networking | `lead-programmer` |
 
 **The engine specialist, for every code story.** From the `specialists` line above:
 `code` (`specialists.code`, the language specialist: it tells a Godot C# project

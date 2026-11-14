@@ -350,7 +350,7 @@ behavior: strict project defaults for CI, looser developer overrides for local w
 > only spawner), so in the orchestrators
 > `lean` and `solo` behave the same, and `full` adds two things:
 > `/team-release`'s technical-director release sign-off, and, at
-> `team.size: small`, `/team-narrative`'s `localization-lead` and `world-builder`.
+> `team.size: small`, `/team-narrative`'s second agents (none since v3.01).
 >
 > Outside the orchestrators, the skills in the *Core skills* table below read
 > `review_mode` as that table documents.
@@ -403,7 +403,7 @@ These skills run the same way at `full`, `lean` and `solo`. None of them takes a
 | **architecture-review** | The primary engine specialist's look runs in-skill after the engine audit, from its lens (recorded as NOT ASSESSED when no engine is configured) |
 | **dev-story** | Core programmer routing, plus the engine specialist's check of every code story |
 | **code-review** | One fresh-context engine helper (the primary specialist, with the code, shader and UI lenses) when an engine is configured; the testability check runs in-skill |
-| **security-audit** | `security-engineer` is spawned to run the audit |
+| **security-audit** | `lead-programmer` is spawned to run the audit |
 
 ---
 
@@ -417,7 +417,7 @@ pipeline's own review steps run in every mode.
 |-------|------|------|------|
 | **All nine `team-*`** | Every director gate the pipeline names | PHASE-GATE-type gates only | No director gates |
 | **team-release** | + technical-director release sign-off before the go/no-go call | Sign-off not run — recorded as `not run (review_mode: lean)` | Sign-off not run — recorded as `not run (review_mode: solo)` |
-| **team-narrative** | ND-CONSISTENCY; at `team.size: small`, + `localization-lead` and `world-builder` | ND-CONSISTENCY; at `small`, `narrative-director` + `writer` only | ND-CONSISTENCY still runs when `narrative-director` is active |
+| **team-narrative** | ND-CONSISTENCY; at `team.size: small`, `narrative-director` + `writer` | ND-CONSISTENCY; at `small`, `narrative-director` + `writer` only | ND-CONSISTENCY still runs when `narrative-director` is active |
 
 ---
 
@@ -900,7 +900,7 @@ check-in. In `guided` the pipeline advances automatically unless BLOCKED. In
 `autonomous` the full pipeline runs end to end.
 
 `team-combat`, `team-ui`, `team-audio`, `team-qa`, `team-release`,
-`team-narrative`, `team-polish`, `team-level`, `team-live-ops`
+`team-narrative`, `team-polish`, `team-level`
 
 **Implementation skills — lower impact.** Pause for architectural questions
 before writing code. In `guided` only genuinely ambiguous decisions stop. In
@@ -1299,7 +1299,7 @@ closing, or produces a warning and lets work continue — per test type
 
 > **Different axis from `workflow`.** `workflow` controls *what docs are required.*
 > `team.size` controls *which agents exist to make them.* A solo dev on
-> `workflow: full` still doesn't need all 49 agents — they need the same coverage
+> `workflow: full` still doesn't need all 26 agents — they need the same coverage
 > from a smaller active set.
 
 ---
@@ -1310,7 +1310,7 @@ closing, or produces a warning and lets work continue — per test type
 |-------|-----------|-------|
 | `individual` | Core 8: `producer`, `game-designer`, `gameplay-programmer`, engine-specialist (engine-driven), `technical-artist`, `sound-designer`, `qa-tester`, `writer`. **Default.** | Directors and lead-* run only on explicit invocation (e.g. via `/architecture-decision`). Specialists outside the core 8 routed through their nearest core agent. Each `team-*` skill names its own set per value, which can sit outside the core 8 (`team-release` runs `release-manager`); each skill's own `team.size` list is authoritative, and the Affected skills table below mirrors it. |
 | `small` | Core 15: directors (CD, TD, PR) + leads (LP, AD, QL, ND) + game-designer + systems-designer + engine-specialist + technical-artist + sound-designer + qa-tester + ux-designer + writer | `team-*` skills add their `small` set (below); most reach their full pipeline only at `studio`. |
-| `studio` | All 49 agents available. Engine sub-specialists (e.g. `unity-dots-specialist` separate from `unity-specialist`) routed when relevant. The adversarial review pass in `team-combat`, `team-ui` and `team-polish`. | Commercial titles, learning the full org chart, large teams with parallel work. |
+| `studio` | All 26 agents available. Unity sub-specialists (e.g. `unity-shader-specialist` separate from `unity-specialist`) routed when relevant. The adversarial review pass in `team-combat`, `team-ui` and `team-polish`. | Commercial titles, learning the full org chart, large teams with parallel work. |
 
 ---
 
@@ -1318,15 +1318,14 @@ closing, or produces a warning and lets work continue — per test type
 
 | Skill | individual | small | studio |
 |-------|------|-------|--------|
-| **team-combat** | Single agent (gameplay-programmer) runs the pipeline; ai-programmer escalated only if AI work flagged | Default pipeline as documented | Default + the primary engine specialist may use its sub-specialists + adversarial review pass (Phase 5's qa-tester looks for how it breaks) |
-| **team-narrative** | writer only; narrative-director invoked only on explicit pillar conflict | narrative-director + writer, + localization-lead and world-builder at `review_mode: full` | All six narrative agents, whatever the review mode |
-| **team-ui** | ui-programmer + ux-designer | + accessibility-specialist + art-director | + engine UI specialist + adversarial review pass (Phase 4's reviewers look for where it fails its spec) |
-| **team-audio** | sound-designer only | + audio-director + technical-artist + gameplay-programmer | + accessibility-specialist + the primary engine specialist |
-| **team-level** | level-designer only | + systems-designer + art-director + qa-tester | + narrative-director + world-builder + accessibility-specialist |
+| **team-combat** | Single agent (gameplay-programmer) runs the pipeline, AI work included | Default pipeline as documented | Default + the primary engine specialist may use its sub-specialists + adversarial review pass (Phase 5's qa-tester looks for how it breaks) |
+| **team-narrative** | writer only; narrative-director invoked only on explicit pillar conflict | narrative-director + writer | All narrative agents, whatever the review mode |
+| **team-ui** | ui-programmer + ux-designer | + art-director | + engine UI specialist + adversarial review pass (Phase 4's reviewers look for where it fails its spec) |
+| **team-audio** | sound-designer only | + audio-director + technical-artist + gameplay-programmer | + ux-designer + the primary engine specialist |
+| **team-level** | level-designer only | + systems-designer + art-director + qa-tester | + narrative-director + ux-designer |
 | **team-qa** | qa-tester only; qa-lead invoked at phase gates only | qa-lead + qa-tester pipeline | qa-lead + per-story qa-tester spawn + sign-off |
-| **team-release** | release-manager only | + producer + devops-engineer + qa-lead + community-manager | + security-engineer + analytics-engineer + localization-lead + performance-analyst, and network-programmer when the game is multiplayer |
-| **team-polish** | performance-analyst + technical-artist; no programmer is active, so Phase 2's optimisation list is handed to `/dev-story` | + sound-designer + qa-tester + engine-programmer (implements Phase 2's optimisation list), and tools-programmer when Phase 1 traces a cause to a content authoring tool | engine-programmer, as at small, + adversarial review pass (Phase 5's qa-tester looks for how it breaks) |
-| **team-live-ops** | live-ops-designer + economy-designer | + analytics-engineer + community-manager | + writer + narrative-director |
+| **team-release** | release-manager only | + producer + qa-lead + writer | + lead-programmer (security, and netcode when multiplayer) + performance-analyst |
+| **team-polish** | performance-analyst + technical-artist; no programmer is active, so Phase 2's optimisation list is handed to `/dev-story` | + sound-designer + qa-tester + unity-specialist (implements Phase 2's optimisation list, content tools included) | unity-specialist, as at small, + adversarial review pass (Phase 5's qa-tester looks for how it breaks) |
 | **gate-check** | Panel width is `modes.workflow`'s axis, not this one (gates always run) — `team.size` affects only specialist depth within each director's review | Same as individual for directors; specialists within directors' reviews use small set | Same plus engine sub-specialists |
 | **architecture-decision** | TD-ADR (in `full` review mode) + the primary engine specialist | Same | Same — no sub-specialist or adversarial reviewer at any size |
 
@@ -1336,7 +1335,7 @@ closing, or produces a warning and lets work continue — per test type
 
 - `team.size` does not decide whether directors run: `/gate-check`'s panel follows `review_mode` and `modes.workflow`, and no `team-*` pipeline spawns a director phase gate. In a team skill, a "phase gate" is one of the decision points its own pipeline lists, whatever the `automation` mode.
 - `individual` does not disable agents — it just changes which are active by default. Any agent can still be invoked by name.
-- When `team.size: individual` and a non-core agent is needed (e.g. `network-programmer` for a multiplayer story), the skill emits an informational note and routes through the nearest active core agent.
+- When `team.size: individual` and a non-core agent is needed (e.g. `lead-programmer` for a multiplayer story), the skill emits an informational note and routes through the nearest active core agent.
 
 ---
 
@@ -1347,7 +1346,7 @@ which specialists are routed and which architecture sections are required
 **Values:** `true` | `false`  
 **Default:** none — unset is not `false`  
 **Set by:** `/project-settings`  
-**Read by:** `security-audit`, `team-release` (and the `security-engineer` agent)
+**Read by:** `security-audit`, `team-release` (and the `lead-programmer` agent)
 
 **Priority chain:** `platform.multiplayer` in `project.yaml` → unset (`platform.*` is locked to `project.yaml`, so `project.local.yaml` cannot set it). Nothing writes it except `/project-settings`, so on most projects it is unset: `/security-audit` and `/team-release` ask whether the game is multiplayer rather than reading unset as `false`.
 
@@ -1366,8 +1365,8 @@ which specialists are routed and which architecture sections are required
 
 | Value | Meaning |
 |-------|---------|
-| `true` | Game has real-time online multiplayer. `/security-audit` runs its netcode category and rates a HIGH finding as release-blocking; `/team-release` adds `network-programmer`'s sign-off. |
-| `false` | No real-time multiplayer. `/security-audit` skips the netcode category and says so; `/team-release` does not spawn `network-programmer`. |
+| `true` | Game has real-time online multiplayer. `/security-audit` runs its netcode category and rates a HIGH finding as release-blocking; `/team-release` adds `lead-programmer`'s sign-off. |
+| `false` | No real-time multiplayer. `/security-audit` skips the netcode category and says so; `/team-release` does not spawn `lead-programmer`. |
 
 ---
 
@@ -1376,7 +1375,7 @@ which specialists are routed and which architecture sections are required
 | Skill | multiplayer: true | multiplayer: false |
 |-------|------------------|-------------------|
 | **security-audit** | Includes netcode review — authentication, replication, cheat vectors | Netcode review skipped, and the report says so |
-| **team-release** | `network-programmer` included in release sign-off pipeline | `network-programmer` excluded |
+| **team-release** | `lead-programmer` included in release sign-off pipeline | `lead-programmer` excluded |
 
 No other skill reads this key: `/dev-story`, `/create-architecture` and `/gate-check`
 decide networking scope from the story, GDD or architecture in front of them.
@@ -1389,7 +1388,7 @@ decide networking scope from the story, GDD or architecture in front of them.
 **Values:** `true` | `false`
 **Default:** none — unset is not `false`
 **Set by:** `/project-settings`
-**Read by:** `security-audit`, `team-release` (and the `security-engineer` agent)
+**Read by:** `security-audit`, `team-release` (and the `lead-programmer` agent)
 
 **Priority chain:** `platform.online` in `project.yaml` → unset (`platform.*` is locked to `project.yaml`, so `project.local.yaml` cannot set it). Nothing writes it except `/project-settings`: `/security-audit` and `/team-release` ask rather than reading unset as `false`.
 
@@ -1403,7 +1402,7 @@ decide networking scope from the story, GDD or architecture in front of them.
 
 | Value | Meaning |
 |-------|---------|
-| `true` | Project includes online services (cloud saves, leaderboards, achievements, telemetry, IAP, anything calling external APIs at runtime). `/security-audit` runs Category 2 (network and multiplayer — including a plaintext-token check) when this or `platform.multiplayer` is true or unset; `/team-release` adds a `security-engineer` sign-off. |
+| `true` | Project includes online services (cloud saves, leaderboards, achievements, telemetry, IAP, anything calling external APIs at runtime). `/security-audit` runs Category 2 (network and multiplayer — including a plaintext-token check) when this or `platform.multiplayer` is true or unset; `/team-release` adds a `lead-programmer` sign-off. |
 | `false` | Project is fully offline. `/security-audit` skips Category 2 only when `platform.multiplayer` is also false. |
 
 ---
@@ -1413,9 +1412,9 @@ decide networking scope from the story, GDD or architecture in front of them.
 | Skill | online: true | online: false |
 |-------|--------------|---------------|
 | **security-audit** | Category 2 (network) runs — server authority, packet validation, rate limits, plaintext tokens | Category 2 skipped only when `platform.multiplayer` is also false |
-| **team-release** | `security-engineer` sign-off when the game is online or stores player data | No online-driven security sign-off |
+| **team-release** | `lead-programmer` sign-off when the game is online or stores player data | No online-driven security sign-off |
 
-No other skill reads this key: `/create-architecture`, `/dev-story`, `/team-live-ops`
+No other skill reads this key: `/create-architecture`, `/dev-story`
 and `/gate-check` decide online scope from the documents in front of them.
 
 ---
@@ -1469,7 +1468,7 @@ must tell them apart)
 > below describes the intended design, not current behaviour.
 >
 > The value is checked for valid spelling when you set it, and then ignored.
-> The accessibility-specialist routing and the Polish-stage audit described
+> The ux-designer routing and the Polish-stage audit described
 > below **do not happen at any level** — `/team-ui`, `/team-level`,
 > `/team-polish` and `/gate-check` do not read this setting, and `/start`
 > does not ask for it.
@@ -1493,9 +1492,9 @@ must tell them apart)
 
 | Value | Required features | Specialist routing |
 |-------|-------------------|--------------------|
-| `none` | None enforced | `accessibility-specialist` not spawned |
-| `standard` | Colorblind-safe palette, subtitles for any voice content, key remapping | `accessibility-specialist` runs in team-ui, team-level |
-| `aaa` | Full Game Accessibility Guidelines: motor, vision, hearing, cognitive categories | `accessibility-specialist` runs in all team-* skills; mandatory audit at Polish stage |
+| `none` | None enforced | `ux-designer` not spawned |
+| `standard` | Colorblind-safe palette, subtitles for any voice content, key remapping | `ux-designer` runs in team-ui, team-level |
+| `aaa` | Full Game Accessibility Guidelines: motor, vision, hearing, cognitive categories | `ux-designer` runs in all team-* skills; mandatory audit at Polish stage |
 
 ---
 
@@ -1503,8 +1502,8 @@ must tell them apart)
 
 | Skill | none | standard | aaa |
 |-------|------|----------|-----|
-| **team-ui** | accessibility-specialist not spawned | accessibility-specialist included for HUD/menu reviews | accessibility-specialist included for every screen + accessibility audit pass |
-| **team-level** | accessibility-specialist not spawned | accessibility-specialist reviews level for colorblind safety and signposting | accessibility-specialist reviews for full mobility/audio/cognitive considerations |
+| **team-ui** | ux-designer not spawned | ux-designer included for HUD/menu reviews | ux-designer included for every screen + accessibility audit pass |
+| **team-level** | ux-designer not spawned | ux-designer reviews level for colorblind safety and signposting | ux-designer reviews for full mobility/audio/cognitive considerations |
 | **team-polish** | No accessibility pass | Final accessibility pass added | Full accessibility audit required before completion |
 | **gate-check** | No accessibility check at any stage | Polish gate checks for the standard required features | Polish gate requires full Game Accessibility Guidelines compliance audit |
 
@@ -1789,7 +1788,7 @@ implementation, review, and architecture validation
 | Engine | Language/code specialist | Shader specialist | UI specialist | Additional specialists |
 |--------|--------------------------|-------------------|---------------|----------------------|
 | **Godot** | `godot-gdscript-specialist` (GDScript) or `godot-csharp-specialist` (C#) — driven by `engine.language` | `godot-shader-specialist` | `godot-specialist` | `godot-gdextension-specialist` |
-| **Unity** | `unity-specialist` | `unity-shader-specialist` | `unity-ui-specialist` | `unity-addressables-specialist`, `unity-dots-specialist` |
+| **Unity** | `unity-specialist` | `unity-shader-specialist` | `unity-ui-specialist` | `unity-addressables-specialist` |
 | **Unreal** | `unreal-specialist` | `unreal-specialist` | `ue-umg-specialist` | `ue-gas-specialist`, `ue-blueprint-specialist`, `ue-replication-specialist` |
 | **Web** | `lead-programmer` (no web specialist agent; engine checks go against `docs/engine-reference/web/`) | `lead-programmer` | `lead-programmer` | None |
 | **[UNSET]** | No specialist spawned — warning emitted | No specialist spawned | No specialist spawned | None |
@@ -2113,7 +2112,7 @@ and resumes at the first `incomplete` section. No `active.md` needed.
 | **map-systems** | `design/gdd/systems-index.md` | Before system enumeration |
 | **brainstorm** | `design/gdd/game-concept.md` (`standard`/`full`) · `design/game-brief.md` (`minimal`) | Before concept discussion |
 
-> **Note on agents:** `world-builder` and `narrative-director` are agents, not
+> **Note on agents:** `narrative-director` is an agent, not
 > invocable skills — they do not have SKILL.md files. Long-form output from these
 > agents is produced via the skills above (design-system, art-bible, etc.) which
 > are responsible for skeleton-first enforcement.

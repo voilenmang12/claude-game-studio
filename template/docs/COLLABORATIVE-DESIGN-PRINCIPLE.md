@@ -599,7 +599,7 @@ Skill (Coordinator):
  - gameplay-programmer: Core grapple physics
  - technical-artist: Cable VFX
  - sound-designer: Whoosh + impact SFX
- - ai-programmer: Enemy reactions to being grappled
+ - gameplay-programmer: Enemy reactions to being grappled
 
  Each will show you their work before writing files. Proceed?"
 

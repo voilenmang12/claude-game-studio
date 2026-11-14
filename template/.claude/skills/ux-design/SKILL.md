@@ -139,7 +139,7 @@ specific sub-topics, additional context or coordination may be needed:
 | Implementation feasibility (engine constraints) | `ui-programmer` — before finalizing component inventory |
 | Gameplay data requirements | `game-designer` — when data ownership is unclear |
 | Narrative/lore visible in the UI | `narrative-director` — for flavor text, item names, lore panels |
-| Accessibility tier decisions | Recorded by this session (`/ux-design accessibility`; the user picks the tier) against the criteria `accessibility-specialist` defines and audits — consult it when a requirement's criterion is unclear |
+| Accessibility tier decisions | Recorded by this session (`/ux-design accessibility`; the user picks the tier) against the criteria `ux-designer` defines and audits — consult it when a requirement's criterion is unclear |
 
 When delegating to another agent via the `Agent` tool:
 - Provide: screen name, game concept summary, the specific question needing expert input

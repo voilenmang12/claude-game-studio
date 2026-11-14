@@ -67,4 +67,4 @@ exit $EXIT_CODE
 When this hook fails, the committer should:
 1. For missing design sections: invoke the `game-designer` agent to complete
    the document
-2. For invalid JSON: invoke the `tools-programmer` agent or fix manually
+2. For invalid JSON: invoke the `unity-specialist` agent or fix manually

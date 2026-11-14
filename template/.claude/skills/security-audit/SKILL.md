@@ -75,7 +75,7 @@ Read `project.yaml` to determine the following, falling back to `.claude/docs/te
   > set it with /project-settings)`, which makes `CLEAR TO SHIP` unreachable per Phase 5.
   > While the scope is unconfirmed, rate severity as for a multiplayer game — an
   > open HIGH is then DO NOT SHIP — and say in the report that the rating assumed
-  > multiplayer, as `security-engineer` does.
+  > multiplayer, as `lead-programmer` does.
   > Over-scanning a single-player game costs a few minutes; under-scanning a
   > multiplayer one ships the category unrun.
   >
@@ -87,7 +87,7 @@ Read `project.yaml` to determine the following, falling back to `.claude/docs/te
 
 ## Phase 2: Spawn Security Engineer
 
-Spawn `security-engineer` via `Agent` — the audit is its job, so do not run the
+Spawn `lead-programmer` via `Agent` — the audit is its job, so do not run the
 categories in this session instead. If it cannot be spawned, say why, run the
 scan here, and let the report's **Audited by** line say so.
 
@@ -131,13 +131,13 @@ empty code root is the insufficient-implementation case in Phase 5, and each
 category that scans code reads `NOT ASSESSED — no source under <root>`, not zero
 findings. Neither is ever reported clean.
 
-The security-engineer runs the audit across 6 categories (see Phase 3). Collect their full findings before proceeding.
+The lead-programmer runs the audit across 6 categories (see Phase 3). Collect their full findings before proceeding.
 
 ---
 
 ## Phase 3: Audit Categories
 
-The security-engineer evaluates each of the following. Skip categories not
+The lead-programmer evaluates each of the following. Skip categories not
 applicable to the project scope, and name each skipped category and why in the
 Executive Summary (`Category 2 — skipped: platform.multiplayer and
 platform.online are false`).
@@ -276,7 +276,7 @@ For each finding, assign:
 **Date**: [date]
 **Scope**: [full | network | save | input | quick]
 **Engine**: [engine + version]
-**Audited by**: [security-engineer via /security-audit | this session — security-engineer not spawned: reason]
+**Audited by**: [lead-programmer via /security-audit | this session — lead-programmer not spawned: reason]
 **Files scanned**: [N source files, N config files]
 
 ---

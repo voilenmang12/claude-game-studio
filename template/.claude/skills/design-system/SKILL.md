@@ -71,15 +71,15 @@ If two rows fit, use the union of their Primary roles and say why.
 
 | System type | Primary role | Supporting role(s) |
 |----------------|---------------|---------------------|
-| **Foundation/Infrastructure** (event bus, save/load, scene mgmt, service locator) | `systems-designer` | `gameplay-programmer` (feasibility), `engine-programmer` (engine integration) |
-| Combat, damage, health | `game-designer` | `systems-designer` (formulas), `ai-programmer` (enemy AI), `art-director` (hit feedback visual direction, VFX intent) |
+| **Foundation/Infrastructure** (event bus, save/load, scene mgmt, service locator) | `systems-designer` | `gameplay-programmer` (feasibility), `unity-specialist` (engine integration) |
+| Combat, damage, health | `game-designer` | `systems-designer` (formulas), `gameplay-programmer` (enemy AI), `art-director` (hit feedback visual direction, VFX intent) |
 | Economy, loot, crafting | `economy-designer` | `systems-designer` (curves), `game-designer` (loops) |
 | Progression, XP, skills | `game-designer` | `systems-designer` (curves), `economy-designer` (sinks) |
 | Dialogue, quests, lore | `game-designer` | `narrative-director` (story), `writer` (content), `art-director` (character visual profiles, cinematic tone) |
 | UI systems (HUD, menus) | `game-designer` | `ux-designer` (flows), `ui-programmer` (feasibility), `art-director` (visual style direction), `technical-artist` (render/shader constraints) |
 | Audio systems | `game-designer` | `audio-director` (direction), `sound-designer` (specs) |
-| AI, pathfinding, behavior | `game-designer` | `ai-programmer` (implementation), `systems-designer` (scoring) |
-| Level/world systems | `game-designer` | `level-designer` (spatial), `world-builder` (lore) |
+| AI, pathfinding, behavior | `game-designer` | `gameplay-programmer` (implementation), `systems-designer` (scoring) |
+| Level/world systems | `game-designer` | `level-designer` (spatial), `narrative-director` (lore) |
 | Camera, input, controls | `game-designer` | `ux-designer` (feel), `gameplay-programmer` (feasibility) |
 | Animation, character movement | `game-designer` | `art-director` (animation style, pose language), `technical-artist` (rig/blend constraints), `gameplay-programmer` (feel) |
 | Visual effects, particles, shaders | `game-designer` | `art-director` (VFX visual direction), `technical-artist` (performance budget, shader complexity), `systems-designer` (trigger/state integration) |

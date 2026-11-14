@@ -3,7 +3,7 @@
 ## What Is This?
 
 This is a complete Claude Code agent architecture for game development. It
-organizes 49 specialized AI agents into a studio hierarchy that mirrors
+organizes 26 specialized AI agents into a studio hierarchy that mirrors
 real game development teams, with defined responsibilities, delegation
 rules, and coordination protocols. It includes engine-specialist agents
 for Godot, Unity, and Unreal — each with dedicated sub-specialists for
@@ -53,7 +53,7 @@ There are three tiers of agents:
 
 - **Tier 2 — Department leads** who own their domain
   - `game-designer`, `lead-programmer`, `art-director`, `audio-director`,
-    `narrative-director`, `qa-lead`, `release-manager`, `localization-lead`
+    `narrative-director`, `qa-lead`, `release-manager`, `writer`
 
 - **Tier 3 — Specialists** who execute within their domain
   - Designers, programmers, artists, writers, testers, engineers
@@ -77,32 +77,21 @@ Ask yourself: "What department would handle this in a real studio?"
 | Write test cases | `qa-tester` |
 | Design a level | `level-designer` |
 | Fix a performance problem | `performance-analyst` |
-| Set up CI/CD | `devops-engineer` |
+| Set up CI/CD | `release-manager` |
 | Design a loot table | `economy-designer` |
 | Resolve a creative conflict | `creative-director` |
 | Make an architecture decision | `technical-director` |
 | Manage a release | `release-manager` |
-| Prepare strings for translation | `localization-lead` |
+| Prepare strings for translation | `writer` |
 | Test a mechanic idea quickly | `prototyper` |
-| Review code for security issues | `security-engineer` |
-| Check accessibility compliance | `accessibility-specialist` |
-| Get Unreal Engine advice | `unreal-specialist` |
+| Review code for security issues | `lead-programmer` |
+| Check accessibility compliance | `ux-designer` |
 | Get Unity advice | `unity-specialist` |
-| Get Godot advice | `godot-specialist` |
-| Design GAS abilities/effects | `ue-gas-specialist` |
-| Define BP/C++ boundaries | `ue-blueprint-specialist` |
-| Implement UE replication | `ue-replication-specialist` |
-| Build UMG/CommonUI widgets | `ue-umg-specialist` |
-| Design DOTS/ECS architecture | `unity-dots-specialist` |
 | Write Unity shaders/VFX | `unity-shader-specialist` |
 | Manage Addressable assets | `unity-addressables-specialist` |
 | Build UI Toolkit/UGUI screens | `unity-ui-specialist` |
-| Write idiomatic GDScript | `godot-gdscript-specialist` |
-| Write Godot C# code | `godot-csharp-specialist` |
-| Create Godot shaders | `godot-shader-specialist` |
-| Build GDExtension modules | `godot-gdextension-specialist` |
-| Plan live events and seasons | `live-ops-designer` |
-| Write patch notes for players | `community-manager` |
+| Plan live events and seasons | `economy-designer` |
+| Write patch notes for players | `writer` |
 | Brainstorm a new game idea | Use `/brainstorm` skill |
 
 ### 3. Use Slash Commands for Common Tasks
@@ -170,7 +159,6 @@ Ask yourself: "What department would handle this in a real studio?"
 | `/team-polish` | Orchestrate full polish team pipeline |
 | `/team-audio` | Orchestrate full audio team pipeline |
 | `/team-level` | Orchestrate full level creation pipeline |
-| `/team-live-ops` | Orchestrate live-ops team for seasons, events, and post-launch content |
 | `/team-qa` | Orchestrate full QA team cycle — test plan, test cases, smoke check, sign-off |
 | `/qa-plan` | Generate a QA test plan for a sprint or feature |
 | `/bug-triage` | Re-prioritize open bugs, assign to sprints, surface systemic trends |
@@ -311,7 +299,7 @@ CLAUDE.md                          -- Master config (read this first, ~80 lines)
 project.yaml                       -- Machine-readable project config (engine, modes, stage) — source of truth
 .claude/
   settings.json                    -- Claude Code hooks and project settings
-  agents/                          -- 49 agent definitions (YAML frontmatter)
+  agents/                          -- 26 agent definitions (YAML frontmatter)
   skills/                          -- 75 slash command definitions (YAML frontmatter)
   hooks/                           -- 15 event hooks (.sh, wired by settings.json) + yaml-helper.sh, update-check.sh
   rules/                           -- 14 path-specific rule files

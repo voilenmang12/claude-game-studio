@@ -44,7 +44,7 @@ specialists:
   code: "unity-specialist"
   shader: "unity-shader-specialist"
   ui: "unity-ui-specialist"
-  additional: ["unity-dots-specialist", "unity-addressables-specialist"]
+  additional: ["unity-addressables-specialist"]
 
 naming:
   classes: PascalCase

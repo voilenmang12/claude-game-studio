@@ -56,19 +56,40 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+**Removed**
+- 23 of the 49 agents. None had ever been spawned in a studio session (CG01, CG02 and the base project's session
+  logs show no agent call), and none fits a solo Unity 2D web game: the 5 `godot-*`, 4 `ue-*` and
+  `unreal-specialist`, `unity-dots-specialist`, `ai-programmer`, `engine-programmer`, `tools-programmer`,
+  `network-programmer`, `security-engineer`, `devops-engineer`, `analytics-engineer`, `localization-lead`,
+  `accessibility-specialist`, `world-builder`, `live-ops-designer`, `community-manager`, with their
+  `studio-tests/agents/` specs and catalog entries.
+- `/team-live-ops`: its whole team was removed.
+
 **Changed**
-- Agents follow the automation mode: every agent's "Collaboration Protocol" (all 49 in `.claude/agents/`) opens
-  with a "Mode first" paragraph: in `autonomous`, its questions, proposals and "May I write?" steps are skipped
-  (pick the recommended option, log it, write, report; never end a turn on a question or ask the same thing twice).
-  Before this, a subagent in an autonomous game still asked before every write.
-- `CLAUDE.md` "Autonomy": subagents follow the same mode, every subagent brief says so, and a question answered in
-  the session or the decision log is never asked again.
+- The 26 kept agents are autonomous only: "Collaboration Protocol" (ask, propose, "May I write?", end the turn on a
+  question) is replaced in each by one "Working protocol (autonomous)": read the brief, decide and record, write
+  directly, check, report; never ask, never ask twice, human-only steps under "Needs you". The registry and
+  prototype steps that asked first now write and report.
+- Work of a removed agent goes to the kept agent that covers it (`agent-roster.md`, rewritten): AI, engine and tools
+  → `gameplay-programmer` / `unity-specialist`; security and netcode → `lead-programmer`; build and deploy →
+  `release-manager`; strings, translation and player messages → `writer`; accessibility → `ux-designer`; lore →
+  `narrative-director`; events → `economy-designer`; analytics → `producer`. Skills (`team-*`, `design-review`,
+  `design-system`, `dev-story`, `localize`, `security-audit`, `patch-notes`, `day-one-patch`, `ux-design`), docs
+  (`effects-map.md`, `model-tiers.md`, `quick-start.md`, `skills-reference.md`, `technical-preferences.md`,
+  `workflow-catalog.yaml`) and `project.yaml` (`specialists.additional`) point to them.
+- `CLAUDE.md` "Autonomy": the agents are autonomous whatever `modes.automation` says; a question answered in the
+  session or the decision log is never asked again.
 - `.claude/rules/art-assets.md`: with no art bible, an autonomous run runs `/art-bible` and picks the style from the
   brief instead of asking the user.
+- Upstream reference docs (`docs/WORKFLOW-GUIDE.md`, `docs/CCGS-*.md`) and the remaining `studio-tests/` specs still
+  name the removed agents; they describe upstream CCGS, not this template.
 
 **Port** (with the next release)
-- Each game: `bash sync-template.sh <Game>` (copies `.claude/agents/` and `.claude/rules/`), then copy the new
-  sentences of "Decide and proceed" in "Autonomy" from the template's `CLAUDE.md`.
+- Each game: `bash sync-template.sh <Game>` (copies `.claude/agents/`, `.claude/skills/`, `.claude/docs/`,
+  `.claude/rules/`; it never deletes), then `git rm` the 23 removed agent files from `.claude/agents/` and
+  `.claude/skills/team-live-ops/`; in `project.yaml` drop `unity-dots-specialist` from `specialists.additional`;
+  copy the new sentences of "Decide and proceed" in "Autonomy" from the template's `CLAUDE.md`. Start a new
+  session: the agent list loads at session start.
 
 ## v3.00 (2026-11-14)
 
