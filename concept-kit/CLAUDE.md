@@ -117,7 +117,15 @@ follow from a phone (Remote Control), so a run never stops to ask.
   each finished item there (Conventional Commits). At the end, without asking: commit what is left,
   `git switch main`, `git merge --no-ff <branch>` (one merge commit per task, so `git revert -m 1 <merge>` undoes
   it), then delete the branch. Concepts have no remote: never push. Done means a clean tree on `main` and no task
-  branch left. Never ask "commit?", "merge?" or "delete the branch?". Never rewrite history or use `--no-verify`.
+  branch left (an open `try/` branch excepted). Never ask "commit?", "merge?" or "delete the branch?". Never
+  rewrite history or use `--no-verify`.
+- **Small follow-ups stay here, on no new branch.** A small change the user asks for after a task (a value, a text,
+  a color, one rule) is done in this same session: on the task's branch if it is still open, otherwise as one
+  commit straight on `main`. Never open a new session or a new branch for it.
+- **Tries: `try/<slug>`, the one branch you do not close.** When the user wants to see a change before deciding
+  ("try", "thử", "test first", "xem trước"): branch `try/<slug>` from `main`, change the playtest, take a before and
+  an after screenshot, show them, and leave the branch unmerged. "Keep" merges it like a task; "drop" deletes it.
+  Two options are two `try/` branches made one after the other in this session, never two sessions.
 - **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
   sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
   rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".

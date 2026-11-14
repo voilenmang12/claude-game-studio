@@ -26,6 +26,9 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
   task, and later tasks can build on it), pushing `main` where the repo has a remote, and deleting the branch
   locally and on `origin`. A task is done only when the tree is clean, `main` matches `origin/main` and no task
   branch is left. A conflict Claude cannot resolve with confidence keeps its branch and goes to the user.
+- Two exceptions (`template/CLAUDE.md`, "Autonomy"): a **small follow-up** in the same session goes on the task's
+  branch while it is open, otherwise as one commit straight on `main`, with no new branch; a **try** runs on
+  `try/<slug>` and stays unmerged until the user says keep (merge `--no-ff`) or drop (delete the branch).
 - Never rewrite pushed history: no `push --force` on `main`, no rebase of pushed commits, no amend of a pushed commit.
 - Never commit with `--no-verify`: the CCGS hooks are the safety net. Fix what a hook reports.
 - Workspace and `local/`: commit and push only when the user asks **(user)**, unless the user's `local/RULES.md`

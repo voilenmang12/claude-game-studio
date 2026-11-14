@@ -141,9 +141,23 @@ follow from a phone (Remote Control), so a run never stops to ask.
   end, without asking: commit what is left, `git switch main`, `git merge --no-ff <branch>` (one merge commit per
   task, so `git revert -m 1 <merge>` undoes the whole task), push `main` to the game's own private repo, then delete
   the branch locally and on `origin` if it was pushed. Done means a clean tree, `main` equal to `origin/main` and no
-  task branch left. Never ask "commit?", "merge?", "push?" or "delete the branch?"; the report's Commits section
+  task branch left (an open `try/` branch excepted). Never ask "commit?", "merge?", "push?" or "delete the branch?"; the report's Commits section
   lists the merge. A conflict you cannot resolve with confidence: keep the branch, put it under "Needs you". Never
   force-push, rewrite pushed history or use `--no-verify`.
+- **Small follow-ups stay here, on no new branch.** A small change the user asks for after a task (size S, same
+  topic: a nudge, a text, a color, one value) is done in this same session: on the task's branch if it is still
+  open, otherwise as one commit straight on `main` (`fix:` or `chore:`, pushed; `git revert <sha>` undoes it).
+  Never open a new session or a new branch for it. A follow-up of size M or L, or on another topic, is a new task.
+- **Tries: `try/<slug>`, the one branch you do not close.** When the user wants to see a change before deciding
+  ("try", "thử", "test first", "xem trước"), or two looks are equally plausible: branch `try/<slug>` from `main`,
+  make the change, take a before and an after screenshot at the same size, show them, and leave the branch
+  unmerged. "Keep" merges it like a task; "drop" deletes it (`git switch main`, `git branch -D`). Two options are
+  two `try/` branches made one after the other in this session, never two sessions. A `try/` branch the user has
+  not answered goes under "Needs you"; small follow-ups on it stay on it.
+- **A new session only for work that runs apart:** another topic, other files, and no need of the Unity Editor at
+  the same time (a GDD, an asset plan, docs), or a session whose context has grown too long (the new one starts
+  from `active.md`). Two sessions in one Unity project share one Editor: never recompile or run Play Mode from two
+  at once.
 - **Never alone:** spend money, publish (store or portal upload, a public repo, `vercel --prod`), change accounts,
   sign-ins or credentials, delete outside this repo. Put these under "Needs you" in the report and carry on with the
   rest. A taste or business call with no written answer: choose a reversible default, note it under "Needs you".
