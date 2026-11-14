@@ -1,7 +1,7 @@
 # Useful commands
 
 A quick reference: what to type, where, when, and what you get. `/...` commands are skills typed in the Claude Code
-chat; `bash ...` scripts are run by Claude when you ask (you do not need to type them). Template v3.00.
+chat; `bash ...` scripts are run by Claude when you ask (you do not need to type them). Template v3.01.
 
 ## 1. How to hand work to Claude (phrases, not commands)
 
@@ -38,6 +38,7 @@ one Editor and get in each other's way.
 | `/release-checklist` | Before an upload to a store or portal | `/release-checklist` | Build, metadata and limit checks |
 | `/project-settings` | See or change one `project.yaml` setting | `/project-settings automation` | Its value and where it comes from |
 | `node Tools/playmode.mjs ...` | Claude runs it to see the game | `node Tools/playmode.mjs home=snap "shop=click:Btn Shop"` | One command: recompile, Play Mode, clicks, screenshots, console errors |
+| `audit` step of `playmode.mjs` | After any UI change | `node Tools/playmode.mjs "shop=click:Btn Shop" shop-audit=audit` | Measured layout faults (text cut, pieces off screen or on a frame's rim, overlaps) that a screenshot review misses |
 
 ## 3. In a concept folder (`concepts/<slug>/`)
 

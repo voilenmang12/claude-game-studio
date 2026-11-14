@@ -52,9 +52,25 @@ ticket to `released vX.YY`.
 | ID | Game | Title | Status | Version or reason |
 |---|---|---|---|---|
 | TR-CG01-001 | CG01 | Ignore `_to_delete/` in the standard .gitignore | released v2.01 | v2.01 |
-| TR-CG01-002 | CG01 | UI layout audit tool for Play Mode | accepted (2026-11-14) | planned for v3.01: generic `UiAudit.cs` with decor names and tooltip type as settings, run through `Tools/playmode.mjs` |
+| TR-CG01-002 | CG01 | UI layout audit tool for Play Mode | released v3.01 | v3.01 |
 
 ## Unreleased
+
+## v3.01 (2026-11-14)
+
+Minor. Fewer, autonomous-only agents, and a measured UI layout audit in the Play Mode tool.
+
+**Added**
+- `Assets/Editor/PlayMode/UiAudit.cs` (`GameStudio.Editor.UiAudit`): layout audit of the uGUI on screen in Play Mode.
+  Lists TEXT (cut, wrapped button label, glyphs past the box), OFFSCREEN, ESCAPE (outside the framed piece it sits
+  in), RIM (on a 9-slice frame's visible border, read from the sprite pixels), OVERLAP and PANEL faults; measures
+  glyphs, opaque pixels, masks and veils; says `NOT ASSESSED` when nothing on screen can be measured. The game's names
+  (decor, tooltip component, popup root, veils, edge pieces) go in `ProjectSettings/UiAudit.json`. Made generic from
+  CG01's tool (TR-CG01-002).
+- `Tools/playmode.mjs`: `audit[:<WxH>]` step; fails on any fault or `NOT ASSESSED`, prints the fault lines, and a
+  named step (`shop-audit=audit`) saves the full report next to its screenshot. `audit:<WxH>` sets the Game view.
+- `CLAUDE.md` Play Mode bullet, `UIPopupStandard.md` (section 6 and the checklist), `/ui-resolution-check` (uses
+  `audit:<WxH>` instead of a game-written Game view helper) and `docs/commands.md` point to it.
 
 **Removed**
 - 23 of the 49 agents. None had ever been spawned in a studio session (CG01, CG02 and the base project's session
@@ -84,12 +100,23 @@ ticket to `released vX.YY`.
 - Upstream reference docs (`docs/WORKFLOW-GUIDE.md`, `docs/CCGS-*.md`) and the remaining `studio-tests/` specs still
   name the removed agents; they describe upstream CCGS, not this template.
 
-**Port** (with the next release)
-- Each game: `bash sync-template.sh <Game>` (copies `.claude/agents/`, `.claude/skills/`, `.claude/docs/`,
-  `.claude/rules/`; it never deletes), then `git rm` the 23 removed agent files from `.claude/agents/` and
-  `.claude/skills/team-live-ops/`; in `project.yaml` drop `unity-dots-specialist` from `specialists.additional`;
-  copy the new sentences of "Decide and proceed" in "Autonomy" from the template's `CLAUDE.md`. Start a new
-  session: the agent list loads at session start.
+**Port** (from v3.00, in the game's own session)
+1. `bash sync-template.sh <Game>` (copies `.claude/agents/`, `.claude/skills/`, `.claude/docs/`, `.claude/rules/`,
+   `Tools/playmode.mjs`, `Assets/Editor/PlayMode/`; it never deletes).
+2. `git rm` the 23 removed agent files from `.claude/agents/` and `.claude/skills/team-live-ops/`; in
+   `project.yaml` drop `unity-dots-specialist` from `specialists.additional`.
+3. In the game's `CLAUDE.md`: copy the new sentences of "Decide and proceed" in "Autonomy" and the `audit`
+   sentence of the Play Mode bullet from the template; copy section 6's "Layout audit" row and the checklist line
+   into the game's `UIPopupStandard.md` if it keeps its own copy.
+4. A game with its own UI audit (CG01's `Assets/Editor/UiAudit.cs`): write its extra decor names and tooltip type
+   into `ProjectSettings/UiAudit.json` (CG01: `{"decor":["Scene","Banner"],"tooltip":"<its namespace>.Game.HoverTip"}`),
+   run both once on the same screen, then remove its copy and point its playtest driver to
+   `GameStudio.Editor.UiAudit`.
+5. Recompile, then `node Tools/playmode.mjs home=snap home-audit=audit`; start a new session (the agent list loads
+   at session start).
+
+**Requests**
+- TR-CG01-002 (UI layout audit tool), released.
 
 ## v3.00 (2026-11-14)
 

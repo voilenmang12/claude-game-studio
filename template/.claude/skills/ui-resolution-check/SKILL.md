@@ -26,11 +26,12 @@ Unless the user names others:
 1. List the screens to visit (title, home, every popup, gameplay HUD, results) and how to reach each one with
    `Tools/playmode.mjs` steps (`click:`, `show:`, `scene:`, `eval:`). Write them once to
    `production/qa/resolution-steps.txt`, one step per line, each screen step named (`home=snap`, `shop=click:Btn Shop`).
-2. For each size: set the Game view to it, then one run: `node Tools/playmode.mjs --steps production/qa/resolution-steps.txt
-   --size <WxH> --out production/qa/resolution-<date>/<size name>`. The Game view size is set with a static Editor method
-   of the game (reflection on `UnityEditor.GameViewSizes` to add and select a fixed size), called with `eval:`; add it
-   to the game's Editor code the first time and reuse it after. One Play Mode session per size, never one per screen.
-3. Look at each screenshot once. A fault is: something cut off or outside the screen, overlapping elements, text that
+2. For each size, one run: `node Tools/playmode.mjs --steps production/qa/resolution-steps.txt --size <WxH>
+   --out production/qa/resolution-<date>/<size name>`, with `audit:<WxH>` as the first step (it sets the Game view to
+   that size) and an `<screen>-audit=audit` step after each screen step. One Play Mode session per size, never one per
+   screen.
+3. Read each screen's audit lines (`UiAudit`: TEXT, OFFSCREEN, ESCAPE, RIM, OVERLAP, PANEL), then look at each
+   screenshot once for what it cannot measure. A fault is: something cut off or outside the screen, overlapping elements, text that
    overflows or becomes unreadable, a button too small to tap (under about 44 px at that size), a stretched or
    letterboxed image that should fill, empty bands.
 
