@@ -147,6 +147,10 @@ follow from a phone (Remote Control), so a run never stops to ask.
   image or line of proof (`production/qa/audit-<date>.md`). Pass 2, fix: each finding becomes one goal item, highest
   first, checked as an S task; minors left at the end are listed, not chased. Load the playtest once per
   sweep, not once per finding.
+- **Edit with the Edit tool.** It keeps CRLF line endings (most files here are CRLF, `core.autocrlf=true`) and fails
+  loudly when the text does not match. Read only the range you need (`offset`/`limit`, after a Grep for the line),
+  then Edit; that is enough for Edit and keeps "Read once". No `python - <<` or `sed -i` rewrites of a file for one
+  or a few changes. A script only for many mechanical edits across files, and it must keep each file's line endings.
 - **Retry cap.** The same failure three times with three different fixes: mark the item `[~]` with the reason, move
   on, and list it in the report. Never repeat an identical command hoping for a different result.
 - **Sessions.** One goal or task per session. Before ending, update `active.md` (done, open, next step); the next
