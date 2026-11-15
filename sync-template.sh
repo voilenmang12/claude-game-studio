@@ -3,6 +3,7 @@
 # local/overlay/ files every time, local/seed/ files only when the game has none. Commits nothing.
 #   bash sync-template.sh <GameFolder> --dry-run   list what would change
 #   bash sync-template.sh <GameFolder>             copy
+#   bash sync-template.sh --all [--dry-run]        every game folder and local/project
 # Shared files belong to the template: a game never edits them for its own sake (it files a template request).
 # Game-owned files (CLAUDE.md, project.yaml, registries, profiles) are never overwritten; the changelog's
 # Port steps say what to merge into them by hand.
@@ -13,6 +14,20 @@ SRC="$ROOT/template"
 OVL="$ROOT/local/overlay"
 SEED="$ROOT/local/seed"
 NAME="${1:-}"
+# --all: every game folder and local/project, one after the other. A project that fails (uncommitted changes) is
+# named at the end and the others still run.
+if [ "$NAME" = "--all" ]; then
+  failed=()
+  for d in "$ROOT"/*/ "$ROOT/local/project/"; do
+    g="${d#"$ROOT"/}"; g="${g%/}"
+    case "$g" in template|concept-kit|local.example|_to_delete) continue ;; esac
+    [ -f "$d/project.yaml" ] && [ -f "$d/TEMPLATE_VERSION" ] || continue
+    echo "== $g"
+    bash "$0" "$g" ${2:+"$2"} || failed+=("$g")
+  done
+  [ ${#failed[@]} -eq 0 ] || { echo "Not synced: ${failed[*]}" >&2; exit 1; }
+  exit 0
+fi
 DRY=0
 [ "${2:-}" = "--dry-run" ] && DRY=1
 [ -n "$NAME" ] && [ -f "$ROOT/$NAME/project.yaml" ] || { echo "Usage: bash sync-template.sh <GameFolder> [--dry-run]" >&2; exit 2; }
