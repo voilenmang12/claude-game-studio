@@ -56,6 +56,30 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.04 (2026-11-16)
+
+Minor. The task tracker is version 2 (a control room for autonomous agents), and the rule for game sessions
+follows it.
+
+**Changed**
+- `CLAUDE.md`, "Task tracker" bullet, rewritten for tracker v2: `digest` at session start with the user's inbox
+  first; the first plan with `plan.apply` (milestones as groups, sized tasks with checkable criteria); what S, M,
+  L and `/run-goal` record; work found on the way (`task.add` with a reason, `task.ask` when outside the GDD);
+  "Needs you" as `task.ask` or `task.block`; subagents and `team-*` skills never write, the session records for
+  them with `agent=<name>`; wording in the user's language.
+- `docs/setup.md` (workspace), "Task tracker": version 2, `project.create`, where tracker rules live.
+
+**Port**
+1. Update the tracker: in `project-task-tracking/`, stop the server, copy `.local/`, `git pull --ff-only`,
+   `npm ci`, `npm test`, `npm run build`; move `~/.claude/skills/nhanh-project-tracking` away and run
+   `bash studio-setup.sh --tracker`, then `--tracker-start`. Version 1 data is converted on first start.
+2. `bash sync-template.sh --all` (no shared file changes in this version).
+3. In each game's `CLAUDE.md`, replace the "Task tracker" bullet with the template's.
+4. Copy `TEMPLATE_CHANGELOG.md`, write `3.04` into `TEMPLATE_VERSION`, commit `chore: sync template v3.04`.
+
+**Requests**
+- None.
+
 ## v3.03 (2026-11-15)
 
 Minor. An optional task tracker in the workflow, and Codex Asset Studio inside the workspace.
