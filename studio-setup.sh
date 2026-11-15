@@ -9,7 +9,10 @@
 #                                              Python packages, run its doctor, write assetStudioDir
 #   bash studio-setup.sh --autostart           start the Asset Studio worker at Windows sign-in, and now
 #   bash studio-setup.sh --smoke               Asset Studio smoke test: one real image job (uses image quota)
-# Required: git node python unity. Optional: github vercel codex agy assetstudio pixelorama.
+#   bash studio-setup.sh --tracker [dir]       clone the task tracker (default: project-task-tracking/ in this workspace),
+#                                              install, build, install its skill for Claude Code, write trackerDir
+#   bash studio-setup.sh --tracker-start       start the tracker at Windows sign-in, and now
+# Required: git node python unity. Optional: github vercel codex agy assetstudio pixelorama tracker.
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -17,7 +20,8 @@ cd "$ROOT"
 CONFIG="local/studio.config.json"
 CAS_URL="https://github.com/voilenmang12/codex-asset-studio.git"
 REQUIRED=(git node python unity)
-OPTIONAL=(github vercel codex agy assetstudio pixelorama)
+TRK_URL="https://github.com/voilenmang12/project-task-tracking.git"
+OPTIONAL=(github vercel codex agy assetstudio pixelorama tracker)
 UNITY_PIN="$(grep -o -m1 '6000\.[0-9]*\.[0-9]*f[0-9]*' template/CLAUDE.md || true)"
 WINDOWS=0; case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) WINDOWS=1 ;; esac
 
@@ -50,6 +54,12 @@ autostart_on() {
   [ -f "$(startup_cmd)" ] && return 0
   [ $WINDOWS -eq 1 ] && schtasks //Query //FO CSV //V 2>/dev/null | grep -qi "start-on-logon.ps1"
 }
+
+trk_dir() { local d; d="$(cfg trackerDir)"; echo "${d:-$ROOT/project-task-tracking}"; }
+trk_api() { local a; a="$(cfg trackerApi)"; echo "${a:-${NHANH_URL:-http://127.0.0.1:5173}}"; }
+trk_startup_cmd() { echo "${APPDATA:-}/Microsoft/Windows/Start Menu/Programs/Startup/project-task-tracking.cmd"; }
+trk_health() { curl -s -m 3 "$(trk_api)/api/health" 2>/dev/null; }
+trk_skill() { echo "$HOME/.claude/skills/nhanh-project-tracking"; }
 
 # ---- check
 todo=0
@@ -144,6 +154,19 @@ check_pixelorama() {
     || need pixelorama "MCP server packages are missing" "bash studio-setup.sh --install pixelorama-server"
   curl -s -m 2 http://127.0.0.1:7373/health >/dev/null 2>&1 && ok pixelorama "PixMcpBridge answers on 7373" \
     || row info pixelorama "bridge not answering (open Pixelorama with PixMcpBridge enabled: tools/pixelorama-mcp/README.md)"
+}
+
+check_tracker() {
+  local d; d="$(trk_dir)"
+  if [ ! -f "$d/server/index.js" ]; then need tracker "not set up in $d" "bash studio-setup.sh --tracker"; return; fi
+  ok tracker "$d"
+  [ -d "$d/node_modules" ] && [ -f "$d/dist/index.html" ] && ok tracker "installed and built"     || need tracker "packages or the built UI are missing" "bash studio-setup.sh --tracker"
+  [ -f "$(trk_skill)/SKILL.md" ] && ok tracker "skill nhanh-project-tracking for Claude Code"     || need tracker "its skill is not installed for Claude Code" "bash studio-setup.sh --tracker"
+  if trk_health | grep -q 'nhanh-local'; then ok tracker "running at $(trk_api)"
+  else need tracker "not running at $(trk_api)" "bash studio-setup.sh --tracker-start"; fi
+  if [ $WINDOWS -eq 1 ]; then
+    [ -f "$(trk_startup_cmd)" ] && ok tracker "starts at sign-in" || need tracker "does not start at sign-in" "bash studio-setup.sh --tracker-start"
+  fi
 }
 
 check_all() {
@@ -248,6 +271,36 @@ autostart() {
   for _ in $(seq 1 20); do cas_health | grep -q '"enabled": *true' && { echo "Worker running at $(cas_api)."; return; }; sleep 1; done
   die "worker did not answer at $(cas_api); read $d/asset-connector/data/windows-worker.stderr.log"
 }
+# ---- task tracker (project-task-tracking, "Nhanh")
+tracker() {
+  local d="${1:-$(trk_dir)}"
+  [ -d local ] || die "no local/ layer: bash studio-doctor.sh --init"
+  if [ -f "$d/server/index.js" ]; then
+    echo "The tracker is already in $d."
+  else
+    [ ! -e "$d" ] || [ -z "$(ls -A "$d" 2>/dev/null)" ] || die "$d exists and is not the tracker; pick another folder"
+    git clone "$TRK_URL" "$d" || die "clone failed"
+  fi
+  (cd "$d" && npm ci && npm run build) || die "npm ci or the build failed in $d"
+  if [ -f "$(trk_skill)/SKILL.md" ]; then echo "Skill already installed: $(trk_skill) (to upgrade: move it away, then run this again)."
+  else (cd "$d" && node scripts/install-skill.mjs --target "$HOME/.claude/skills") || die "skill install failed"; fi
+  local abs; abs="$(cd "$d" && pwd -W 2>/dev/null || pwd)"
+  cfg_set trackerDir "\"${abs//\\//}\""
+  echo "trackerDir = ${abs//\\//} (in $CONFIG). Next: bash studio-setup.sh --tracker-start"
+}
+tracker_start() {
+  local d; d="$(trk_dir)"; [ -f "$d/server/index.js" ] || die "the tracker is not set up: --tracker"
+  [ $WINDOWS -eq 1 ] || die "on this OS, start it yourself: cd \"$d\" && npm start"
+  local ps1 wd; ps1="$(cygpath -w "$ROOT/tools/tracker/start-tracker.ps1")"; wd="$(cygpath -w "$d")"
+  printf '@echo off
+powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%s" -Dir "%s"
+' "$ps1" "$wd" > "$(trk_startup_cmd)"
+  echo "Starts at sign-in: $(trk_startup_cmd)"
+  if trk_health | grep -q 'nhanh-local'; then echo "Tracker already running at $(trk_api)."; return; fi
+  powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "$ps1" -Dir "$wd" >/dev/null 2>&1
+  for _ in $(seq 1 20); do trk_health | grep -q 'nhanh-local' && { echo "Tracker running at $(trk_api)."; return; }; sleep 1; done
+  die "the tracker did not answer at $(trk_api); read $d/.local/windows-server.stderr.log"
+}
 smoke() {
   local d; d="$(cas_dir)"; [ -f "$d/asset-connector/setup.mjs" ] || die "Asset Studio is not set up: --asset-studio"
   (cd "$d" && node asset-connector/setup.mjs smoke)
@@ -263,5 +316,7 @@ case "${1:-}" in
   --asset-studio) asset_studio "${2:-}" ;;
   --autostart) autostart ;;
   --smoke) smoke ;;
-  *) sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  --tracker) tracker "${2:-}" ;;
+  --tracker-start) tracker_start ;;
+  *) sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

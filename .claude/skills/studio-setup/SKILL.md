@@ -22,6 +22,8 @@ several answers (the check shows which already work):
 - `assetstudio` + `codex`: Codex Asset Studio makes the game art (needs a ChatGPT plan with image generation).
 - `agy`: Antigravity CLI drafts Asset Studio's image prompts; without it Codex drafts them.
 - `pixelorama`: only for pixel-art games.
+- `tracker`: the task tracker (local web UI where the user follows each game's tasks and progress);
+  `bash studio-setup.sh --tracker`, then `--tracker-start`.
 Save the answer: `bash studio-setup.sh --choose <ids>`. Without `local/`, run `bash studio-doctor.sh --init`
 first (it makes `local/` and turns on the commit hook).
 

@@ -56,11 +56,35 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.03 (2026-11-15)
+
+Minor. An optional task tracker in the workflow, and Codex Asset Studio inside the workspace.
+
+**Added**
+- Task tracker (optional): [project-task-tracking](https://github.com/voilenmang12/project-task-tracking), a local API
+  and web UI where the user follows each game's scope and progress. `studio-setup.sh --tracker [dir]` clones it into
+  `project-task-tracking/`, installs, builds, installs its skill `nhanh-project-tracking` for Claude Code and
+  writes `trackerDir`; `--tracker-start` starts it now and at Windows sign-in (`tools/tracker/start-tracker.ps1`);
+  the check lists it as the optional part `tracker`. `docs/setup.md`, "Task tracker".
+- `project.yaml`: `tracker.project_id` and `tracker.actor` (empty = not tracked). `CLAUDE.md`, "Task tracker"
+  bullet: a tracked game records its M and L tasks and goals there (create or find, claim, evidence, done or
+  blocked); S tasks are not tracked; a tracker that does not answer never stops the work.
+
 **Changed**
 - Codex Asset Studio lives in the workspace (workspace, no port needed): `studio-setup.sh --asset-studio` clones it
   into `codex-asset-studio/` by default (was a folder next to the workspace); `new-game.sh` reserves the name;
   `docs/setup.md` says how Claude runs, updates, changes and moves it. A studio that already has it elsewhere keeps
   its `assetStudioDir`.
+
+**Port**
+1. `bash sync-template.sh --all` (no shared file changes in this version).
+2. In each game: append the `tracker:` block of the template's `project.yaml` to the game's, and copy the "Task
+   tracker" bullet of "Studio template" from the template's `CLAUDE.md` (before the Git bullet). To track the
+   game, create its project in the tracker and write its ID and an actor into `tracker`.
+3. Copy `TEMPLATE_CHANGELOG.md`, write `3.03` into `TEMPLATE_VERSION`, commit `chore: sync template v3.03`.
+
+**Requests**
+- None.
 
 ## v3.02 (2026-11-15)
 

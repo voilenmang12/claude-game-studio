@@ -65,3 +65,9 @@ commands:
   # Play Mode is run by the user. Set this when the project has a player to launch.
   run: "[TO BE CONFIGURED]"
   smoke: "unity recompile --project-path . --timeout 240"
+
+# Task tracker (optional): this game's project in the studio's tracker (CLAUDE.md, "Task tracker").
+# Empty project_id = not tracked.
+tracker:
+  project_id: ""
+  actor: ""

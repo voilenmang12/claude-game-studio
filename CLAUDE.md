@@ -60,6 +60,9 @@ and `local/project/` work:
 ├─ licenses/                  upstream licenses
 ├─ codex-asset-studio/        Codex Asset Studio (optional; its own repo, ignored): the worker that makes game art.
 │                             Claude runs, updates and maintains it (`docs/setup.md`, "Codex Asset Studio")
+├─ project-task-tracking/     the task tracker (optional; its own repo, ignored): local API and web UI at
+│                             127.0.0.1:5173 where the user follows each game's scope and progress. Claude deploys,
+│                             runs and updates it (`docs/setup.md`, "Task tracker"); `tools/tracker/` starts it
 ├─ concepts/                  local: BACKLOG.md and one folder per concept, each a local git repo (ignored)
 └─ <Game>/                    one folder = one Unity project = one git repo (ignored by this repo)
 ```
