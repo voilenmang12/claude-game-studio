@@ -58,6 +58,8 @@ and `local/project/` work:
 ├─ sync-template.sh           bash sync-template.sh <Game> [--dry-run]   port shared template files
 ├─ list-template-requests.sh  bash list-template-requests.sh [--open]    tickets of every game
 ├─ licenses/                  upstream licenses
+├─ codex-asset-studio/        Codex Asset Studio (optional; its own repo, ignored): the worker that makes game art.
+│                             Claude runs, updates and maintains it (`docs/setup.md`, "Codex Asset Studio")
 ├─ concepts/                  local: BACKLOG.md and one folder per concept, each a local git repo (ignored)
 └─ <Game>/                    one folder = one Unity project = one git repo (ignored by this repo)
 ```

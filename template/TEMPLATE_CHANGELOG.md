@@ -56,6 +56,12 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+**Changed**
+- Codex Asset Studio lives in the workspace (workspace, no port needed): `studio-setup.sh --asset-studio` clones it
+  into `codex-asset-studio/` by default (was a folder next to the workspace); `new-game.sh` reserves the name;
+  `docs/setup.md` says how Claude runs, updates, changes and moves it. A studio that already has it elsewhere keeps
+  its `assetStudioDir`.
+
 ## v3.02 (2026-11-15)
 
 Minor. One flow for every repo: each update is a release, ported to every game at once. No game file changes.

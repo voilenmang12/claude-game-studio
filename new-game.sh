@@ -29,7 +29,7 @@ done
 DST="$ROOT/$NAME"
 
 printf '%s' "$NAME" | grep -Eq '^[A-Za-z0-9_-]+$' || fail "Folder names use letters, digits, '-' and '_' only (no spaces): $NAME"
-case "$NAME" in template|tools|licenses|docs|concepts|concept-kit|local|local.example) fail "Reserved folder name: $NAME" ;; esac
+case "$NAME" in template|tools|licenses|docs|concepts|concept-kit|local|local.example|codex-asset-studio) fail "Reserved folder name: $NAME" ;; esac
 [ -f "$SRC/TEMPLATE_VERSION" ] || fail "Template not found: $SRC"
 
 BASE=0
