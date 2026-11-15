@@ -69,8 +69,10 @@ Startup folder, which runs `tools/tracker/start-tracker.ps1`, and starts the ser
 
 A game is tracked when `tracker.project_id` in its `project.yaml` names a project of the tracker (`tracker.actor`
 is the label its sessions write as, for example `claude-cg01`); `template/CLAUDE.md`, "Task tracker", says what a
-game session records there. Create the project once with `projects.create` (CLI: `node
-project-task-tracking/scripts/nhanh.mjs`, envelope in the skill's `references/calls.md`).
+game session records there. Create the project once with `project.create` (CLI: `node
+project-task-tracking/scripts/nhanh.mjs project.create id=<id> title="<title>" repo=<folder> --actor <name>`;
+`nhanh actions` lists every action). The tracker is version 2: the web UI shows every project (Tổng quan), what
+waits for the user (Cần bạn), and per project the plan, the journal with evidence and notes.
 
 **Claude deploys, runs and updates it:**
 - Run: `bash studio-setup.sh` shows whether it answers; `--tracker-start` starts it. One server per data directory:
@@ -80,4 +82,7 @@ project-task-tracking/scripts/nhanh.mjs`, envelope in the skill's `references/ca
 - Update: stop the server (the process on port 5173), copy `.local/`, `git pull --ff-only`, `npm ci`,
   `npm test`, `npm run build`, start it again and check `GET /api/health`. A new skill version: move
   `~/.claude/skills/nhanh-project-tracking` away, then `--tracker` again.
+- A change to the tracker that agents must know about goes into its skill (`SKILL.md`, `references/rules.md`) in
+  the same task, and the installed copy in `~/.claude/skills/` is replaced. What a game session does with the
+  tracker in this studio is the "Task tracker" bullet of `template/CLAUDE.md`: change it there and release.
 - Change: its own repo, same git rules (`docs/git-rules.md`); `npm test` and `npm run build` before each merge.
