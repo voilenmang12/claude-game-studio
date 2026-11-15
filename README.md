@@ -5,11 +5,15 @@ that move improvements both ways: from the template to the games, and from the g
 
 > **Fork notice.** `template/` is a hard fork of
 > [Claude Code Game Studios](https://github.com/donchitos/claude-code-game-studios) by Donchitos (MIT), taken at
-> `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`) and maintained on its own since template v2.60. The 49
-> agents, 78 skills, hooks, rules, genre sheets and docs in `template/.claude/` come from there, changed for
-> autonomous runs. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
+> `v1.3.0` (commit `abc0de7`, first forked at `v1.2.0`) and maintained on its own since template v2.60. The agents
+> (26 of the original 49), skills, hooks, rules, genre sheets and docs in `template/.claude/` come from there, changed
+> for autonomous runs. [`FORK.md`](FORK.md) lists every upstream file that changed, was removed or was added.
 
 ## Quick start
+
+No coding background? Read the [beginner guide](docs/beginner-guide.md) first: which folder to start Claude in, how
+to ask for changes, tries and goals, what Claude does alone and what is left to you. The command list is
+[`docs/commands.md`](docs/commands.md).
 
 Make an empty folder, start Claude Code in it and say:
 
@@ -40,7 +44,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 │  └─ TEMPLATE_VERSION, TEMPLATE_CHANGELOG.md
 ├─ tools/pixelorama-mcp/       optional Pixelorama MCP for pixel-art games (Pixelorama-MCP 0.2.1, 106 tools)
 ├─ tools/hooks/pre-commit      keeps private content out of commits to this repo
-├─ docs/                       setup.md, game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md, commands.md
+├─ docs/                       setup.md, game-lifecycle.md, git-rules.md, test-deploys.md, local-layer.md, commands.md, beginner-guide.md
 ├─ concept-kit/                what a concept folder gets on top of the CCGS layer
 ├─ new-concept.sh              start a concept: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
