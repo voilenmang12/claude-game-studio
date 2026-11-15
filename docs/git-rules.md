@@ -31,9 +31,13 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
   `try/<slug>` and stays unmerged until the user says keep (merge `--no-ff`) or drop (delete the branch).
 - Never rewrite pushed history: no `push --force` on `main`, no rebase of pushed commits, no amend of a pushed commit.
 - Never commit with `--no-verify`: the CCGS hooks are the safety net. Fix what a hook reports.
-- Workspace and `local/`: commit and push only when the user asks **(user)**, unless the user's `local/RULES.md`
-  sets the branch-per-task flow for them too. Game and concept repos: Claude commits each finished item on the task
-  branch and closes the branch at the end of the task (`template/CLAUDE.md`, "Autonomy"); never ask about it. Making a repo public, store uploads and `--prod` deploys stay **(user)**.
+- Every repo (workspace, `local/`, `local/project/`, games, concepts): Claude commits each finished item on the task
+  branch and closes the branch at the end of the task (`template/CLAUDE.md`, "Autonomy"); never ask about it. Making
+  a repo public, store uploads and `--prod` deploys stay **(user)**.
+- A task that changes `template/` ends with a template release and its port to every game
+  (`bash sync-template.sh --all`, then the Port steps), so no game stays behind the workspace.
+- Leave nothing behind: a branch already merged into `main` is deleted locally and on `origin`, and a finished
+  worktree is removed (`git worktree remove`). `bash studio-doctor.sh` lists the ones it finds.
 
 ## 3. Commit messages
 

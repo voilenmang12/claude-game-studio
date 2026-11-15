@@ -11,7 +11,13 @@ workspace work: a new game, template upkeep, comparing games, triaging template 
   captions, task reports). Everything else in the repos is English (code, docs, commits).
 - Do the work: run the scripts and the Unity CLI yourself. Ask only for decisions, approval of destructive actions,
   and what only a human can do (store uploads, payments, sign-ins); Claude runs Play Mode itself.
-- No commits without the user's instruction.
+- **One task, one branch, closed without asking** (`docs/git-rules.md`, section 2), in the workspace, `local/` and
+  `local/project/` as in games: never ask "commit?", "push?" or "delete the branch?"; the closing message says what
+  was merged and how to undo it (`git revert -m 1 <merge>`). A commit the hook refuses stops the task and goes to
+  the user.
+- **Deleting files: `_to_delete/`.** The CCGS settings deny `rm -rf`: files Claude made and no longer needs are moved
+  to `_to_delete/` (workspace or project root, ignored by git) and the user empties it. Tracked files go with
+  `git rm` in the task's commit.
 
 ## Working style (sessions started here)
 The same economy as game sessions (`template/CLAUDE.md`, "Autonomy" and "Autonomous runs"), for workspace, `local/`
@@ -80,14 +86,20 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
 
 ## Git (`docs/git-rules.md`)
 - Workspace repo public (workspace files only); concept repos local with no remote; one private GitHub repo per game.
-- Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. In this workspace and `local/`, commit
-  and push only when the user asks (a user's `local/RULES.md` may set otherwise); inside a game or concept, one
-  branch per task, merged `--no-ff` into `main`, pushed and deleted at its end without asking (`template/CLAUDE.md`,
-  "Autonomy").
+- Trunk `main`; no force-push, no rewriting pushed history, no `--no-verify`. In every repo (workspace, `local/`,
+  `local/project/`, games, concepts): one branch per task (`task/<slug>`), merged `--no-ff` into `main`, pushed and
+  deleted locally and on `origin` at its end without asking (`template/CLAUDE.md`, "Autonomy"). No merged branch
+  and no finished worktree is left behind.
 - Conventional Commits, plus the fixed messages in `git-rules.md` (start, sync, request, release, GDD, name lock).
 
 ## The template
-- Change shared behaviour in `template/` first, then port it to existing games deliberately.
+- Change shared behaviour in `template/` first. **Every update is a release, ported to every game at once:** a task
+  that changes `template/` (or a file games copy from `local/overlay/`) ends with a release (below), then
+  `bash sync-template.sh --all` and the entry's Port steps in every game and in `local/project/`, each committed
+  `chore: sync template vX.YY`. A game with uncommitted work is skipped and named in the closing message.
+- **What is public, what is local.** This repo is a tool on its own: workflow, rules, scripts and the template,
+  improved continuously. Detailed work (projects, design docs, brainstorms, platform, plugins, accounts) stays in
+  `local/`, games and `concepts/`, kept out by `.gitignore` and the commit hook.
 - **Versions.** `template/TEMPLATE_VERSION` holds the current version (`MAJOR.MINOR`, minor two digits: 1.00, 1.01
   … 2.00); `template/TEMPLATE_CHANGELOG.md` holds one entry per version with **Port** steps, plus the release and
   port procedures. Log every template change under `## Unreleased` as you make it; a release commit is

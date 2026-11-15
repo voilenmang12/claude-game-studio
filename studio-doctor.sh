@@ -100,9 +100,25 @@ for d in */ local/project/; do
   if [ "$gv" = "$tv" ] && { [ -z "$lv" ] || [ "$gl" = "$lv" ]; }; then
     ok "$d: $line"
   else
-    info "$d: $line (current: template $tv${lv:+, local $lv}); port it: bash sync-template.sh $d + the Port steps"
+    info "$d: $line (current: template $tv${lv:+, local $lv}); port it: bash sync-template.sh --all + the Port steps"
   fi
 done
+
+# ---- branches and worktrees left behind (docs/git-rules.md, section 2)
+left=0
+for d in . local/project */; do
+  d="${d%/}"
+  [ -e "$d/.git" ] || continue
+  case "$d" in template|concept-kit|local.example|_to_delete) continue ;; esac
+  cur="$(git -C "$d" branch --show-current 2>/dev/null || true)"   # the task in progress is not left behind
+  merged="$(git -C "$d" branch -a --merged main 2>/dev/null | sed 's/^[*+ ]*//' | grep -v -x -F -e "$cur" | grep -v -E '^(main|remotes/origin/(main|HEAD.*))$' | tr '\n' ' ' || true)"
+  [ -z "$merged" ] || { info "$d: merged into main, delete: $merged"; left=1; }
+  open="$(git -C "$d" branch --no-merged main 2>/dev/null | sed 's/^[*+ ]*//' | grep -v -x -F -e "$cur" | tr '\n' ' ' || true)"
+  [ -z "$open" ] || { info "$d: open branch(es): $open"; left=1; }
+  wt="$(git -C "$d" worktree list 2>/dev/null | tail -n +2 | awk '{print $1}' | tr '\n' ' ')"
+  [ -z "$wt" ] || { info "$d: extra worktree(s): $wt"; left=1; }
+done
+[ $left -eq 1 ] || ok "no branch or worktree left behind"
 
 # ---- upstream
 src=""

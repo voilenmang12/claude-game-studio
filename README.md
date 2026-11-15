@@ -50,7 +50,7 @@ claude-game-studio/            the workspace; game folders are created next to t
 ├─ new-game.sh                 apply the template and a locked concept to a new Unity project
 ├─ publish-game.sh             create the game's own private GitHub repo and push
 ├─ deploy-test.sh              put a playtest or WebGL build on Vercel and print the test URL
-├─ sync-template.sh            port the template's shared files to an existing game
+├─ sync-template.sh            port the template's shared files to an existing game (--all: every game)
 ├─ list-template-requests.sh   list the template requests of every game
 └─ licenses/                   upstream licenses (CCGS, pixelorama-mcp, game-ui-design)
 ```
