@@ -39,10 +39,21 @@ passwords or codes, and none of them is written into a repo.
 
 ## Codex Asset Studio
 
-`--asset-studio [dir]` clones [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (default: next
-to the workspace), runs the `python -m pip install` lines of its README Quick start and its doctor, and writes
+`--asset-studio [dir]` clones [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (default:
+`codex-asset-studio/` in the workspace root, its own repo, ignored by the workspace repo), runs the `python -m pip install` lines of its README Quick start and its doctor, and writes
 `assetStudioDir`. `--autostart` (Windows) puts `codex-asset-studio.cmd` in your Startup folder, which runs its
 `start-on-logon.ps1`, and starts the worker now. `--smoke` makes one real image (uses your image quota).
 
 The worker drafts each image prompt with AGY when it is signed in and falls back to Codex (`auto`); images are always
 made by Codex ImageGen. A game chooses per project or per job: `template/Assets/Integration/AssetStudio.md`.
+
+**Claude runs and maintains it.** Asset Studio is part of the studio's tooling, not something handed back to the user:
+- Run: `bash studio-setup.sh` shows whether the worker answers; `--autostart` starts it. Before a job batch, check
+  `GET /health` (`worker.ready`), and read `asset-connector/data/windows-worker.stderr.log` when it is not.
+- Update: in `codex-asset-studio/`, with no job active, `git pull --ff-only`, the README's `pip install` lines if
+  they changed, `node asset-connector/setup.mjs doctor`, then restart the worker. `--smoke` only when a change
+  touches generation or export (it uses image quota).
+- Change: its own repo, same git rules (`docs/git-rules.md`: one branch per task, merged and pushed). Generated
+  assets and worker data (`assets/`, `asset-connector/data/`) are ignored there and never committed.
+- Move: paths are stored absolute (`assetStudioDir`, each game's `output_root` and ledger, the worker's
+  `store.json`, the sign-in task, the Codex project trust entry); stop the worker and rewrite all of them.

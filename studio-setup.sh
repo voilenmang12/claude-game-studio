@@ -5,7 +5,7 @@
 #   bash studio-setup.sh --choose <id>...      save the optional parts you use ("setup" in local/studio.config.json)
 #   bash studio-setup.sh --install <id>        install one tool (winget, npm or the Unity CLI)
 #   bash studio-setup.sh --login <id>          sign in to one service; it asks you, so run it in your own terminal
-#   bash studio-setup.sh --asset-studio [dir]  clone Codex Asset Studio (default: next to this workspace), install its
+#   bash studio-setup.sh --asset-studio [dir]  clone Codex Asset Studio (default: codex-asset-studio/ in this workspace), install its
 #                                              Python packages, run its doctor, write assetStudioDir
 #   bash studio-setup.sh --autostart           start the Asset Studio worker at Windows sign-in, and now
 #   bash studio-setup.sh --smoke               Asset Studio smoke test: one real image job (uses image quota)
@@ -42,7 +42,7 @@ python_cmd() {
 }
 unity_cmd() { find_cmd unity "${LOCALAPPDATA:-/nonexistent}/Unity/bin/unity" "${LOCALAPPDATA:-/nonexistent}/Unity/bin/unity.exe"; }
 agy_cmd() { find_cmd agy "${LOCALAPPDATA:-/nonexistent}/agy/bin/agy.exe"; }
-cas_dir() { local d; d="$(cfg assetStudioDir)"; echo "${d:-$(cd "$ROOT/.." && pwd)/codex-asset-studio}"; }
+cas_dir() { local d; d="$(cfg assetStudioDir)"; echo "${d:-$ROOT/codex-asset-studio}"; }
 cas_api() { local a; a="$(cfg assetStudioApi)"; echo "${a:-${ASSET_STUDIO_API:-http://127.0.0.1:3941}}"; }
 startup_cmd() { echo "${APPDATA:-}/Microsoft/Windows/Start Menu/Programs/Startup/codex-asset-studio.cmd"; }
 cas_health() { curl -s -m 3 "$(cas_api)/health" 2>/dev/null; }

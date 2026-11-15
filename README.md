@@ -134,7 +134,7 @@ the image with Codex ImageGen and exports a game-ready PNG (pixel grid recovery,
 Set it up with `/studio-setup`, or by hand:
 
 ```bash
-bash studio-setup.sh --asset-studio      # clone it next to the workspace, Python packages, its doctor, assetStudioDir
+bash studio-setup.sh --asset-studio      # clone it into codex-asset-studio/, Python packages, its doctor, assetStudioDir
 bash studio-setup.sh --autostart         # Windows: worker starts at sign-in, and now
 bash studio-setup.sh --smoke             # one real image job (uses image quota)
 ```
