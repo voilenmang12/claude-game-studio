@@ -56,11 +56,36 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.02 (2026-11-15)
+
+Minor. One flow for every repo: each update is a release, ported to every game at once. No game file changes.
+
 **Added**
+- `sync-template.sh --all [--dry-run]` (workspace): syncs every game folder and `local/project/` in one command; a
+  project with uncommitted changes is named at the end and the others still run.
+- `studio-doctor.sh`: lists branches already merged into `main`, open branches and extra worktrees in the
+  workspace, `local/`, `local/project/` and every game.
 - `docs/beginner-guide.md` (workspace, no port needed): working with Claude Code and the studio with no coding
   background (which folder to start in, how to ask for changes, tries and goals, the lifecycle step by step, what is
   left to the user, troubleshooting, glossary); `docs/commands.md` gains `/start`, undo, port, `@file`, `!`, Esc,
   `/model` and `/help`; `README.md` links both (and its agent count is 26).
+
+**Changed**
+- Git flow (workspace `CLAUDE.md`, `docs/git-rules.md` section 2): the branch-per-task flow, closed without asking,
+  is the rule in the workspace, `local/` and `local/project/` too (it was an option a user's `local/RULES.md` could
+  set). A task that changes `template/` ends with a release and its port to every game. Merged branches and
+  finished worktrees are removed.
+- Workspace `CLAUDE.md`: the `_to_delete/` rule, and what is public (the tool: workflow, rules, scripts, template)
+  against what stays local (projects, design docs, brainstorms, platform, plugins, accounts).
+
+**Port**
+1. From the workspace root: `bash sync-template.sh --all` (after v3.01 it changes nothing; a game on an older
+   version takes that version's Port steps first).
+2. In each game: copy `TEMPLATE_CHANGELOG.md`, write `3.02` into `TEMPLATE_VERSION`, commit
+   `chore: sync template v3.02`.
+
+**Requests**
+- None.
 
 ## v3.01 (2026-11-14)
 
