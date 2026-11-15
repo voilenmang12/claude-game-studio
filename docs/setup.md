@@ -57,3 +57,27 @@ made by Codex ImageGen. A game chooses per project or per job: `template/Assets/
   assets and worker data (`assets/`, `asset-connector/data/`) are ignored there and never committed.
 - Move: paths are stored absolute (`assetStudioDir`, each game's `output_root` and ledger, the worker's
   `store.json`, the sign-in task, the Codex project trust entry); stop the worker and rewrite all of them.
+
+## Task tracker
+
+[project-task-tracking](https://github.com/voilenmang12/project-task-tracking) ("Nhanh") is a local API and web UI
+(`http://127.0.0.1:5173`, loopback only) where the user and the agents share each game's design document, task tree
+and progress. `--tracker [dir]` clones it (default: `project-task-tracking/` in the workspace root, its own repo,
+ignored by the workspace repo), runs `npm ci` and `npm run build`, installs its skill `nhanh-project-tracking` into
+`~/.claude/skills/` and writes `trackerDir`. `--tracker-start` (Windows) puts `project-task-tracking.cmd` in your
+Startup folder, which runs `tools/tracker/start-tracker.ps1`, and starts the server now.
+
+A game is tracked when `tracker.project_id` in its `project.yaml` names a project of the tracker (`tracker.actor`
+is the label its sessions write as, for example `claude-cg01`); `template/CLAUDE.md`, "Task tracker", says what a
+game session records there. Create the project once with `projects.create` (CLI: `node
+project-task-tracking/scripts/nhanh.mjs`, envelope in the skill's `references/calls.md`).
+
+**Claude deploys, runs and updates it:**
+- Run: `bash studio-setup.sh` shows whether it answers; `--tracker-start` starts it. One server per data directory:
+  never start a second one, and never write `.local/` by hand (API or CLI only).
+- Data: everything is in `project-task-tracking/.local/` (ignored by its repo, never committed). Copy that folder
+  before an update or a move; `workspace.backup.json` is the snapshot before the last write.
+- Update: stop the server (the process on port 5173), copy `.local/`, `git pull --ff-only`, `npm ci`,
+  `npm test`, `npm run build`, start it again and check `GET /api/health`. A new skill version: move
+  `~/.claude/skills/nhanh-project-tracking` away, then `--tracker` again.
+- Change: its own repo, same git rules (`docs/git-rules.md`); `npm test` and `npm run build` before each merge.
