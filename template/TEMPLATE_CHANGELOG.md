@@ -56,6 +56,12 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+**Added**
+- `docs/beginner-guide.md` (workspace, no port needed): working with Claude Code and the studio with no coding
+  background (which folder to start in, how to ask for changes, tries and goals, the lifecycle step by step, what is
+  left to the user, troubleshooting, glossary); `docs/commands.md` gains `/start`, undo, port, `@file`, `!`, Esc,
+  `/model` and `/help`; `README.md` links both (and its agent count is 26).
+
 ## v3.01 (2026-11-14)
 
 Minor. Fewer, autonomous-only agents, and a measured UI layout audit in the Play Mode tool.

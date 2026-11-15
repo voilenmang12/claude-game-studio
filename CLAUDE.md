@@ -43,7 +43,7 @@ and `local/project/` work:
 ├─ tools/pixelorama-mcp/      Pixelorama MCP (PixMcpBridge + server; games point to it with ../tools/...; README)
 ├─ tools/hooks/pre-commit     refuses workspace commits that match local/public-denylist.txt
 ├─ docs/                      setup.md, game-lifecycle.md (idea → GitHub repo), git-rules.md, test-deploys.md,
-│                             commands.md (useful commands and how to hand work to Claude)
+│                             commands.md (useful commands), beginner-guide.md (working with Claude, no code)
 ├─ concept-kit/               files new-concept.sh adds to a concept (no-engine CCGS config, GDD, playtest, name lock)
 ├─ new-concept.sh             bash new-concept.sh <slug>       concepts/<slug>/: brief, GDD, HTML playtest, name lock
 ├─ new-game.sh                bash new-game.sh <Game> --concept <slug>   template + concept into a Unity project

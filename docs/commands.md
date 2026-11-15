@@ -2,6 +2,7 @@
 
 A quick reference: what to type, where, when, and what you get. `/...` commands are skills typed in the Claude Code
 chat; `bash ...` scripts are run by Claude when you ask (you do not need to type them). Template v3.01.
+New here, or no coding background? Start with the [beginner guide](beginner-guide.md).
 
 ## 1. How to hand work to Claude (phrases, not commands)
 
@@ -24,6 +25,9 @@ one Editor and get in each other's way.
 | `/run-goal <goal>` | Big multi-step work you want done to the end | `/run-goal build the Shop screen with 3 tabs and a buy button` | A checklist in `goal.md`, each item done, checked and committed, then an illustrated report. The `goal-check` hook keeps it going and ends it when progress stops (no endless loop) |
 | `/prototype` | Try an idea or mechanic fast | `/prototype drag-and-drop queue sorting` | A throwaway playable, ending on proceed / pivot / kill |
 | `/next-step` | Not sure what to do next | `/next-step` | One clear next step |
+| `/start` | First session in a new folder, no idea where to begin | `/start` | A short guided onboarding that picks the right flow |
+| "Undo ..." | You don't like a change | "Undo the last change", "undo the shop task" | Claude reverts it in git (`git revert`); history keeps both |
+| "Port the template" | The studio has a newer template version | "Port the latest template version" | `sync-template.sh` plus the changelog's Port steps, done and checked in the game |
 | `/ui-resolution-check` | **Only** when you want the UI checked at every size and aspect ratio | `/ui-resolution-check` | Every screen captured at each size, faults listed, nothing fixed. Normal UI work is checked on 16:9 only |
 | `/art-bible` | Before making assets, to fix the visual style | `/art-bible` | Assets that share one style (pixel or raster) |
 | `/asset-spec` | Specs and prompts per asset | `/asset-spec shop UI` | Specs ready for Asset Studio jobs |
@@ -69,3 +73,8 @@ one Editor and get in each other's way.
 | `/clear` | Done, moving to something unrelated | A clean start; a game reads `active.md` again |
 | `/resume` | Back to an earlier session | That session reopened |
 | `/code-review` | Check code just changed | A list of likely bugs |
+| `@<file>` | Point Claude at a file or image | That file read as part of your message (dragging it into the chat does the same) |
+| `! <command>` | Run one terminal command yourself, such as a sign-in Claude asks you to do | The command runs and Claude sees its output (`! bash studio-setup.sh --login github`) |
+| Esc, or the stop button in the app | Claude is going the wrong way | It stops at once; then say what you meant |
+| `/model` (terminal; in the app, the model picker) | Switch the model for this session | A cheaper or stronger model from here on |
+| `/help` (terminal) | See every built-in command | The full list |
