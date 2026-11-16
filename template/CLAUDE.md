@@ -55,9 +55,18 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
   `nhanh-project-tracking`, `http://127.0.0.1:5173`) is the user's view of this game: the plan, what is being done,
   what is done with proof, and what waits for them. Follow the skill and its `references/rules.md`; in this studio:
   - **Session start:** `digest <project_id>` as `tracker.actor`. The inbox comes first (the user's new requests,
-    answers and unblocks). `NO PLAN YET`: set the plan up from the GDD, the milestones and what `main` already
-    has (`plan.apply`): milestones as groups, the current one in sized tasks with checkable criteria, later ones
-    coarse.
+    answers and unblocks), then the flows and their last reports. `NO PLAN YET`: set the plan up from the GDD,
+    the milestones and what `main` already has (`plan.apply`): milestones as groups, the current one in sized
+    tasks with checkable criteria, later ones coarse.
+  - **The work loop (instead of plan mode):** when the user asks to plan, or for work of size M or L, agree on it
+    in chat, then write it to the tracker in one `plan.apply` with sized tasks, checkable criteria, `after` arrows
+    for the real order and `flow: {id, title}`, and stop: the user reviews the proposed flow on the Luồng tab.
+    Never start the tasks of a flow that is proposed or not running. When the user tells you in chat to run it,
+    `flow.update status=running userSaid="<their words>"`, then take the flow's `NEXT` tasks in this session, one
+    after the other, by the size rules below. A flow they started with Run in the web UI belongs to a tracker run
+    (actor `run-<n>`): leave its tasks alone. When the flow ends or you stop, `flow.report` (the overall report:
+    one line per task with its proof, what is blocked or waits for them, branches and commits, next steps), and the
+    same in the closing message.
   - **By size:** S: one `project.log` line after the commit. M: `task.start` with the branch, `task.progress` at
     each finished step, `task.done` with the merge commit, the tests and the report path. L and `/run-goal`: one
     task whose criteria or sub-tasks are the items of `goal.md`, ticked when `goal.md` is.
