@@ -71,8 +71,13 @@ A game is tracked when `tracker.project_id` in its `project.yaml` names a projec
 is the label its sessions write as, for example `claude-cg01`); `template/CLAUDE.md`, "Task tracker", says what a
 game session records there. Create the project once with `project.create` (CLI: `node
 project-task-tracking/scripts/nhanh.mjs project.create id=<id> title="<title>" repo=<folder> --actor <name>`;
-`nhanh actions` lists every action). The tracker is version 2: the web UI shows every project (Tổng quan), what
-waits for the user (Cần bạn), and per project the plan, the journal with evidence and notes.
+`nhanh actions` lists every action). The web UI shows every project (Tổng quan), what waits for the user (Cần bạn:
+questions, proposed plans and flows, blocked work), the agents at work (Đang chạy: chat sessions and tracker runs), and
+per project the plan, the flows (order arrows on a board, each with its report), the journal with evidence and notes.
+The work loop replaces plan mode: plan in chat, the agent writes the plan and a proposed flow, the user reviews it,
+then says "run it" in chat or presses Run (the tracker starts `claude -p` in the game folder), and the agent reports
+per task and per flow. Run needs the `claude` CLI signed in (`claude`, then `/login`) and the game folder trusted
+(`claude` run there once).
 
 **Claude deploys, runs and updates it:**
 - Run: `bash studio-setup.sh` shows whether it answers; `--tracker-start` starts it. One server per data directory:
