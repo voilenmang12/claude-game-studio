@@ -69,9 +69,11 @@ Startup folder, which runs `tools/tracker/start-tracker.ps1`, and starts the ser
 
 A game is tracked when `tracker.project_id` in its `project.yaml` names a project of the tracker (`tracker.actor`
 is the label its sessions write as, for example `claude-cg01`); `template/CLAUDE.md`, "Task tracker", says what a
-game session records there. Create the project once with `project.create` (CLI: `node
-project-task-tracking/scripts/nhanh.mjs project.create id=<id> title="<title>" repo=<folder> --actor <name>`;
-`nhanh actions` lists every action). The web UI shows every project (Tổng quan), what waits for the user (Cần bạn:
+game session records there. `new-game.sh` links a new game (it runs `bash tools/tracker/link-game.sh <Game>`,
+which creates the project and writes both values; run it by hand for an older game or when the tracker was down,
+then commit `project.yaml`). In the game, every call goes through `node .claude/scripts/tracker.mjs <action> ...`,
+which adds the project id and the actor, and the session-start hook prints the digest (or "NOT CHECKED" with the
+reason); `node project-task-tracking/scripts/nhanh.mjs actions` lists every action. The web UI shows every project (Tổng quan), what waits for the user (Cần bạn:
 questions, proposed plans and flows, blocked work), the agents at work (Đang chạy: chat sessions and tracker runs), and
 per project the plan, the flows (order arrows on a board, each with its report), the journal with evidence and notes.
 The work loop replaces plan mode: plan in chat, the agent writes the plan and a proposed flow, the user reviews it,

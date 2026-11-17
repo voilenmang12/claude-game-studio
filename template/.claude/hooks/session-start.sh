@@ -379,5 +379,17 @@ if [ -f "$STATE_FILE" ] && { ! command -v session_state_enabled >/dev/null 2>&1 
     echo "=== END SESSION STATE PREVIEW ==="
 fi
 
+# --- Task tracker -------------------------------------------------------------
+# This game's digest (inbox, flows, next tasks) when tracker.project_id is set; a line saying it was NOT
+# CHECKED when the tracker or Node is missing. Silent for a game with no tracker project.
+if [ -f .claude/scripts/tracker.mjs ] && grep -Eq '^[[:space:]]+project_id:[[:space:]]*"?[A-Za-z0-9]' project.yaml 2>/dev/null; then
+    if command -v node >/dev/null 2>&1; then
+        node .claude/scripts/tracker.mjs --session-start 2>/dev/null
+    else
+        echo ""
+        echo "=== TASK TRACKER: NOT CHECKED (no Node.js on PATH) ==="
+    fi
+fi
+
 echo "==================================="
 exit 0

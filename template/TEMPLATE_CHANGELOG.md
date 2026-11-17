@@ -56,6 +56,33 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.08 (2026-11-17)
+
+Minor. The task tracker becomes part of every game's base workflow: linked when the game is made, shown at every
+session start, one command for every call.
+
+**Added**
+- `.claude/scripts/tracker.mjs`: `node .claude/scripts/tracker.mjs <action> key=value ...` adds the game's
+  `projectId` and `tracker.actor` from `project.yaml` and runs the tracker's CLI (installed skill, else the
+  workspace copy); `--status` shows what it uses; `--session-start` prints the hook block.
+- `.claude/hooks/session-start.sh`: a "TASK TRACKER" block with the digest (inbox, flows, next tasks), capped at
+  40 lines, or "NOT CHECKED" with the reason. Silent for a game with no tracker project.
+- Workspace: `tools/tracker/link-game.sh <Game>` creates the game's tracker project (id from the folder, actor
+  `claude-<code>`) and writes it into `project.yaml`; `new-game.sh` runs it before the first commit.
+
+**Changed**
+- `CLAUDE.md`, "Task tracker": the one command, the session-start block.
+- `next-step` skill: the tracker's inbox and `NEXT` tasks come before the catalog.
+- `run-goal` skill: a goal is one tracker task (started, ticked per item, closed with the merge or blocked).
+- Workspace docs: `docs/setup.md` "Task tracker", `docs/game-lifecycle.md` stage 6.
+
+**Port**
+1. `bash sync-template.sh --all` (copies the script, the hook and the two skills).
+2. In each game's `CLAUDE.md`, replace the first two items of the "Task tracker" bullet with the template's
+   ("One command" and "Session start").
+3. A game with an empty `tracker.project_id`: `bash tools/tracker/link-game.sh <Game>` and commit `project.yaml`
+   with the port.
+
 ## v3.07 (2026-11-17)
 
 Minor. A hook enforces the project boundary of v3.06.

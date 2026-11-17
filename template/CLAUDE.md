@@ -54,7 +54,13 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
 - **Task tracker (optional).** When `tracker.project_id` in `project.yaml` is set, the studio's tracker (skill
   `nhanh-project-tracking`, `http://127.0.0.1:5173`) is the user's view of this game: the plan, what is being done,
   what is done with proof, and what waits for them. Follow the skill and its `references/rules.md`; in this studio:
-  - **Session start:** `digest <project_id>` as `tracker.actor`. The inbox comes first (the user's new requests,
+  - **One command:** `node .claude/scripts/tracker.mjs <action> key=value ...` (`digest`, `tree`, `task.start`,
+    `plan.apply --file x.json`, ...). It adds this game's `projectId` and `tracker.actor` and finds the CLI; never
+    call the tracker's folder or server another way. A new game is linked by `new-game.sh`
+    (`tools/tracker/link-game.sh` in the workspace).
+  - **Session start:** the session-start hook prints the digest ("TASK TRACKER"), or "NOT CHECKED" with the
+    reason; read it before anything else, and rerun `node .claude/scripts/tracker.mjs digest` after a compaction.
+    The inbox comes first (the user's new requests,
     answers and unblocks), then the flows and their last reports. `NO PLAN YET`: set the plan up from the GDD,
     the milestones and what `main` already has (`plan.apply`): milestones as groups, the current one in sized
     tasks with checkable criteria, later ones coarse.
