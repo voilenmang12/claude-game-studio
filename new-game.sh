@@ -130,6 +130,12 @@ if [ -n "$CONCEPT" ]; then
   done < <(list_concept)
 fi
 
+# ---- 6. the game's project in the task tracker (optional: a tracker that is down never stops the script)
+TRACKER_NOTE="Task tracker: not linked; when it runs: bash tools/tracker/link-game.sh $NAME, then commit project.yaml."
+if [ -f "$ROOT/tools/tracker/link-game.sh" ] && trk_out="$(bash "$ROOT/tools/tracker/link-game.sh" "$NAME" 2>&1)"; then
+  TRACKER_NOTE="Task tracker: $trk_out"
+fi
+
 cd "$DST"
 if [ -d .git ]; then
   COMMITTED="existing git repo: review and commit the new files yourself"
@@ -153,13 +159,15 @@ FROM="template v$VERSION"
 cat <<EOF
 Made $DST from $FROM: $copied template files copied, $kept kept, $layered from local/, $from_concept from the concept.
 $COMMITTED.
+$TRACKER_NOTE
 
 Next (docs/game-lifecycle.md):
   1. Open the project in Unity and let it import (the Editor scripts need com.unity.nuget.newtonsoft-json).
   2. Player Settings from design/name-lock.md (company, application identifier, save key; the product name is set
      when the concept has one), then commit: chore: set product identity
   3. GitHub repo, private: bash publish-game.sh $NAME
-  4. Start Claude Code in the game folder: claude  ->  /start
+  4. Start Claude Code in the game folder: claude  ->  /start (the session start shows the tracker's
+     NO PLAN YET: the first session sets the plan up from the GDD)
   5. Set the target platforms and the build command (project.yaml, .claude/docs/technical-preferences.md), unless
      local/seed/ or local/overlay/ already does.
 EOF

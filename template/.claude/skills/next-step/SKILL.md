@@ -111,6 +111,14 @@ last `## Session Extract` block instead. Extract:
 - Any in-progress tasks or open questions
 - Current epic/feature/task from STATUS block (if present)
 
+**Task tracker.** When `tracker.project_id` in `project.yaml` is set, also run
+`node .claude/scripts/tracker.mjs digest` once. Its inbox (the user's requests and
+answers) and its `NEXT` tasks outrank the catalog: name the first of them as
+"Next up", unless a proposed flow waits for the user's review (then that review
+is the next step). `NO PLAN YET` makes setting up the plan the next step
+(`CLAUDE.md`, "Task tracker"). If the command fails, say "tracker: NOT CHECKED"
+with its error in the output and carry on with the catalog.
+
 This tells you what the user just finished or is stuck on — use it to personalize
 the output. It runs at every tier: at `minimal` it is the only read of the
 checkpoint Step 4m relies on (a checkpoint saying "Next step: /story-done" means

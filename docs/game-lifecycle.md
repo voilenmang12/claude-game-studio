@@ -83,10 +83,13 @@ Only now does the game get a folder name, a repo or a product name. Until then, 
    ```
    It refuses a concept whose name is not locked. It applies `template/`, copies the concept's design files,
    `prototypes/` and `references/`, creates the git repo and commits `chore: start <Game> from template vX.YY`,
-   with the concept's last commit in the message.
+   with the concept's last commit in the message. When the task tracker runs, it also gives the game its tracker
+   project (`tools/tracker/link-game.sh`, written into `project.yaml` before that commit); otherwise it says how to
+   link it later.
 3. Set the product name, company, application identifier and save key from the Locked block in Unity's Player
    Settings; commit `chore: set product identity`.
-4. Start Claude Code in the game folder and run `/start`: it finds the brief and the GDD.
+4. Start Claude Code in the game folder and run `/start`: it finds the brief and the GDD. With a tracker project,
+   the session start shows `NO PLAN YET` and the first session sets the plan up from the GDD for you to review.
 
 ## 7. GitHub repo
 

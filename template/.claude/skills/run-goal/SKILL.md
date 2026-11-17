@@ -36,6 +36,10 @@ Request: <the user's words, verbatim>
   build size, a file that exists). A subjective wish ("looks better") becomes concrete criteria (contrast ratio,
   nothing outside its frame on the standard 16:9 screen, matches `UIPopupStandard.md`) plus before/after screenshots.
 - Anything only a human can do goes under "Needs the user", never in the checklist.
+- **Task tracker** (when `tracker.project_id` is set): the goal is one tracker task of size L. Use the plan's task
+  when the goal is one (`task.start taskId=<id> branch=<branch>`), else `task.add` it with the checklist items as
+  its criteria, then `task.start`. Write the task id into goal.md as `Tracker: <id>`. All calls:
+  `node .claude/scripts/tracker.mjs ...`. A tracker that does not answer is a Log line, never a stop.
 - If the built-in `/goal` is also active, its condition is judged by a model: end every turn with a short
   "Goal status" block (each checklist item, ticked or not, with its evidence) so it can confirm. If part of its
   condition can never be shown, say once that `/goal clear` stops it; this checklist carries the work.
@@ -46,7 +50,8 @@ For the first open item:
 2. Run its check once. Visual items: Play Mode screenshot with `node Tools/playmode.mjs --out production/reports/<goal-slug>
    <name>=<step>...` (`CLAUDE.md`, "Play Mode"; one run visits every screen the item needs).
 3. Pass: tick it `- [x] <item> — evidence: <result or path>`, commit (`feat|fix|...: <item>`, body
-   `Goal: <title>`), add a Log line. Fail: fix and re-check; after 3 different attempts mark
+   `Goal: <title>`), add a Log line, and with a `Tracker:` line `task.progress taskId=<id> check=<n>
+   note="<evidence>"`. Fail: fix and re-check; after 3 different attempts mark
    `- [~] <item> — <why>`, add a Log line, move on.
 4. Long work (asset batch, build, test suite) runs in the background; work on another item or end the turn and
    continue when it finishes.
@@ -56,5 +61,7 @@ changing: a stop with no tick and no Log line ends the goal as `stalled`.
 
 ## 3. Finish
 When every item is `[x]` or `[~]`: run the full check once (tests, scan, the main screens), close the branch
-(`CLAUDE.md`, "Autonomy": merge `--no-ff` into `main`, push `main`, delete the branch), set `Status: done`, then write and send the report (`.claude/docs/task-report.md`). A stalled goal gets the
+(`CLAUDE.md`, "Autonomy": merge `--no-ff` into `main`, push `main`, delete the branch), set `Status: done`,
+close the tracker task (`task.done` with the merge commit, the tests and the report path; a stalled goal:
+`task.block` with what is left), then write and send the report (`.claude/docs/task-report.md`). A stalled goal gets the
 same report with what is left and why.
