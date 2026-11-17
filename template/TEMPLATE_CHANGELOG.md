@@ -56,6 +56,21 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.07 (2026-11-17)
+
+Minor. A hook enforces the project boundary of v3.06.
+
+**Added**
+- `.claude/hooks/project-boundary.sh` and `project-boundary.mjs` (PreToolUse on Write, Edit, NotebookEdit, Bash,
+  PowerShell, wired in `.claude/settings.json`): refuses a write that lands in the workspace but outside the
+  project the session was started in, and points to a ticket. Reads, tool CLIs and paths outside the workspace
+  pass; shell commands are checked by their text. `node .claude/hooks/project-boundary.mjs --self-test`.
+- `.claude/docs/hooks-reference.md` and `coordination-rules.md` name the hook.
+
+**Port**
+1. `bash sync-template.sh --all` (copies the hook, the settings and the two docs).
+2. Sessions already open keep their old hooks: restart Claude Code in the game.
+
 ## v3.06 (2026-11-17)
 
 Minor. Project boundaries: a child project (a game, a concept, a tool) writes only inside its own repository;
