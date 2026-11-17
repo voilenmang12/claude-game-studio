@@ -20,6 +20,27 @@
    request in an engine, plugin or vendor repository, even when asked. Write a
    draft (`/bug-report` drafts only) and the user submits it.
 
+## Project Boundary
+
+This project is one of several in a workspace: the games, the tools the studio runs (asset worker, task tracker)
+and, above them, the workspace with `template/` and its scripts. Each has its own repository and its own session.
+
+8. **Write only inside this project.** A session, and every agent it spawns, changes only the repository it was
+   started in. Other projects at the same level and the workspace are read-only: read their files, docs and
+   history for reference, copy an idea into this project, and call a tool through its published interface (the
+   asset worker's REST API, the tracker's CLI with this project's own id). Never, in another project or the
+   workspace: create, edit, move or delete a file; run `git` commands that write (commit, switch, merge, pull,
+   push, stash); install or update packages; start, stop or reconfigure its server; or write its data files.
+   This holds when the fix is one line, when the other project blocks this one, and when the user is away.
+9. **A change elsewhere is a request.** When this project needs another one to change (a bug in a tool, a
+   template file, a shared script, something a sibling game has), file a ticket in `design/template-requests/`
+   with its `Target:` line (form in that folder's `README.md`), commit it here, and give the user its ID. The
+   target project's own session, or the workspace session, makes the change, and it reaches this project as a
+   template version or a tool update. Until then work around it inside this project, or put the task under
+   "Needs you"; never patch the other project to get unblocked.
+10. **What arrives from the workspace.** Template versions (`chore: sync template vX.YY`) and tool updates are
+   made by the workspace session. Do not pull, update or re-sync them from here; ask for them with a ticket.
+
 ## Model Tier Assignment
 
 Read `.claude/docs/model-tiers.md` on demand. It carries the tier table, the

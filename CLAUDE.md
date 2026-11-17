@@ -70,6 +70,23 @@ and `local/project/` work:
   folder where `claude` starts.
 - Game codes are the folder prefix (`CG01-Name` → `CG01`); template request IDs use them.
 
+## Project boundaries
+This workspace is the parent project. Below it sit the child projects, each with its own repository and its own
+session: the games, the concepts, and the tools (`codex-asset-studio/`, `project-task-tracking/`).
+- **A child writes only inside itself.** A session started in a child project (and its subagents) may read any
+  sibling project and the workspace for reference, and use a tool through its published interface (REST API, CLI).
+  It never edits, deletes, commits, pulls, updates, restarts or reconfigures a sibling or the workspace, however
+  small the fix. Games carry this rule in `.claude/docs/coordination-rules.md` ("Project Boundary"), the tools in
+  their `AGENTS.md`.
+- **A change elsewhere is a request.** A game files `TR-<code>-<NNN>` in its `design/template-requests/` with a
+  `Target:` line (template, workspace, a tool or another game); a tool files `requests/REQ-<NNN>-<slug>.md` in its
+  own repository. `bash list-template-requests.sh --open` lists both. The user approves each one.
+- **Who carries a request out.** The workspace session (started here) owns `template/`, the workspace files and
+  the tools: it makes the change in the target's repository on that repository's own task branch, and it reaches
+  the games as a template release or a tool update. A request for a game is done by a session started in that
+  game. From here a game is changed only by a template port (`sync-template.sh` and the entry's Port steps);
+  game design, code and content are never edited from the workspace.
+
 ## Your layer: `local/` (`docs/local-layer.md`)
 - Workspace files belong to the public repo; `local/` belongs to the user. Never change a workspace file for one
   user's needs (a platform, a language, a plugin, a path): put it in `local/` (`RULES.md`, `studio.config.json`,
