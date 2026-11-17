@@ -34,3 +34,14 @@ for f in "$ROOT"/*/design/template-requests/TR-*.md; do
   rows=$((rows + 1))
 done
 echo "$rows ticket(s)."
+
+# Tickets for another project name it in a "- Target:" line; requests filed by a tool live in <tool>/requests/.
+for f in "$ROOT"/*/design/template-requests/TR-*.md; do
+  target="$(sed -n 's/^- Target: *//p' "$f" | head -n1)"
+  case "$target" in ''|template*) ;; *) echo "target $target: ${f#"$ROOT"/}" ;; esac
+done
+for f in "$ROOT"/*/requests/REQ-*.md; do
+  status="$(sed -n 's/^- Status: *//p' "$f" | head -n1)"
+  if [ $OPEN -eq 1 ]; then case "$status" in done*|rejected*) continue ;; esac; fi
+  echo "tool request (${status:-?}): ${f#"$ROOT"/}"
+done

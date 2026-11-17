@@ -56,6 +56,23 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.06 (2026-11-17)
+
+Minor. Project boundaries: a child project (a game, a concept, a tool) writes only inside its own repository;
+sibling projects and the workspace are read-only, and a change there is a request.
+
+**Added**
+- `.claude/docs/coordination-rules.md`, "Project Boundary" (rules 8 to 10): write only inside this project, read
+  others for reference, use tools through their API or CLI; a change elsewhere is a ticket; template versions and
+  tool updates are made by the workspace session.
+- `design/template-requests/README.md`: a ticket may target the workspace, a tool or another game (`Target:` line).
+- Workspace: `CLAUDE.md` "Project boundaries"; `docs/git-rules.md` section 1; `list-template-requests.sh` also
+  lists tickets with another target and the tools' `requests/REQ-*.md`. The two tools carry the rule in their
+  `AGENTS.md`.
+
+**Port**
+1. `bash sync-template.sh --all` (copies the two files above).
+
 ## v3.05 (2026-11-16)
 
 Minor. The task tracker (2.5.0) adds the work loop: a plan made in chat becomes a proposed flow the user reviews,

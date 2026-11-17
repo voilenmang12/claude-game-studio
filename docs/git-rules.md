@@ -12,6 +12,10 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
 
 - One game = one folder = one repo. A game repo never contains another game, and the workspace repo never contains
   a game, a concept or game content (its `.gitignore` tracks only the workspace files).
+- **A session commits only in the repo it was started in.** A game, concept or tool session reads sibling repos
+  and the workspace but never writes or runs writing `git` commands there; a change it needs elsewhere is a request
+  (`CLAUDE.md`, "Project boundaries"). The workspace session owns the workspace, `local/` and the tools, and
+  commits in a game only to port a template version.
 - A game repo gets its GitHub remote only after the name is locked and the first commit exists
   (`docs/game-lifecycle.md`, stages 5 to 7). Never create a GitHub repo for a concept.
 - A game repo that holds paid Asset Store plugins stays **private**. Making any repo public is **(user)**.

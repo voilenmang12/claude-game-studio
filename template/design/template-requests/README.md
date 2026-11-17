@@ -4,6 +4,12 @@ A game may change what every game gets, but only through a ticket in this folder
 `template/` itself. The template session reviews the ticket, turns it into a general change, releases it in a
 template version, and the changelog names the ticket.
 
+The same ticket is how a game asks for a change in **any other project**: the workspace (scripts, docs), a tool
+(the asset worker, the task tracker) or another game. A game writes only inside its own repository
+(`.claude/docs/coordination-rules.md`, "Project Boundary"); everything else is read-only, and a needed change is a
+ticket with a `Target:` line. The workspace session handles tickets for the template, the workspace and the
+tools; a ticket for another game is done by that game's own session when the user passes it on.
+
 ## When to file
 
 File a ticket when work in this game made or found something every game should have:
@@ -38,6 +44,7 @@ for this game needs no ticket; say why in that commit message.
 - Game: CG01-MyGame
 - Filed: YYYY-MM-DD
 - Template version: 1.02 (the game's TEMPLATE_VERSION when filed)
+- Target: template (default) | workspace | <tool folder> | <game folder>
 - Type: fix | tool | rule | standard
 - Priority: high (breaks or blocks other games) | normal | low
 - Status: open
@@ -57,6 +64,9 @@ What must stay out of the template (names, palette, numbers that only fit this g
 ## Port impact
 Minor (copy files) or major (migration steps), and what an existing game must do to take it.
 ```
+
+For a target other than `template`, "Proposal" says what should change in that project and "Evidence" names the
+files read there (path and commit), so its session can act without this game's context.
 
 ## Statuses
 
@@ -81,5 +91,7 @@ In `template/` or the workspace root:
 3. Add a row to the table in `TEMPLATE_CHANGELOG.md` with the status and, for `needs-info` or `rejected`, the reason.
 4. Accepted: make the change in `template/` as a general change (strip the game-specific parts), test it, and end
    each changelog line it adds with the ticket ID, for example `(TR-CG01-001)`.
+   A ticket whose target is the workspace or a tool is done in that repository on its own task branch, and the
+   table row names the commit or the tool version instead of a template version.
 5. Release: the version entry gets a `**Requests**` line with every ticket it closes, and each table row becomes
    `released vX.YY`.
