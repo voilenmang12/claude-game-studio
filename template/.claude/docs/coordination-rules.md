@@ -41,6 +41,9 @@ and, above them, the workspace with `template/` and its scripts. Each has its ow
 10. **What arrives from the workspace.** Template versions (`chore: sync template vX.YY`) and tool updates are
    made by the workspace session. Do not pull, update or re-sync them from here; ask for them with a ticket.
 
+The `project-boundary` hook refuses the plain cases of rule 8 (a Write or Edit, or a writing shell command, aimed
+at the workspace outside this project). A refusal is final: file the ticket, never look for another spelling.
+
 ## Model Tier Assignment
 
 Read `.claude/docs/model-tiers.md` on demand. It carries the tier table, the
