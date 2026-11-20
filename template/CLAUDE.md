@@ -181,10 +181,21 @@ follow from a phone (Remote Control), so a run never stops to ask.
   task branch left (an open `try/` branch excepted). Never ask "commit?", "merge?", "push?" or "delete the branch?"; the report's Commits section
   lists the merge. A conflict you cannot resolve with confidence: keep the branch, put it under "Needs you". Never
   force-push, rewrite pushed history or use `--no-verify`.
-- **Small follow-ups stay here, on no new branch.** A small change the user asks for after a task (size S, same
-  topic: a nudge, a text, a color, one value) is done in this same session: on the task's branch if it is still
-  open, otherwise as one commit straight on `main` (`fix:` or `chore:`, pushed; `git revert <sha>` undoes it).
-  Never open a new session or a new branch for it. A follow-up of size M or L, or on another topic, is a new task.
+- **Small follow-ups go where the work is.** A small change the user asks for on work in this session (size S,
+  same topic: a nudge, a text, a color, one value, a UI fix on the screen you are building) is done in this same
+  session, never in a new session. Where it goes, checked in this order (one `git branch --show-current` and,
+  for 2 and 3, one `git worktree list` and `git branch --no-merged main`):
+  1. **This session's task branch is open** (not merged yet, also when this session runs in a worktree): commit it
+     there and carry on; it reaches `main` with the task's merge. Never `git switch main`, never `cd` to the main
+     checkout or another worktree, never commit it on `main` "quickly" first. The user asking for a fix is not the
+     end of the task.
+  2. **The work it changes is on another open branch** (another worktree or session holds the files): do not
+     commit it on `main` or on that branch from here; say which branch and session holds it, so the user sends
+     the request there, and stop that item.
+  3. **The task is merged and no open branch touches those files:** in the main checkout, one commit straight on
+     `main` (`fix:` or `chore:`, pushed; `git revert <sha>` undoes it). In a worktree, a branch `fix/<slug>` from an
+     up-to-date `main` in this worktree, closed like a task.
+  A follow-up of size M or L, or on another topic, is a new task.
 - **Tries: `try/<slug>`, the one branch you do not close.** When the user wants to see a change before deciding
   ("try", "thử", "test first", "xem trước"), or two looks are equally plausible: branch `try/<slug>` from `main`,
   make the change, take a before and an after screenshot at the same size, show them, and leave the branch
