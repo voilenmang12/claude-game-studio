@@ -47,6 +47,15 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
   in a commit.
 - `TEMPLATE_VERSION` — template version this project is synced to; `TEMPLATE_CHANGELOG.md` — what
   each version changed and how to port it. In a game, change both only when porting a template version.
+- **Template updates (this game ports them).** The workspace releases template versions and never ports them
+  here. The session start says "TEMPLATE: vX.YY available" when the workspace's `template/TEMPLATE_VERSION` is newer
+  than this game's. Port only when the user asks in this session ("port the template", "cập nhật template"), as
+  a task: branch `task/sync-template-vX.YY`, `bash ../sync-template.sh <this folder> --dry-run`, then without
+  `--dry-run`, then the **Port** steps of every entry after this game's version, oldest first (game-owned files such
+  as this `CLAUDE.md` and `project.yaml` are merged by hand, keeping this game's own lines), copy
+  `../template/TEMPLATE_CHANGELOG.md` and `TEMPLATE_VERSION`, recompile, commit `chore: sync template vX.YY` and
+  close the branch. Work in progress on other branches stays as it is; they take the port when they next merge
+  `main`. Never edit the workspace's `template/` from here.
 - **Template requests.** When work in a game makes or finds something every game should have (a fix in a
   template-owned file, a reusable tool, a rule learned the hard way, a standard that is wrong), file a ticket in
   `design/template-requests/` by its `README.md` and give the user its ID. A game never edits `template/`. A fix

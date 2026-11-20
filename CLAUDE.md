@@ -84,8 +84,8 @@ session: the games, the concepts, and the tools (`codex-asset-studio/`, `project
 - **Who carries a request out.** The workspace session (started here) owns `template/`, the workspace files and
   the tools: it makes the change in the target's repository on that repository's own task branch, and it reaches
   the games as a template release or a tool update. A request for a game is done by a session started in that
-  game. From here a game is changed only by a template port (`sync-template.sh` and the entry's Port steps);
-  game design, code and content are never edited from the workspace.
+  game. Nothing in a game is changed from here, template ports included: the game's own session ports a release
+  (`template/CLAUDE.md`, "Template updates").
 
 ## Your layer: `local/` (`docs/local-layer.md`)
 - Workspace files belong to the public repo; `local/` belongs to the user. Never change a workspace file for one
@@ -115,10 +115,13 @@ Stages, each closed by the user: 0 idea (`concepts/BACKLOG.md`) → 1 brief → 
 - Conventional Commits, plus the fixed messages in `git-rules.md` (start, sync, request, release, GDD, name lock).
 
 ## The template
-- Change shared behaviour in `template/` first. **Every update is a release, ported to every game at once:** a task
-  that changes `template/` (or a file games copy from `local/overlay/`) ends with a release (below), then
-  `bash sync-template.sh --all` and the entry's Port steps in every game and in `local/project/`, each committed
-  `chore: sync template vX.YY`. A game with uncommitted work is skipped and named in the closing message.
+- Change shared behaviour in `template/` first. **Every update is a release; the games port it themselves.** A
+  task that changes `template/` (or a file games copy from `local/overlay/`) ends with a release (below) and stops
+  there. The workspace session never ports: no `sync-template.sh` on a game or on `local/project/`, no commit in
+  them, also when a game is far behind. Porting is the game's own action: a session started in that game (or in
+  `local/project/`), when the user asks there, runs `bash ../sync-template.sh <its folder>` and the Port steps on a
+  task branch and commits `chore: sync template vX.YY` (`template/CLAUDE.md`, "Template updates"). The closing
+  message of a release names the version and says that each game takes it from its own session.
 - **What is public, what is local.** This repo is a tool on its own: workflow, rules, scripts and the template,
   improved continuously. Detailed work (projects, design docs, brainstorms, platform, plugins, accounts) stays in
   `local/`, games and `concepts/`, kept out by `.gitignore` and the commit hook.

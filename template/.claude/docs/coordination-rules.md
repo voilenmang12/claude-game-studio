@@ -38,8 +38,10 @@ and, above them, the workspace with `template/` and its scripts. Each has its ow
    target project's own session, or the workspace session, makes the change, and it reaches this project as a
    template version or a tool update. Until then work around it inside this project, or put the task under
    "Needs you"; never patch the other project to get unblocked.
-10. **What arrives from the workspace.** Template versions (`chore: sync template vX.YY`) and tool updates are
-   made by the workspace session. Do not pull, update or re-sync them from here; ask for them with a ticket.
+10. **What arrives from the workspace.** The workspace session makes template versions and tool updates, and
+   never ports them into this project. This project's own session ports a template version, when the user asks
+   here (`CLAUDE.md`, "Template updates"): `sync-template.sh` reads the workspace's template and writes only into
+   this project. Tools are updated by the workspace session; ask for a tool change with a ticket.
 
 The `project-boundary` hook refuses the plain cases of rule 8 (a Write or Edit, or a writing shell command, aimed
 at the workspace outside this project). A refusal is final: file the ticket, never look for another spelling.

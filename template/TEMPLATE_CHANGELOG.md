@@ -56,6 +56,26 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.10 (2026-11-20)
+
+Minor. Porting moves to the game: the workspace releases, each game ports in its own session when the user asks.
+
+**Added**
+- `CLAUDE.md`, "Template updates (this game ports them)": when and how a game ports a release (its own task
+  branch, `bash ../sync-template.sh <this folder>`, the Port steps, game-owned files merged by hand).
+- `.claude/hooks/session-start.sh`: the line "TEMPLATE: vX.YY available" when the workspace's template is newer.
+
+**Changed**
+- `.claude/docs/coordination-rules.md`, rule 10: the game ports template versions itself; tools stay with the
+  workspace.
+- Workspace: `CLAUDE.md` "The template" and "Project boundaries", `docs/git-rules.md`, `docs/local-layer.md`,
+  `docs/commands.md`: a release ends the workspace task; the workspace session never ports or commits in a game.
+
+**Port** (in the game's own session, when the user asks)
+1. `bash ../sync-template.sh <Game>` (copies the hook and `coordination-rules.md`).
+2. In the game's `CLAUDE.md`, add the template's "Template updates (this game ports them)" item before
+   "Template requests".
+
 ## v3.09 (2026-11-20)
 
 Minor. Small follow-ups no longer jump to `main` while their task is still on a branch.
