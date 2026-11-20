@@ -44,8 +44,8 @@ A new game is built in this order, later wins: `local/project/` (or your Unity H
 Files named `_layer.md` are notes about a folder and are never copied.
 
 `local/project/` can be a git repo of its own (for example the base project's existing repo) and a working
-Unity project: open it in Unity Hub to work on the base, and keep its template files current with
-`bash sync-template.sh local/project`. Version your layer in `local/CHANGELOG.md` (what changed, which workspace
+Unity project: open it in Unity Hub to work on the base, and keep its template files current from a session started
+there (`bash ../../sync-template.sh local/project`). Version your layer in `local/CHANGELOG.md` (what changed, which workspace
 version it was tested with, Port steps); a `LOCAL_VERSION` file in `local/overlay/` tells each game which one it has.
 
 ## Commit both sides
@@ -64,8 +64,8 @@ bash studio-doctor.sh --fetch        # what changed in your workspace files, and
 git merge vX.YY                      # or: git pull
 ```
 
-Then follow the **Port** steps of each new version in `template/TEMPLATE_CHANGELOG.md` for every game
-(`bash sync-template.sh <Game>`). If `studio-doctor.sh` lists workspace files you changed, move those changes into
+Then each game takes the new versions in its own session: ask there to port the template (`bash ../sync-template.sh
+<Game>` and the **Port** steps of each entry in `template/TEMPLATE_CHANGELOG.md`). If `studio-doctor.sh` lists workspace files you changed, move those changes into
 `local/` first and restore the files (`git checkout -- <file>`). A change that every user would want belongs in the
 public repo: open an issue or a pull request there.
 

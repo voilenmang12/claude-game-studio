@@ -379,6 +379,19 @@ if [ -f "$STATE_FILE" ] && { ! command -v session_state_enabled >/dev/null 2>&1 
     echo "=== END SESSION STATE PREVIEW ==="
 fi
 
+# --- Template version ---------------------------------------------------------
+# One line when the workspace above holds a newer template release than this game. The game ports it in its own
+# session when the user asks (CLAUDE.md, "Template updates"); this only says it is there.
+if [ -f TEMPLATE_VERSION ] && [ -f ../template/TEMPLATE_VERSION ] && [ -f ../sync-template.sh ]; then
+    TV_HERE=$(tr -d '[:space:]' < TEMPLATE_VERSION)
+    TV_WS=$(tr -d '[:space:]' < ../template/TEMPLATE_VERSION)
+    if [ -n "$TV_HERE" ] && [ -n "$TV_WS" ] && [ "$TV_HERE" != "$TV_WS" ] \
+       && [ "$(printf '%s\n%s\n' "$TV_HERE" "$TV_WS" | sort -t. -k1,1n -k2,2n | tail -n1)" = "$TV_WS" ]; then
+        echo ""
+        echo "TEMPLATE: v$TV_WS available (this game is on v$TV_HERE). Port it only when the user asks (CLAUDE.md, \"Template updates\")."
+    fi
+fi
+
 # --- Task tracker -------------------------------------------------------------
 # This game's digest (inbox, flows, next tasks) when tracker.project_id is set; a line saying it was NOT
 # CHECKED when the tracker or Node is missing. Silent for a game with no tracker project.

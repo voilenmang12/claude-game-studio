@@ -27,7 +27,7 @@ one Editor and get in each other's way.
 | `/next-step` | Not sure what to do next | `/next-step` | One clear next step |
 | `/start` | First session in a new folder, no idea where to begin | `/start` | A short guided onboarding that picks the right flow |
 | "Undo ..." | You don't like a change | "Undo the last change", "undo the shop task" | Claude reverts it in git (`git revert`); history keeps both |
-| "Port the template" | The studio has a newer template version | "Port the latest template version" | `sync-template.sh` plus the changelog's Port steps, done and checked in the game |
+| "Port the template" | The studio has a newer template version | "Port the latest template version" | Said in the game's own session (the workspace never ports): `bash ../sync-template.sh <Game>` plus the changelog's Port steps on a task branch, done and checked in the game |
 | `/ui-resolution-check` | **Only** when you want the UI checked at every size and aspect ratio | `/ui-resolution-check` | Every screen captured at each size, faults listed, nothing fixed. Normal UI work is checked on 16:9 only |
 | `/art-bible` | Before making assets, to fix the visual style | `/art-bible` | Assets that share one style (pixel or raster) |
 | `/asset-spec` | Specs and prompts per asset | `/asset-spec shop UI` | Specs ready for Asset Studio jobs |

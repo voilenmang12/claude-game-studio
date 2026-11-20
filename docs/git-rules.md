@@ -40,8 +40,9 @@ Rules for every repo in the workspace. Claude follows them; the user decides any
 - Every repo (workspace, `local/`, `local/project/`, games, concepts): Claude commits each finished item on the task
   branch and closes the branch at the end of the task (`template/CLAUDE.md`, "Autonomy"); never ask about it. Making
   a repo public, store uploads and `--prod` deploys stay **(user)**.
-- A task that changes `template/` ends with a template release and its port to every game
-  (`bash sync-template.sh --all`, then the Port steps), so no game stays behind the workspace.
+- A task that changes `template/` ends with a template release, and nothing more: the workspace session commits
+  in no game. Each game ports the version in its own session when the user asks there (`bash ../sync-template.sh
+  <Game>`, the Port steps, `chore: sync template vX.YY` on a task branch).
 - Leave nothing behind: a branch already merged into `main` is deleted locally and on `origin`, and a finished
   worktree is removed (`git worktree remove`). `bash studio-doctor.sh` lists the ones it finds.
 
