@@ -56,6 +56,24 @@ ticket to `released vX.YY`.
 
 ## Unreleased
 
+## v3.09 (2026-11-20)
+
+Minor. Small follow-ups no longer jump to `main` while their task is still on a branch.
+
+**Fixed**
+- `CLAUDE.md`, "Autonomy": "Small follow-ups go where the work is" replaces "Small follow-ups stay here". A small fix
+  on work in progress goes on this session's open task branch, also in a worktree: never `git switch main`, never
+  the main checkout or another worktree, never a quick commit on `main` first. Work held by another open branch is
+  left to its session. Only a merged task with no open branch on those files gets a commit straight on `main` (in
+  a worktree: a `fix/<slug>` branch). Before, a session in a worktree took "the task is done" from the request and
+  committed the fix on `main`, which then conflicted with its own branch.
+- Workspace: `docs/git-rules.md` section 2 says the same.
+
+**Port**
+1. `bash sync-template.sh --all` (no shared file changes).
+2. In each game's `CLAUDE.md`, replace the "Small follow-ups stay here, on no new branch." item with the
+   template's "Small follow-ups go where the work is." item.
+
 ## v3.08 (2026-11-17)
 
 Minor. The task tracker becomes part of every game's base workflow: linked when the game is made, shown at every
