@@ -188,6 +188,14 @@ A **NOT ASSESSED** verdict blocks the same way, and the user may override it the
 
 When the user proceeds past NEEDS REVISION or NOT ASSESSED, the final report records the override: the verdict, the concerns or unassessed dimensions left open, and that the user chose to proceed.
 
+### Phase 1d: UI Demo (new screens and redesigns)
+
+For a new screen, a HUD, a popup set or a redesign, run `/ui-demo [feature-name]` before visual design: an SVG
+mockup the user approves, two demo pages (Claude and AGY) the user picks from, then the parts. Its two approvals
+always wait for the user, whatever `automation` says. The chosen demo (`production/ui/[feature-name]/demo/`,
+`decision.md`) is the look Phase 2 specifies and Phase 3 builds; Phase 4 compares the build with its screenshot.
+A small change to an existing screen skips this phase; say so in the report.
+
 ### Phase 2: Visual Design
 
 Delegate to **art-director**:

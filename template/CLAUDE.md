@@ -125,6 +125,10 @@ The studio's own rules for every game (platform, build, SDKs, plugins). They com
     (`UIPrompting.md` section 10).
   Detailed assets in either style use the REST API of [Codex Asset Studio](https://github.com/voilenmang12/codex-asset-studio) (a separate repo, run locally; `Assets/Integration/AssetStudio.md`). Submit a job, wait for `done`, and use the
   PNG at `export_path`. The Asset Studio worker generates the image and exports the sprite; never generate it yourself.
+  **A new screen or a redesign starts with `/ui-demo`:** SVG mockup → the user approves → two demos (Claude and
+  AGY) from the mockup, the elements and the art style → the user picks → the picked look split into parts, each
+  made and checked, then the screen built and compared with the demo. The two approvals wait for the user even in
+  an autonomous run; small UI fixes skip it.
   Log every asset in `design/asset-ledger.csv`. Every popup and button follows
   `Assets/Integration/UIPopupStandard.md` (layer stack, shared kit, contrast).
 

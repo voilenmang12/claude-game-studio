@@ -53,8 +53,33 @@ ticket to `released vX.YY`.
 |---|---|---|---|---|
 | TR-CG01-001 | CG01 | Ignore `_to_delete/` in the standard .gitignore | released v2.01 | v2.01 |
 | TR-CG01-002 | CG01 | UI layout audit tool for Play Mode | released v3.01 | v3.01 |
+| TR-CG01-003 | CG01 | Asset Studio API 2.0 in `Tools/asset-studio.mjs` and the docs | open | Deferred by the user 2026-11-20, to do later. Checked: the server is API 2.0 (`pixel-v10`, refuses `request.animation`); the template client and `AssetStudio.md` still speak 1.x |
 
 ## Unreleased
+
+## v3.11 (2026-11-20)
+
+Minor. A UI demo step before a screen is built: SVG mockup, two demos (Claude and AGY), then the parts.
+
+**Added**
+- Skill `ui-demo` (`/ui-demo <screen>`): 1. SVG mockup and an element list, screenshot sent to the user;
+  approval 1 (the user's); 2. one brief (mockup, elements, art style) to two makers at once, a Claude subagent and
+  AGY, each writing one self-contained HTML demo, both screenshotted and sent; approval 2 (the user's: one, a
+  mix or a revision, written in `decision.md`); 3. the chosen look split into parts (`parts.md`, tool per part by
+  `UIPrompting.md`); 4. one request per part, each checked against the demo; 5. the screen built and compared
+  with the demo in Play Mode. Files in `production/ui/<screen>/demo/`. A missing AGY is reported as NOT RUN.
+- `Tools/agy-html.mjs`: runs AGY in plan mode with no tools and saves the HTML page it prints; lists external
+  URLs and ids it finds.
+
+**Changed**
+- `CLAUDE.md`, "Art style": a new screen or a redesign starts with `/ui-demo`.
+- `team-ui` skill: Phase 1d runs `/ui-demo` before visual design.
+- `.claude/docs/automation-modes.md`: `ui-demo` is exempt; its two approvals always wait for the user.
+
+**Port** (in the game's own session, when the user asks)
+1. `bash ../sync-template.sh <Game>` (copies the skill, the tool and the docs).
+2. In the game's `CLAUDE.md`, add the template's "A new screen or a redesign starts with `/ui-demo`" lines to the
+   "Art style" item.
 
 ## v3.10 (2026-11-20)
 
