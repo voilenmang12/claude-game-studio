@@ -187,6 +187,7 @@ These skills always behave as `collaborative` regardless of the setting:
 | `gate-check` | Results must be reviewed — a gate verdict without acknowledgement defeats the purpose |
 | `day-one-patch` | Release-critical — every action needs explicit sign-off |
 | `setup-engine` | One-time irreversible choice that affects the entire project |
+| `ui-demo` | Its two approvals (the SVG mockup, then the choice between the two demos) are taste calls the user makes; only those two steps wait, the rest of the skill runs on its own |
 
 These skills do NOT add the automation prelude described above. They keep
 the v1.0 Q→O→D→Draft→Approval protocol exactly.
